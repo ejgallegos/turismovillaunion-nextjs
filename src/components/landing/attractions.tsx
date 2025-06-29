@@ -48,13 +48,13 @@ export async function Atractivos() {
               <CardHeader className="flex flex-row items-start gap-4 pb-4">
                 {getAttractionIcon(attraction.id)}
                 <div className="flex-1">
-                  <CardTitle className="font-headline text-xl">{attraction.title}</CardTitle>
+                   <h3 className="font-headline text-xl font-bold"><Link href={`/atractivos/${attraction.id}`} className="hover:underline">{attraction.title}</Link></h3>
                   <CardDescription className="mt-2 text-base">{attraction.description}</CardDescription>
                 </div>
               </CardHeader>
               <CardContent className="mt-auto flex justify-end">
                 <Button variant="link" className="text-accent" asChild>
-                  <Link href="#">
+                  <Link href={`/atractivos/${attraction.id}`}>
                     Saber Más <ArrowRight className="ml-2 h-4 w-4" />
                   </Link>
                 </Button>
