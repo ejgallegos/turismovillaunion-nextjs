@@ -47,22 +47,13 @@ export function Hero() {
 
   return (
     <>
-      {/* Mobile View: Static with first slide content */}
-      <section className="relative -mt-20 flex h-screen w-full items-center justify-center md:hidden">
-        <Image
-          src={firstSlide.src}
-          alt={firstSlide.alt}
-          data-ai-hint={firstSlide.hint}
-          fill
-          className="object-cover"
-          priority
-        />
-        <div className="absolute inset-0 bg-black/50" />
-        <div className="relative z-10 flex flex-col items-center p-4 text-center text-white">
-          <h1 className="font-headline text-4xl font-bold tracking-tight sm:text-6xl">
+      {/* Mobile View: No image, just text and button */}
+      <section className="-mt-20 flex h-screen w-full items-center justify-center md:hidden">
+        <div className="flex flex-col items-center p-4 text-center">
+          <h1 className="font-headline text-4xl font-bold tracking-tight text-primary sm:text-6xl">
             {firstSlide.title}
           </h1>
-          <p className="mt-4 max-w-2xl text-lg text-primary-foreground/90">
+          <p className="mt-4 max-w-2xl text-lg text-muted-foreground">
             {firstSlide.subtitle}
           </p>
           <div className="mt-8 flex gap-4">
