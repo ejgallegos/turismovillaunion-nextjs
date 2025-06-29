@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { ArrowRight, Landmark } from 'lucide-react';
+import { ArrowRight, MapPin } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { getAttractions } from '@/lib/atractivos.service';
@@ -32,7 +32,7 @@ export async function Atractivos() {
                 />
               </div>
               <CardHeader className="flex flex-row items-start gap-4 pb-4">
-                <Landmark className="h-10 w-10 text-primary" />
+                <MapPin className="h-10 w-10 text-primary" />
                 <div className="flex-1">
                    <h3 className="font-headline text-xl font-bold"><Link href={`/atractivos/${attraction.id}`} className="hover:underline">{attraction.title}</Link></h3>
                   <CardDescription className="mt-2 text-base">{attraction.description}</CardDescription>
