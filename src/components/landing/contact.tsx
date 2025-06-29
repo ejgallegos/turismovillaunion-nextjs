@@ -10,6 +10,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { useToast } from '@/hooks/use-toast';
 import { Card, CardContent } from '@/components/ui/card';
 import { Mail, MapPin, Phone } from 'lucide-react';
+import { sendContactEmail } from '@/app/contacto/actions';
 
 const formSchema = z.object({
   name: z.string().min(2, { message: 'El nombre debe tener al menos 2 caracteres.' }),
@@ -28,13 +29,23 @@ export function Contact() {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
-    toast({
-      title: '¡Mensaje Enviado!',
-      description: "Gracias por contactarnos. Nos pondremos en contacto en breve.",
-    });
-    form.reset();
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    const result = await sendContactEmail(values);
+
+    if (result.success) {
+      toast({
+        title: '¡Mensaje Enviado!',
+        description: 'Gracias por contactarnos. Nos pondremos en contacto en breve.',
+      });
+      form.reset();
+    } else {
+      const errorMessage = result.error || 'Hubo un problema al enviar el mensaje.';
+      toast({
+        title: 'Error',
+        description: errorMessage,
+        variant: 'destructive',
+      });
+    }
   }
 
   return (
@@ -82,7 +93,7 @@ export function Contact() {
                         <FormItem>
                           <FormLabel>Nombre Completo</FormLabel>
                           <FormControl>
-                            <Input placeholder="Juan Pérez" {...field} />
+                            <Input placeholder="Juan Pérez" {...field} disabled={form.formState.isSubmitting} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -95,7 +106,7 @@ export function Contact() {
                         <FormItem>
                           <FormLabel>Correo Electrónico</FormLabel>
                           <FormControl>
-                            <Input placeholder="tu@ejemplo.com" {...field} />
+                            <Input placeholder="tu@ejemplo.com" {...field} disabled={form.formState.isSubmitting}/>
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -108,13 +119,15 @@ export function Contact() {
                         <FormItem>
                           <FormLabel>Mensaje</FormLabel>
                           <FormControl>
-                            <Textarea placeholder="Escribe tu mensaje aquí..." rows={6} {...field} />
+                            <Textarea placeholder="Escribe tu mensaje aquí..." rows={6} {...field} disabled={form.formState.isSubmitting} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
                       )}
                     />
-                    <Button type="submit" className="w-full" size="lg">Enviar Mensaje</Button>
+                    <Button type="submit" className="w-full" size="lg" disabled={form.formState.isSubmitting}>
+                      {form.formState.isSubmitting ? 'Enviando...' : 'Enviar Mensaje'}
+                    </Button>
                   </form>
                 </Form>
               </CardContent>
