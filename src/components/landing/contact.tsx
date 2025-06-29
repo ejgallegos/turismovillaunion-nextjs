@@ -8,7 +8,6 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { useToast } from '@/hooks/use-toast';
-import Image from 'next/image';
 import { Card, CardContent } from '@/components/ui/card';
 import { Mail, MapPin, Phone } from 'lucide-react';
 
@@ -67,9 +66,6 @@ export function Contact() {
                     <Mail className="h-6 w-6 flex-shrink-0 text-accent" />
                     <span>info@villaunion.tur.ar</span>
                   </div>
-                </div>
-                <div className="aspect-video w-full overflow-hidden rounded-lg">
-                    <Image src="https://placehold.co/600x400.png" data-ai-hint="map location" width={600} height={400} alt="Mapa de Villa Unión" className="object-cover w-full h-full"/>
                 </div>
               </CardContent>
             </Card>
