@@ -42,11 +42,14 @@ const heroSlides = [
 ];
 
 export function Hero() {
-  const plugin = React.useRef(Autoplay({ delay: 5000, stopOnInteraction: true }));
+  const plugin = React.useRef(Autoplay({ delay: 2000, stopOnInteraction: true }));
 
   return (
     <Carousel
       plugins={[plugin.current]}
+      opts={{
+        loop: true,
+      }}
       className="relative -mt-20 w-full h-screen"
       onMouseEnter={plugin.current.stop}
       onMouseLeave={plugin.current.reset}
