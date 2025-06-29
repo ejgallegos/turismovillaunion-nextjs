@@ -3,6 +3,9 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { PlusCircle, Pencil, Trash2 } from "lucide-react";
+import { AtractivoFormSheet } from './atractivo-form-sheet';
+import { DeleteAtractivoAlert } from './delete-atractivo-alert';
+
 
 export default async function AdminAtractivosPage() {
   const attractions = await getAttractions();
@@ -11,10 +14,12 @@ export default async function AdminAtractivosPage() {
     <div>
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold">Gestionar Atractivos</h1>
-        <Button>
-          <PlusCircle className="mr-2 h-4 w-4" />
-          Añadir Atractivo
-        </Button>
+        <AtractivoFormSheet>
+          <Button>
+            <PlusCircle className="mr-2 h-4 w-4" />
+            Añadir Atractivo
+          </Button>
+        </AtractivoFormSheet>
       </div>
       <Card>
         <CardHeader>
@@ -38,14 +43,18 @@ export default async function AdminAtractivosPage() {
                   <TableCell className="font-medium">{attraction.title}</TableCell>
                   <TableCell className="hidden md:table-cell max-w-sm truncate">{attraction.description}</TableCell>
                   <TableCell className="text-right">
-                    <Button variant="ghost" size="icon">
-                      <Pencil className="h-4 w-4" />
-                      <span className="sr-only">Editar</span>
-                    </Button>
-                    <Button variant="ghost" size="icon" className="text-destructive hover:text-destructive">
-                      <Trash2 className="h-4 w-4" />
-                      <span className="sr-only">Eliminar</span>
-                    </Button>
+                    <AtractivoFormSheet attraction={attraction}>
+                      <Button variant="ghost" size="icon">
+                        <Pencil className="h-4 w-4" />
+                        <span className="sr-only">Editar</span>
+                      </Button>
+                    </AtractivoFormSheet>
+                    <DeleteAtractivoAlert attractionId={attraction.id}>
+                      <Button variant="ghost" size="icon" className="text-destructive hover:text-destructive">
+                        <Trash2 className="h-4 w-4" />
+                        <span className="sr-only">Eliminar</span>
+                      </Button>
+                    </DeleteAtractivoAlert>
                   </TableCell>
                 </TableRow>
               ))}
