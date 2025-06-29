@@ -1,3 +1,25 @@
+import { Header } from '@/components/landing/header';
+import { Hero } from '@/components/landing/hero';
+import { Attractions } from '@/components/landing/attractions';
+import { Gallery } from '@/components/landing/gallery';
+import { Events } from '@/components/landing/events';
+import { SeoGenerator } from '@/components/landing/seo-generator';
+import { Contact } from '@/components/landing/contact';
+import { Footer } from '@/components/landing/footer';
+
 export default function Home() {
-  return <></>;
+  return (
+    <div className="flex min-h-screen flex-col">
+      <Header />
+      <main className="flex-1">
+        <Hero />
+        <Attractions />
+        <Gallery />
+        <Events />
+        <SeoGenerator />
+        <Contact />
+      </main>
+      <Footer />
+    </div>
+  );
 }
