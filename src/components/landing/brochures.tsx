@@ -3,29 +3,11 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Download } from 'lucide-react';
 import Link from 'next/link';
+import { getFolletos } from '@/lib/folletos.service';
 
-const brochures = [
-  {
-    title: 'Guía Completa de Villa Unión',
-    description: 'Todo lo que necesitas saber: atractivos, servicios y más.',
-    imageUrl: 'https://placehold.co/400x566.png',
-    aiHint: 'travel guide'
-  },
-  {
-    title: 'Aventura en Talampaya',
-    description: 'Un recorrido detallado por el Parque Nacional.',
-    imageUrl: 'https://placehold.co/400x566.png',
-    aiHint: 'canyon brochure'
-  },
-  {
-    title: 'Explorando Laguna Brava',
-    description: 'Consejos y rutas para tu visita a la laguna de altura.',
-    imageUrl: 'https://placehold.co/400x566.png',
-    aiHint: 'lake brochure'
-  },
-];
+export async function Brochures() {
+  const brochures = await getFolletos();
 
-export function Brochures() {
   return (
     <section id="folletos" className="w-full bg-secondary py-20 lg:py-28">
       <div className="container mx-auto px-4 md:px-6">
@@ -39,7 +21,7 @@ export function Brochures() {
         </div>
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
           {brochures.map((brochure) => (
-            <Card key={brochure.title} className="flex flex-col overflow-hidden">
+            <Card key={brochure.id} className="flex flex-col overflow-hidden">
               <CardHeader className="p-0">
                 <div className="relative aspect-[3/4] w-full">
                   <Image
@@ -56,8 +38,8 @@ export function Brochures() {
                 <p className="mt-2 text-muted-foreground">{brochure.description}</p>
               </CardContent>
               <CardFooter className="p-6 pt-0">
-                <Button asChild className="w-full">
-                  <Link href="#">
+                <Button asChild className="w-full" disabled={!brochure.downloadUrl || brochure.downloadUrl === '#'}>
+                  <Link href={brochure.downloadUrl || '#'} target="_blank" rel="noopener noreferrer">
                     <Download className="mr-2 h-4 w-4" />
                     Descargar
                   </Link>
@@ -65,6 +47,11 @@ export function Brochures() {
               </CardFooter>
             </Card>
           ))}
+           {brochures.length === 0 && (
+            <div className="col-span-full text-center text-muted-foreground">
+              <p>No hay folletos disponibles en este momento.</p>
+            </div>
+          )}
         </div>
       </div>
     </section>

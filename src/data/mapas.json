@@ -1,0 +1,20 @@
+[
+  {
+    "id": "mapa-villa-union",
+    "title": "Mapa de Villa Unión",
+    "description": "Un mapa detallado del centro de la ciudad y sus principales servicios.",
+    "downloadUrl": "#"
+  },
+  {
+    "id": "mapa-atractivos",
+    "title": "Mapa de Atractivos",
+    "description": "Ubicación de Talampaya, Laguna Brava, Cuesta de Miranda y más.",
+    "downloadUrl": "#"
+  },
+  {
+    "id": "mapa-rutas",
+    "title": "Mapa de Rutas",
+    "description": "Principales rutas y caminos para llegar y moverte por la región.",
+    "downloadUrl": "#"
+  }
+]

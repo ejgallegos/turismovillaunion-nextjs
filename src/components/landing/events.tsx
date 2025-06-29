@@ -1,32 +1,12 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Calendar, Users, Sun } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import { getEventos } from '@/lib/eventos.service';
+import { format } from 'date-fns';
+import { es } from 'date-fns/locale';
 
-const events = [
-  {
-    date: '12 OCT, 2024',
-    title: 'Festival Nacional del Pimiento',
-    description: 'Una celebración de la agricultura y gastronomía local con música en vivo, bailes y puestos de comida tradicional.',
-    category: 'Festival',
-    icon: <Sun className="h-6 w-6 text-accent" />,
-  },
-  {
-    date: '05 NOV, 2024',
-    title: 'Caminata de Luna Llena en Talampaya',
-    description: 'Un recorrido guiado único por el cañón de Talampaya bajo la luz de la luna llena.',
-    category: 'Tour',
-    icon: <Calendar className="h-6 w-6 text-accent" />,
-  },
-  {
-    date: '20 DIC, 2024',
-    title: 'Feria de Artesanos de Villa Unión',
-    description: 'Descubre la artesanía y el arte local en la feria anual de artesanos en la plaza principal.',
-    category: 'Comunidad',
-    icon: <Users className="h-6 w-6 text-accent" />,
-  },
-];
+export async function Events() {
+  const events = await getEventos();
 
-export function Events() {
   return (
     <section className="w-full bg-secondary py-20 lg:py-28">
       <div className="container mx-auto px-4 md:px-6">
@@ -40,10 +20,12 @@ export function Events() {
         </div>
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
           {events.map((event) => (
-            <Card key={event.title} className="flex flex-col overflow-hidden rounded-lg border-l-4 border-accent shadow-md transition-shadow duration-300 hover:shadow-xl">
+            <Card key={event.id} className="flex flex-col overflow-hidden rounded-lg border-l-4 border-accent shadow-md transition-shadow duration-300 hover:shadow-xl">
               <CardHeader>
                 <div className="flex items-center justify-between">
-                  <p className="font-bold text-sm text-primary">{event.date}</p>
+                  <p className="font-bold text-sm text-primary uppercase">
+                    {format(new Date(event.date), "dd MMM, yyyy", { locale: es })}
+                  </p>
                   <Badge variant="outline" className="border-accent text-accent">{event.category}</Badge>
                 </div>
                 <CardTitle className="font-headline pt-2 text-xl">{event.title}</CardTitle>
@@ -53,6 +35,11 @@ export function Events() {
               </CardContent>
             </Card>
           ))}
+           {events.length === 0 && (
+            <div className="col-span-full text-center text-muted-foreground">
+              <p>No hay eventos programados en este momento.</p>
+            </div>
+          )}
         </div>
       </div>
     </section>

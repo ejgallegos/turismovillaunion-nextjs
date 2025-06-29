@@ -1,25 +1,15 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { BedDouble, UtensilsCrossed, MountainSnow } from 'lucide-react';
+import { getServicios } from '@/lib/servicios.service';
+import * as LucideIcons from 'lucide-react';
 
-const services = [
-  {
-    icon: <BedDouble className="h-10 w-10 text-primary" />,
-    title: 'Alojamiento',
-    description: 'Encuentra hoteles, cabañas y posadas acogedoras que se adaptan a todos los gustos y presupuestos para que tu descanso sea perfecto.',
-  },
-  {
-    icon: <UtensilsCrossed className="h-10 w-10 text-primary" />,
-    title: 'Gastronomía',
-    description: 'Deleita tu paladar con la auténtica cocina regional. Descubre restaurantes y comedores que te ofrecen los sabores únicos de La Rioja.',
-  },
-  {
-    icon: <MountainSnow className="h-10 w-10 text-primary" />,
-    title: 'Excursiones',
-    description: 'Vive la aventura con nuestras excursiones guiadas. Explora paisajes increíbles como Talampaya y Laguna Brava de la mano de expertos.',
-  },
-];
+const getServiceIcon = (iconName: string) => {
+    const IconComponent = (LucideIcons as any)[iconName] || LucideIcons.HelpCircle;
+    return <IconComponent className="h-10 w-10 text-primary" />;
+};
 
-export function Services() {
+export async function Services() {
+  const services = await getServicios();
+
   return (
     <section id="servicios" className="w-full bg-secondary py-20 lg:py-28">
       <div className="container mx-auto px-4 md:px-6">
@@ -33,10 +23,10 @@ export function Services() {
         </div>
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
           {services.map((service) => (
-            <Card key={service.title} className="flex flex-col text-center items-center p-6 transform transition-transform duration-300 hover:-translate-y-2">
+            <Card key={service.id} className="flex flex-col text-center items-center p-6 transform transition-transform duration-300 hover:-translate-y-2">
               <CardHeader className="p-0">
                 <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-primary/10">
-                  {service.icon}
+                  {getServiceIcon(service.icon)}
                 </div>
                 <CardTitle className="font-headline pt-6 text-xl">{service.title}</CardTitle>
               </CardHeader>
@@ -45,6 +35,11 @@ export function Services() {
               </CardContent>
             </Card>
           ))}
+          {services.length === 0 && (
+            <div className="col-span-full text-center text-muted-foreground">
+              <p>No hay servicios para mostrar en este momento.</p>
+            </div>
+          )}
         </div>
       </div>
     </section>
