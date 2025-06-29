@@ -1,7 +1,13 @@
+import type { Metadata } from 'next';
 import { Header } from '@/components/landing/header';
 import { Hero } from '@/components/landing/hero';
 import { Atractivos } from '@/components/landing/attractions';
 import { Footer } from '@/components/landing/footer';
+
+export const metadata: Metadata = {
+  title: 'Villa Unión del Talampaya | Tu Aventura te Espera',
+  description: 'Descubre las maravillas naturales de Villa Unión. Explora el Parque Nacional Talampaya, Laguna Brava y más. Conoce uno de los destinos más impresionantes de Argentina.',
+};
 
 export default function Home() {
   return (
