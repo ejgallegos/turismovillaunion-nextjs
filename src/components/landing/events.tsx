@@ -3,6 +3,7 @@ import { Badge } from '@/components/ui/badge';
 import { getEventos } from '@/lib/eventos.service';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
+import Link from 'next/link';
 
 export async function Events() {
   const events = await getEventos();
@@ -24,11 +25,15 @@ export async function Events() {
               <CardHeader>
                 <div className="flex items-center justify-between">
                   <p className="font-bold text-sm text-primary uppercase">
-                    {format(new Date(event.date), "dd MMM, yyyy", { locale: es })}
+                    {format(new Date(`${event.date}T00:00:00`), "dd MMM, yyyy", { locale: es })}
                   </p>
                   <Badge variant="outline" className="border-accent text-accent">{event.category}</Badge>
                 </div>
-                <CardTitle className="font-headline pt-2 text-xl">{event.title}</CardTitle>
+                <CardTitle className="font-headline pt-2 text-xl">
+                   <Link href={`/eventos/${event.id}`} className="hover:underline">
+                    {event.title}
+                  </Link>
+                </CardTitle>
               </CardHeader>
               <CardContent className="flex-grow">
                 <CardDescription className="text-base">{event.description}</CardDescription>

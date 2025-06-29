@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { getServicios } from '@/lib/servicios.service';
 import * as LucideIcons from 'lucide-react';
+import Link from 'next/link';
 
 const getServiceIcon = (iconName: string) => {
     const IconComponent = (LucideIcons as any)[iconName] || LucideIcons.HelpCircle;
@@ -23,17 +24,19 @@ export async function Services() {
         </div>
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
           {services.map((service) => (
-            <Card key={service.id} className="flex flex-col text-center items-center p-6 transform transition-transform duration-300 hover:-translate-y-2">
-              <CardHeader className="p-0">
-                <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-primary/10">
-                  {getServiceIcon(service.icon)}
-                </div>
-                <CardTitle className="font-headline pt-6 text-xl">{service.title}</CardTitle>
-              </CardHeader>
-              <CardContent className="flex-grow pt-4">
-                <p className="text-base text-muted-foreground">{service.description}</p>
-              </CardContent>
-            </Card>
+             <Link href={`/servicios/${service.id}`} key={service.id} className="block group">
+                <Card className="flex flex-col text-center items-center p-6 h-full transform transition-transform duration-300 group-hover:-translate-y-2">
+                <CardHeader className="p-0">
+                    <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-primary/10">
+                    {getServiceIcon(service.icon)}
+                    </div>
+                    <CardTitle className="font-headline pt-6 text-xl">{service.title}</CardTitle>
+                </CardHeader>
+                <CardContent className="flex-grow pt-4">
+                    <p className="text-base text-muted-foreground">{service.description}</p>
+                </CardContent>
+                </Card>
+            </Link>
           ))}
           {services.length === 0 && (
             <div className="col-span-full text-center text-muted-foreground">
