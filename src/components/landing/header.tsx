@@ -50,7 +50,7 @@ export function Header() {
           </span>
         </Link>
 
-        <nav className="hidden items-center gap-6 md:flex">
+        <nav className="hidden items-center gap-6 lg:flex">
           {navLinks.map((link) => (
             <Link
               key={link.href}
@@ -63,7 +63,8 @@ export function Header() {
           <ThemeToggle />
         </nav>
 
-        <div className="md:hidden">
+        <div className="flex items-center gap-2 lg:hidden">
+          <ThemeToggle />
           <Sheet>
             <SheetTrigger asChild>
               <Button variant="ghost" size="icon">
@@ -96,9 +97,6 @@ export function Header() {
                     </Link>
                   </SheetClose>
                 ))}
-              </div>
-              <div className="absolute bottom-6 left-6">
-                <ThemeToggle />
               </div>
             </SheetContent>
           </Sheet>
