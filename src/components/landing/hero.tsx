@@ -42,7 +42,7 @@ const heroSlides = [
 ];
 
 export function Hero() {
-  const plugin = React.useRef(Autoplay({ delay: 2000, stopOnInteraction: true }));
+  const plugin = React.useRef(Autoplay({ delay: 5000, stopOnInteraction: true }));
 
   return (
     <Carousel

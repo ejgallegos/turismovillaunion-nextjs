@@ -40,7 +40,7 @@ const galleryImages = [
 ];
 
 export function Gallery() {
-  const plugin = React.useRef(Autoplay({ delay: 2000, stopOnInteraction: true }));
+  const plugin = React.useRef(Autoplay({ delay: 5000, stopOnInteraction: true }));
 
   return (
     <section className="w-full py-20 lg:py-28">
@@ -58,20 +58,19 @@ export function Gallery() {
           className="w-full max-w-4xl mx-auto"
           onMouseEnter={plugin.current.stop}
           onMouseLeave={plugin.current.reset}
+          opts={{ loop: true }}
         >
-          <CarouselContent>
+          <CarouselContent className="-ml-0">
             {galleryImages.map((image, index) => (
-              <CarouselItem key={index}>
-                <div className="p-1">
-                  <div className="relative aspect-video overflow-hidden rounded-lg shadow-lg">
-                    <Image
-                      src={image.src}
-                      alt={image.alt}
-                      data-ai-hint={image.hint}
-                      fill
-                      className="object-cover"
-                    />
-                  </div>
+              <CarouselItem key={index} className="pl-0">
+                <div className="relative aspect-video overflow-hidden rounded-lg shadow-lg">
+                  <Image
+                    src={image.src}
+                    alt={image.alt}
+                    data-ai-hint={image.hint}
+                    fill
+                    className="object-cover"
+                  />
                 </div>
               </CarouselItem>
             ))}
