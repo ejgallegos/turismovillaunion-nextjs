@@ -46,7 +46,7 @@ export function Contact() {
             Ponte en Contacto
           </h2>
           <p className="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">
-            ¿Tienes preguntas o estás listo para planificar tu visita? Estamos aquí para ayudarte.
+            ¿Tienes preguntas? Estamos aquí para ayudarte. Rellena el formulario y te contactaremos.
           </p>
         </div>
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-5">
@@ -112,7 +112,7 @@ export function Contact() {
                         <FormItem>
                           <FormLabel>Mensaje</FormLabel>
                           <FormControl>
-                            <Textarea placeholder="Cuéntanos sobre tus planes de viaje o haz una pregunta..." rows={6} {...field} />
+                            <Textarea placeholder="Escribe tu mensaje aquí..." rows={6} {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>

@@ -27,9 +27,6 @@ export function Hero() {
           <Button size="lg" asChild>
             <Link href="#attractions">Explora Ahora</Link>
           </Button>
-          <Button size="lg" variant="secondary" asChild>
-            <Link href="#contact">Planifica tu Viaje</Link>
-          </Button>
         </div>
       </div>
     </section>

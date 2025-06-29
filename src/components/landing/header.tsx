@@ -49,9 +49,6 @@ export function Header() {
             </Link>
           ))}
         </nav>
-        <Button asChild>
-          <Link href="#contact">Reserva tu Visita</Link>
-        </Button>
       </div>
     </header>
   );

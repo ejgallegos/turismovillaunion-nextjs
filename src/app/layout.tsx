@@ -4,10 +4,10 @@ import { Toaster } from '@/components/ui/toaster';
 
 export const metadata: Metadata = {
   title: 'Villa Unión del Talampaya | Tu Aventura te Espera',
-  description: 'Descubre las maravillas naturales de Villa Unión. Explora el Parque Nacional Talampaya, Laguna Brava y más. Planifica tu viaje a uno de los destinos más impresionantes de Argentina.',
+  description: 'Descubre las maravillas naturales de Villa Unión. Explora el Parque Nacional Talampaya, Laguna Brava y más. Conoce uno de los destinos más impresionantes de Argentina.',
   openGraph: {
     title: 'Villa Unión del Talampaya | Tu Aventura te Espera',
-    description: 'Descubre las maravillas naturales de Villa Unión. Explora el Parque Nacional Talampaya, Laguna Brava y más. Planifica tu viaje a uno de los destinos más impresionantes de Argentina.',
+    description: 'Descubre las maravillas naturales de Villa Unión. Explora el Parque Nacional Talampaya, Laguna Brava y más. Conoce uno de los destinos más impresionantes de Argentina.',
     url: 'https://villaunion.tur.ar',
     siteName: 'Villa Unión del Talampaya',
     images: [
