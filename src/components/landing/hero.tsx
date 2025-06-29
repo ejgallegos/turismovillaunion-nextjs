@@ -48,7 +48,7 @@ export function Hero() {
   return (
     <>
       {/* Mobile View: No image, just text and button */}
-      <section className="-mt-20 flex h-screen w-full items-center justify-center md:hidden">
+      <section className="-mt-20 flex w-full items-center justify-center bg-background py-32 text-foreground md:hidden">
         <div className="flex flex-col items-center p-4 text-center">
           <h1 className="font-headline text-4xl font-bold tracking-tight text-primary sm:text-6xl">
             {firstSlide.title}
