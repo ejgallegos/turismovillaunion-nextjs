@@ -2,9 +2,9 @@
 
 import Link from 'next/link';
 import { Logo } from '@/components/icons';
-import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { useEffect, useState } from 'react';
+import { ThemeToggle } from '../theme-toggle';
 
 const navLinks = [
   { href: '/atracciones', label: 'Atracciones' },
@@ -38,17 +38,20 @@ export function Header() {
             Villa Unión
           </span>
         </Link>
-        <nav className="hidden items-center gap-6 md:flex">
-          {navLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="font-medium text-foreground/80 transition-colors hover:text-primary"
-            >
-              {link.label}
-            </Link>
-          ))}
-        </nav>
+        <div className="flex items-center gap-2">
+          <nav className="hidden items-center gap-6 md:flex">
+            {navLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="font-medium text-foreground/80 transition-colors hover:text-primary"
+              >
+                {link.label}
+              </Link>
+            ))}
+          </nav>
+          <ThemeToggle />
+        </div>
       </div>
     </header>
   );
