@@ -19,7 +19,7 @@ const heroSlides = [
     title: 'Villa Unión del Talampaya',
     subtitle: 'Donde la naturaleza esculpió obras maestras en piedra y el tiempo se detiene.',
     buttonText: 'Explora Ahora',
-    buttonLink: '#attractions',
+    buttonLink: '#atractivos',
   },
   {
     src: 'https://placehold.co/1920x1080.png',
@@ -27,7 +27,7 @@ const heroSlides = [
     hint: 'salt lake',
     title: 'Descubre la Mágica Laguna Brava',
     subtitle: 'Un espejo de sal en el corazón de los Andes.',
-    buttonText: 'Ver Atracciones',
+    buttonText: 'Ver Atractivos',
     buttonLink: '/atracciones',
   },
   {
