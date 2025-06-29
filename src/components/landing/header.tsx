@@ -19,7 +19,6 @@ import { Separator } from '@/components/ui/separator';
 
 const navLinks = [
   { href: '/atractivos', label: 'Atractivos' },
-  { href: '/galeria', label: 'Galería' },
   { href: '/eventos', label: 'Eventos' },
   { href: '/servicios', label: 'Servicios' },
   { href: '/mapas', label: 'Mapas' },
