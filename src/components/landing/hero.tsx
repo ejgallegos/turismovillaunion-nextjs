@@ -28,7 +28,7 @@ const heroSlides = [
     title: 'Descubre la Mágica Laguna Brava',
     subtitle: 'Un espejo de sal en el corazón de los Andes.',
     buttonText: 'Ver Atractivos',
-    buttonLink: '/atracciones',
+    buttonLink: '/atractivos',
   },
   {
     src: 'https://placehold.co/1920x1080.png',
@@ -37,7 +37,7 @@ const heroSlides = [
     title: 'Aventúrate en la Cuesta de Miranda',
     subtitle: 'Un camino de colores y vistas que te quitarán el aliento.',
     buttonText: 'Ver Más',
-    buttonLink: '/atracciones',
+    buttonLink: '/atractivos',
   },
 ];
 
@@ -49,17 +49,15 @@ export function Hero() {
     <>
       {/* Mobile View: Static with first slide content */}
       <section className="relative -mt-20 flex h-screen w-full items-center justify-center md:hidden">
-        <div className="absolute inset-0 z-0">
-          <Image
-            src={firstSlide.src}
-            alt={firstSlide.alt}
-            data-ai-hint={firstSlide.hint}
-            fill
-            className="object-cover"
-            priority
-          />
-          <div className="absolute inset-0 bg-black/50" />
-        </div>
+        <Image
+          src={firstSlide.src}
+          alt={firstSlide.alt}
+          data-ai-hint={firstSlide.hint}
+          fill
+          className="object-cover"
+          priority
+        />
+        <div className="absolute inset-0 bg-black/50" />
         <div className="relative z-10 flex flex-col items-center p-4 text-center text-white">
           <h1 className="font-headline text-4xl font-bold tracking-tight sm:text-6xl">
             {firstSlide.title}
