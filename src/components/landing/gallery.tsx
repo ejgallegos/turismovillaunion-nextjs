@@ -11,7 +11,7 @@ const galleryImages = [
 
 export function Gallery() {
   return (
-    <section id="gallery" className="w-full py-20 lg:py-28">
+    <section className="w-full py-20 lg:py-28">
       <div className="container mx-auto px-4 md:px-6">
         <div className="mb-12 text-center">
           <h2 className="font-headline text-3xl font-bold tracking-tight text-primary md:text-4xl">

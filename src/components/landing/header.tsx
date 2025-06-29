@@ -7,10 +7,10 @@ import { cn } from '@/lib/utils';
 import { useEffect, useState } from 'react';
 
 const navLinks = [
-  { href: '#attractions', label: 'Atracciones' },
-  { href: '#gallery', label: 'Galería' },
-  { href: '#events', label: 'Eventos' },
-  { href: '#contact', label: 'Contacto' },
+  { href: '/atracciones', label: 'Atracciones' },
+  { href: '/galeria', label: 'Galería' },
+  { href: '/eventos', label: 'Eventos' },
+  { href: '/contacto', label: 'Contacto' },
 ];
 
 export function Header() {
