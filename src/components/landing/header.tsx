@@ -16,7 +16,6 @@ import {
 } from '@/components/ui/sheet';
 import { Menu } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
-import { UserButton } from '@clerk/nextjs';
 
 const navLinks = [
   { href: '/atractivos', label: 'Atractivos' },
@@ -64,12 +63,10 @@ export function Header() {
             </Link>
           ))}
           <ThemeToggle />
-          <UserButton afterSignOutUrl="/" />
         </nav>
 
         <div className="flex items-center gap-2 lg:hidden">
           <ThemeToggle />
-          <UserButton afterSignOutUrl="/" />
           <Sheet>
             <SheetTrigger asChild>
               <Button variant="ghost" size="icon">
