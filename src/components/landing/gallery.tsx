@@ -1,15 +1,47 @@
+'use client';
+
 import Image from 'next/image';
+import React from 'react';
+import Autoplay from 'embla-carousel-autoplay';
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from '@/components/ui/carousel';
 
 const galleryImages = [
-  { src: 'https://placehold.co/600x400.png', alt: 'Paredes del cañón de Talampaya', hint: 'canyon walls' },
-  { src: 'https://placehold.co/600x800.png', alt: 'Vicuñas en Laguna Brava', hint: 'wildlife lagoon' },
-  { src: 'https://placehold.co/600x400.png', alt: 'La sinuosa Cuesta de Miranda', hint: 'mountain road' },
-  { src: 'https://placehold.co/600x400.png', alt: 'Formación rocosa conocida como "El Monje"', hint: 'rock formation' },
-  { src: 'https://placehold.co/600x400.png', alt: 'Flamencos en la laguna de altura', hint: 'flamingos lagoon' },
-  { src: 'https://placehold.co/600x800.png', alt: 'Cielo nocturno estrellado sobre el desierto', hint: 'night sky' },
+  {
+    src: 'https://placehold.co/1200x600.png',
+    alt: 'Paredes del cañón de Talampaya',
+    hint: 'canyon walls',
+  },
+  {
+    src: 'https://placehold.co/1200x600.png',
+    alt: 'Vicuñas en Laguna Brava',
+    hint: 'wildlife lagoon',
+  },
+  {
+    src: 'https://placehold.co/1200x600.png',
+    alt: 'La sinuosa Cuesta de Miranda',
+    hint: 'mountain road',
+  },
+  {
+    src: 'https://placehold.co/1200x600.png',
+    alt: 'Formación rocosa conocida como "El Monje"',
+    hint: 'rock formation',
+  },
+  {
+    src: 'https://placehold.co/1200x600.png',
+    alt: 'Flamencos en la laguna de altura',
+    hint: 'flamingos lagoon',
+  },
 ];
 
 export function Gallery() {
+  const plugin = React.useRef(Autoplay({ delay: 2000, stopOnInteraction: true }));
+
   return (
     <section className="w-full py-20 lg:py-28">
       <div className="container mx-auto px-4 md:px-6">
@@ -21,96 +53,32 @@ export function Gallery() {
             Experimenta la impresionante belleza de nuestros paisajes a través de nuestro lente.
           </p>
         </div>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div className="grid gap-4">
-            <div className="overflow-hidden rounded-lg shadow-lg">
-              <Image
-                src={galleryImages[0].src}
-                alt={galleryImages[0].alt}
-                data-ai-hint={galleryImages[0].hint}
-                width={600}
-                height={400}
-                className="h-auto w-full object-cover transition-transform duration-300 hover:scale-105"
-              />
-            </div>
-            <div className="overflow-hidden rounded-lg shadow-lg">
-              <Image
-                src={galleryImages[1].src}
-                alt={galleryImages[1].alt}
-                data-ai-hint={galleryImages[1].hint}
-                width={600}
-                height={800}
-                className="h-auto w-full object-cover transition-transform duration-300 hover:scale-105"
-              />
-            </div>
-          </div>
-          <div className="grid gap-4">
-            <div className="overflow-hidden rounded-lg shadow-lg">
-              <Image
-                src={galleryImages[2].src}
-                alt={galleryImages[2].alt}
-                data-ai-hint={galleryImages[2].hint}
-                width={600}
-                height={800}
-                className="h-auto w-full object-cover transition-transform duration-300 hover:scale-105"
-              />
-            </div>
-            <div className="overflow-hidden rounded-lg shadow-lg">
-              <Image
-                src={galleryImages[3].src}
-                alt={galleryImages[3].alt}
-                data-ai-hint={galleryImages[3].hint}
-                width={600}
-                height={400}
-                className="h-auto w-full object-cover transition-transform duration-300 hover:scale-105"
-              />
-            </div>
-          </div>
-          <div className="grid gap-4">
-            <div className="overflow-hidden rounded-lg shadow-lg">
-              <Image
-                src={galleryImages[4].src}
-                alt={galleryImages[4].alt}
-                data-ai-hint={galleryImages[4].hint}
-                width={600}
-                height={400}
-                className="h-auto w-full object-cover transition-transform duration-300 hover:scale-105"
-              />
-            </div>
-             <div className="overflow-hidden rounded-lg shadow-lg">
-              <Image
-                src={galleryImages[5].src}
-                alt={galleryImages[5].alt}
-                data-ai-hint={galleryImages[5].hint}
-                width={600}
-                height={800}
-                className="h-auto w-full object-cover transition-transform duration-300 hover:scale-105"
-              />
-            </div>
-          </div>
-           <div className="grid gap-4">
-             <div className="overflow-hidden rounded-lg shadow-lg">
-              <Image
-                src={galleryImages[0].src}
-                alt={galleryImages[0].alt}
-                data-ai-hint={galleryImages[0].hint}
-                width={600}
-                height={800}
-                className="h-auto w-full object-cover transition-transform duration-300 hover:scale-105"
-              />
-            </div>
-            <div className="overflow-hidden rounded-lg shadow-lg">
-              <Image
-                src={galleryImages[1].src}
-                alt={galleryImages[1].alt}
-                data-ai-hint={galleryImages[1].hint}
-                width={600}
-                height={400}
-                className="h-auto w-full object-cover transition-transform duration-300 hover:scale-105"
-              />
-            </div>
-          </div>
-        </div>
+        <Carousel
+          plugins={[plugin.current]}
+          className="w-full max-w-4xl mx-auto"
+          onMouseEnter={plugin.current.stop}
+          onMouseLeave={plugin.current.reset}
+        >
+          <CarouselContent>
+            {galleryImages.map((image, index) => (
+              <CarouselItem key={index}>
+                <div className="p-1">
+                  <div className="relative aspect-video overflow-hidden rounded-lg shadow-lg">
+                    <Image
+                      src={image.src}
+                      alt={image.alt}
+                      data-ai-hint={image.hint}
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+                </div>
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+          <CarouselPrevious />
+          <CarouselNext />
+        </Carousel>
       </div>
     </section>
   );
