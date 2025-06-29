@@ -22,10 +22,10 @@ function SubmitButton() {
       {pending ? (
         <>
           <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-          Generating...
+          Generando...
         </>
       ) : (
-        'Generate Meta Tags'
+        'Generar Metaetiquetas'
       )}
     </Button>
   );
@@ -39,20 +39,20 @@ export function SeoGenerator() {
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
     toast({
-      title: "Copied!",
-      description: "Meta tag has been copied to your clipboard.",
+      title: "¡Copiado!",
+      description: "La metaetiqueta ha sido copiada a tu portapapeles.",
     });
   };
 
   useEffect(() => {
-    if (state?.message && state.message !== 'Successfully generated meta tags.') {
+    if (state?.message && state.message !== 'Metaetiquetas generadas con éxito.') {
       toast({
         title: 'Error',
         description: state.message,
         variant: 'destructive',
       });
     }
-    if (state?.message === 'Successfully generated meta tags.') {
+    if (state?.message === 'Metaetiquetas generadas con éxito.') {
       formRef.current?.reset();
     }
   }, [state, toast]);
@@ -63,24 +63,24 @@ export function SeoGenerator() {
         <div className="flex flex-col justify-center">
           <Bot className="mb-4 h-12 w-12 text-primary" />
           <h2 className="font-headline text-3xl font-bold tracking-tight text-primary md:text-4xl">
-            AI-Powered SEO
+            SEO Potenciado por IA
           </h2>
           <p className="mt-4 max-w-xl text-lg text-muted-foreground">
-            Harness AI to generate dynamic, SEO-optimized meta tags for our attractions. Select a landmark to see how we tailor content to capture current tourist interest.
+            Aprovecha la IA para generar metaetiquetas dinámicas y optimizadas para SEO para nuestras atracciones. Selecciona un lugar de interés para ver cómo adaptamos el contenido para capturar el interés turístico actual.
           </p>
         </div>
         <Card className="shadow-lg">
           <CardHeader>
-            <CardTitle>Meta Tag Generator</CardTitle>
-            <CardDescription>Select a landmark to generate its title and meta description.</CardDescription>
+            <CardTitle>Generador de Metaetiquetas</CardTitle>
+            <CardDescription>Selecciona un lugar de interés para generar su título y meta descripción.</CardDescription>
           </CardHeader>
           <CardContent>
             <form ref={formRef} action={formAction} className="space-y-6">
               <div>
-                <Label htmlFor="landmarkName">Landmark</Label>
+                <Label htmlFor="landmarkName">Lugar de Interés</Label>
                 <Select name="landmarkName" required>
                   <SelectTrigger id="landmarkName" className="w-full">
-                    <SelectValue placeholder="Select a landmark" />
+                    <SelectValue placeholder="Selecciona un lugar de interés" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="Talampaya">Talampaya</SelectItem>
@@ -94,7 +94,7 @@ export function SeoGenerator() {
             {state?.data && (
               <div className="mt-6 space-y-4 rounded-lg border bg-secondary/50 p-4">
                 <div>
-                  <Label className="text-sm font-semibold">Generated Title</Label>
+                  <Label className="text-sm font-semibold">Título Generado</Label>
                   <div className="relative mt-1">
                     <p className="rounded-md bg-background p-3 pr-10 text-sm">{state.data.title}</p>
                     <Button variant="ghost" size="icon" className="absolute right-1 top-1 h-8 w-8" onClick={() => copyToClipboard(state.data.title)}>
@@ -103,7 +103,7 @@ export function SeoGenerator() {
                   </div>
                 </div>
                 <div>
-                  <Label className="text-sm font-semibold">Generated Meta Description</Label>
+                  <Label className="text-sm font-semibold">Meta Descripción Generada</Label>
                   <div className="relative mt-1">
                     <p className="rounded-md bg-background p-3 pr-10 text-sm">{state.data.metaDescription}</p>
                      <Button variant="ghost" size="icon" className="absolute right-1 top-1 h-8 w-8" onClick={() => copyToClipboard(state.data.metaDescription)}>

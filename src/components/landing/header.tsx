@@ -7,10 +7,10 @@ import { cn } from '@/lib/utils';
 import { useEffect, useState } from 'react';
 
 const navLinks = [
-  { href: '#attractions', label: 'Attractions' },
-  { href: '#gallery', label: 'Gallery' },
-  { href: '#events', label: 'Events' },
-  { href: '#contact', label: 'Contact' },
+  { href: '#attractions', label: 'Atracciones' },
+  { href: '#gallery', label: 'Galería' },
+  { href: '#events', label: 'Eventos' },
+  { href: '#contact', label: 'Contacto' },
 ];
 
 export function Header() {
@@ -32,7 +32,7 @@ export function Header() {
       )}
     >
       <div className="container mx-auto flex h-20 items-center justify-between px-4 md:px-6">
-        <Link href="/" className="flex items-center gap-2" aria-label="Back to Homepage">
+        <Link href="/" className="flex items-center gap-2" aria-label="Volver a la página principal">
           <Logo />
           <span className="hidden font-headline text-xl font-bold text-primary sm:inline-block">
             Villa Unión
@@ -50,7 +50,7 @@ export function Header() {
           ))}
         </nav>
         <Button asChild>
-          <Link href="#contact">Book Your Visit</Link>
+          <Link href="#contact">Reserva tu Visita</Link>
         </Button>
       </div>
     </header>

@@ -1,44 +1,44 @@
 // This file is machine-generated - edit with caution!
 'use server';
 /**
- * @fileOverview A flow to generate SEO-optimized title and meta description tags for a landmark page based on current tourist interests.
+ * @fileOverview Un flujo para generar etiquetas de título y meta descripción optimizadas para SEO para una página de un lugar de interés, basadas en los intereses turísticos actuales.
  *
- * - generateMetaTags - A function that generates SEO-optimized title and meta description tags.
- * - GenerateMetaTagsInput - The input type for the generateMetaTags function.
- * - GenerateMetaTagsOutput - The return type for the generateMetaTags function.
+ * - generateMetaTags - Una función que genera etiquetas de título y meta descripción optimizadas para SEO.
+ * - GenerateMetaTagsInput - El tipo de entrada para la función generateMetaTags.
+ * - GenerateMetaTagsOutput - El tipo de retorno para la función generateMetaTags.
  */
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
 
 const GetPopularityInputSchema = z.object({
-  landmarkName: z.string().describe('The name of the landmark.'),
+  landmarkName: z.string().describe('El nombre del lugar de interés.'),
 });
 
 const GenerateMetaTagsInputSchema = z.object({
-  landmarkName: z.string().describe('The name of the landmark.'),
-  currentDate: z.string().describe('The current date.'),
+  landmarkName: z.string().describe('El nombre del lugar de interés.'),
+  currentDate: z.string().describe('La fecha actual.'),
 });
 
 export type GenerateMetaTagsInput = z.infer<typeof GenerateMetaTagsInputSchema>;
 
 const GenerateMetaTagsOutputSchema = z.object({
-  title: z.string().describe('The SEO-optimized title tag for the landmark page.'),
-  metaDescription: z.string().describe('The SEO-optimized meta description tag for the landmark page.'),
+  title: z.string().describe('La etiqueta de título optimizada para SEO para la página del lugar de interés.'),
+  metaDescription: z.string().describe('La etiqueta de meta descripción optimizada para SEO para la página del lugar de interés.'),
 });
 
 export type GenerateMetaTagsOutput = z.infer<typeof GenerateMetaTagsOutputSchema>;
 
 async function getPopularity(input: GetPopularityInputSchema): Promise<number> {
-  // In a real implementation, this would call an external service or database
-  // to get the popularity score of the landmark.
-  // For this example, we'll just return a random number between 0 and 100.
+  // En una implementación real, esto llamaría a un servicio externo o base de datos
+  // para obtener el puntaje de popularidad del lugar de interés.
+  // Para este ejemplo, simplemente devolveremos un número aleatorio entre 0 y 100.
   return Math.floor(Math.random() * 100);
 }
 
 const getPopularityTool = ai.defineTool({
   name: 'getPopularity',
-  description: 'Returns the current popularity score of a landmark.',
+  description: 'Devuelve el puntaje de popularidad actual de un lugar de interés.',
   inputSchema: GetPopularityInputSchema,
   outputSchema: z.number(),
 }, async (input) => {
@@ -54,26 +54,26 @@ const generateMetaTagsPrompt = ai.definePrompt({
   input: {schema: GenerateMetaTagsInputSchema},
   output: {schema: GenerateMetaTagsOutputSchema},
   tools: [getPopularityTool],
-  system: `You are an SEO expert specializing in generating title and meta description tags for landmark pages.
+  system: `Eres un experto en SEO especializado en generar etiquetas de título y meta descripción para páginas de lugares de interés.
 
-  Instructions:
-  1. Use getPopularity tool to obtain popularity of a landmark.
-  2. Generate a concise, engaging, and SEO-friendly title tag (maximum 60 characters).
-  3. Craft a compelling meta description (maximum 160 characters) that highlights the landmark's unique attractions and encourages visits.
-  4. Incorporate relevant keywords based on current tourist interests and the landmark's popularity.
-  5. Always include the landmark's name in both the title and meta description.
-  6. Format the output as a JSON object with "title" and "metaDescription" fields.
-  7. Use the current date to make a reference to the current year in the description.
+  Instrucciones:
+  1. Usa la herramienta getPopularity para obtener la popularidad de un lugar de interés.
+  2. Genera una etiqueta de título concisa, atractiva y amigable para SEO (máximo 60 caracteres).
+  3. Crea una meta descripción atractiva (máximo 160 caracteres) que resalte las atracciones únicas del lugar y fomente las visitas.
+  4. Incorpora palabras clave relevantes basadas en los intereses turísticos actuales y la popularidad del lugar.
+  5. Incluye siempre el nombre del lugar de interés tanto en el título como en la meta descripción.
+  6. Formatea la salida como un objeto JSON con los campos "title" y "metaDescription".
+  7. Usa la fecha actual para hacer referencia al año actual en la descripción.
 
-  Example:
-  Landmark Name: Talampaya Canyon
-  Title: Explore Talampaya Canyon: A Visitor's Guide
-  Meta Description: Discover the wonders of Talampaya Canyon in {{{{currentDate}}}}. Explore towering red cliffs, ancient petroglyphs, and unique wildlife. Plan your visit today!`,
-  prompt: `Landmark Name: {{{landmarkName}}}
-Current Date: {{{currentDate}}}
+  Ejemplo:
+  Nombre del Lugar de Interés: Cañón de Talampaya
+  Título: Explora el Cañón de Talampaya: Guía del Visitante
+  Meta Descripción: Descubre las maravillas del Cañón de Talampaya en {{{{currentDate}}}}. Explora imponentes acantilados rojos, petroglifos antiguos y vida silvestre única. ¡Planifica tu visita hoy!`,
+  prompt: `Nombre del Lugar de Interés: {{{landmarkName}}}
+Fecha Actual: {{{currentDate}}}
 
-  Title:
-  Meta Description: `,
+  Título:
+  Meta Descripción: `,
 });
 
 const generateMetaTagsFlow = ai.defineFlow(

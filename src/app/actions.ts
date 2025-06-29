@@ -11,22 +11,22 @@ export async function handleGenerateMetaTags(prevState: any, formData: FormData)
     const validatedLandmark = landmarkSchema.safeParse(landmarkName);
     
     if (!validatedLandmark.success) {
-      return { message: 'Invalid landmark selected.', data: null };
+      return { message: 'Lugar de interés inválido seleccionado.', data: null };
     }
 
     const result = await generateMetaTags({
       landmarkName: validatedLandmark.data,
-      currentDate: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long' }),
+      currentDate: new Date().toLocaleDateString('es-ES', { year: 'numeric', month: 'long' }),
     });
 
     return {
-      message: 'Successfully generated meta tags.',
+      message: 'Metaetiquetas generadas con éxito.',
       data: result,
     };
   } catch (error) {
     console.error('Error generating meta tags:', error);
     return {
-      message: 'An unexpected error occurred. Please try again.',
+      message: 'Ocurrió un error inesperado. Por favor, inténtalo de nuevo.',
       data: null,
     };
   }

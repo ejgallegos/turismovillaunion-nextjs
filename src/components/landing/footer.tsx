@@ -38,8 +38,8 @@ export function Footer() {
           </div>
         </div>
         <div className="mt-6 border-t pt-6 text-center text-sm text-muted-foreground">
-          <p>&copy; {new Date().getFullYear()} Secretaría de Turismo de Villa Unión. All rights reserved.</p>
-          <p className="mt-1">Developed for demonstration purposes.</p>
+          <p>&copy; {new Date().getFullYear()} Secretaría de Turismo de Villa Unión. Todos los derechos reservados.</p>
+          <p className="mt-1">Desarrollado con fines de demostración.</p>
         </div>
       </div>
     </footer>

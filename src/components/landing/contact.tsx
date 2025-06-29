@@ -13,9 +13,9 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Mail, MapPin, Phone } from 'lucide-react';
 
 const formSchema = z.object({
-  name: z.string().min(2, { message: 'Name must be at least 2 characters.' }),
-  email: z.string().email({ message: 'Please enter a valid email address.' }),
-  message: z.string().min(10, { message: 'Message must be at least 10 characters.' }),
+  name: z.string().min(2, { message: 'El nombre debe tener al menos 2 caracteres.' }),
+  email: z.string().email({ message: 'Por favor, ingresa una dirección de correo electrónico válida.' }),
+  message: z.string().min(10, { message: 'El mensaje debe tener al menos 10 caracteres.' }),
 });
 
 export function Contact() {
@@ -32,8 +32,8 @@ export function Contact() {
   function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values);
     toast({
-      title: 'Message Sent!',
-      description: "Thank you for contacting us. We'll be in touch shortly.",
+      title: '¡Mensaje Enviado!',
+      description: "Gracias por contactarnos. Nos pondremos en contacto en breve.",
     });
     form.reset();
   }
@@ -43,17 +43,17 @@ export function Contact() {
       <div className="container mx-auto px-4 md:px-6">
         <div className="mb-12 text-center">
           <h2 className="font-headline text-3xl font-bold tracking-tight text-primary md:text-4xl">
-            Get In Touch
+            Ponte en Contacto
           </h2>
           <p className="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">
-            Have questions or ready to plan your visit? We're here to help.
+            ¿Tienes preguntas o estás listo para planificar tu visita? Estamos aquí para ayudarte.
           </p>
         </div>
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-5">
           <div className="lg:col-span-2">
             <Card className="h-full">
               <CardContent className="p-8 space-y-6">
-                <h3 className="font-headline text-2xl font-bold">Contact Information</h3>
+                <h3 className="font-headline text-2xl font-bold">Información de Contacto</h3>
                 <div className="space-y-4 text-muted-foreground">
                   <div className="flex items-start gap-4">
                     <MapPin className="h-6 w-6 flex-shrink-0 text-accent" />
@@ -69,7 +69,7 @@ export function Contact() {
                   </div>
                 </div>
                 <div className="aspect-video w-full overflow-hidden rounded-lg">
-                    <Image src="https://placehold.co/600x400.png" data-ai-hint="map location" width={600} height={400} alt="Map of Villa Unión" className="object-cover w-full h-full"/>
+                    <Image src="https://placehold.co/600x400.png" data-ai-hint="map location" width={600} height={400} alt="Mapa de Villa Unión" className="object-cover w-full h-full"/>
                 </div>
               </CardContent>
             </Card>
@@ -84,9 +84,9 @@ export function Contact() {
                       name="name"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Full Name</FormLabel>
+                          <FormLabel>Nombre Completo</FormLabel>
                           <FormControl>
-                            <Input placeholder="John Doe" {...field} />
+                            <Input placeholder="Juan Pérez" {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -97,9 +97,9 @@ export function Contact() {
                       name="email"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Email Address</FormLabel>
+                          <FormLabel>Correo Electrónico</FormLabel>
                           <FormControl>
-                            <Input placeholder="you@example.com" {...field} />
+                            <Input placeholder="tu@ejemplo.com" {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -110,15 +110,15 @@ export function Contact() {
                       name="message"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Message</FormLabel>
+                          <FormLabel>Mensaje</FormLabel>
                           <FormControl>
-                            <Textarea placeholder="Tell us about your travel plans or ask a question..." rows={6} {...field} />
+                            <Textarea placeholder="Cuéntanos sobre tus planes de viaje o haz una pregunta..." rows={6} {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
                       )}
                     />
-                    <Button type="submit" className="w-full" size="lg">Send Message</Button>
+                    <Button type="submit" className="w-full" size="lg">Enviar Mensaje</Button>
                   </form>
                 </Form>
               </CardContent>

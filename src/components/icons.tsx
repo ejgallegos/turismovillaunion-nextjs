@@ -16,7 +16,7 @@ export const Logo = (props: SVGProps<SVGSVGElement>) => (
       d="M50,95A45,45,0,0,0,85.36,85.36L14.64,14.64A45,45,0,0,0,50,95Z"
       fill="hsl(var(--accent))"
     />
-    <title>Villa Unión del Talampaya Logo</title>
+    <title>Logo de Villa Unión del Talampaya</title>
   </svg>
 );
 
@@ -33,6 +33,6 @@ export const TalampayaIcon = (props: SVGProps<SVGSVGElement>) => (
   >
     <path d="M3 17l6-6 4 4 8-8" />
     <path d="M3 7l6 6 4-4 8 8" />
-    <title>Talampaya Icon</title>
+    <title>Ícono de Talampaya</title>
   </svg>
 );

@@ -3,31 +3,31 @@ import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
 
 export const metadata: Metadata = {
-  title: 'Villa Unión del Talampaya | Your Adventure Awaits',
-  description: 'Discover the natural wonders of Villa Unión. Explore Talampaya National Park, Laguna Brava, and more. Plan your trip to one of Argentina\'s most breathtaking destinations.',
+  title: 'Villa Unión del Talampaya | Tu Aventura te Espera',
+  description: 'Descubre las maravillas naturales de Villa Unión. Explora el Parque Nacional Talampaya, Laguna Brava y más. Planifica tu viaje a uno de los destinos más impresionantes de Argentina.',
   openGraph: {
-    title: 'Villa Unión del Talampaya | Your Adventure Awaits',
-    description: 'Discover the natural wonders of Villa Unión. Explore Talampaya National Park, Laguna Brava, and more. Plan your trip to one of Argentina\'s most breathtaking destinations.',
-    url: 'https://villaunion.tur.ar', // Replace with actual URL
+    title: 'Villa Unión del Talampaya | Tu Aventura te Espera',
+    description: 'Descubre las maravillas naturales de Villa Unión. Explora el Parque Nacional Talampaya, Laguna Brava y más. Planifica tu viaje a uno de los destinos más impresionantes de Argentina.',
+    url: 'https://villaunion.tur.ar',
     siteName: 'Villa Unión del Talampaya',
     images: [
       {
-        url: 'https://placehold.co/1200x630.png', // Replace with an actual hero image URL
+        url: 'https://placehold.co/1200x630.png',
         width: 1200,
         height: 630,
-        alt: 'A stunning view of the Talampaya Canyon.',
+        alt: 'Una vista impresionante del Cañón de Talampaya.',
       },
     ],
-    locale: 'en_US',
+    locale: 'es_AR',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Villa Unión del Talampaya | Your Adventure Awaits',
-    description: 'Discover the natural wonders of Villa Unión. Explore Talampaya National Park, Laguna Brava, and more.',
-    images: ['https://placehold.co/1200x630.png'], // Replace with an actual hero image URL
+    title: 'Villa Unión del Talampaya | Tu Aventura te Espera',
+    description: 'Descubre las maravillas naturales de Villa Unión. Explora el Parque Nacional Talampaya, Laguna Brava y más.',
+    images: ['https://placehold.co/1200x630.png'],
   },
-  keywords: 'Villa Unión, Talampaya, La Rioja, Argentina, tourism, travel, Laguna Brava, Cuesta de Miranda, adventure',
+  keywords: 'Villa Unión, Talampaya, La Rioja, Argentina, turismo, viajes, Laguna Brava, Cuesta de Miranda, aventura',
   viewport: 'width=device-width, initial-scale=1',
 };
 
@@ -37,7 +37,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="scroll-smooth">
+    <html lang="es" className="scroll-smooth">
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />

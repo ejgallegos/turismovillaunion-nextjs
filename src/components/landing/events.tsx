@@ -4,24 +4,24 @@ import { Badge } from '@/components/ui/badge';
 
 const events = [
   {
-    date: 'OCT 12, 2024',
+    date: '12 OCT, 2024',
     title: 'Festival Nacional del Pimiento',
-    description: 'A celebration of local agriculture and cuisine with live music, dancing, and traditional food stalls.',
+    description: 'Una celebración de la agricultura y gastronomía local con música en vivo, bailes y puestos de comida tradicional.',
     category: 'Festival',
     icon: <Sun className="h-6 w-6 text-accent" />,
   },
   {
-    date: 'NOV 05, 2024',
-    title: 'Talampaya Full Moon Walk',
-    description: 'A unique guided tour through the Talampaya canyon under the light of the full moon.',
+    date: '05 NOV, 2024',
+    title: 'Caminata de Luna Llena en Talampaya',
+    description: 'Un recorrido guiado único por el cañón de Talampaya bajo la luz de la luna llena.',
     category: 'Tour',
     icon: <Calendar className="h-6 w-6 text-accent" />,
   },
   {
-    date: 'DEC 20, 2024',
+    date: '20 DIC, 2024',
     title: 'Feria de Artesanos de Villa Unión',
-    description: 'Discover local crafts and artistry at the annual artisan fair in the main square.',
-    category: 'Community',
+    description: 'Descubre la artesanía y el arte local en la feria anual de artesanos en la plaza principal.',
+    category: 'Comunidad',
     icon: <Users className="h-6 w-6 text-accent" />,
   },
 ];
@@ -32,10 +32,10 @@ export function Events() {
       <div className="container mx-auto px-4 md:px-6">
         <div className="mb-12 text-center">
           <h2 className="font-headline text-3xl font-bold tracking-tight text-primary md:text-4xl">
-            Upcoming Events
+            Próximos Eventos
           </h2>
           <p className="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">
-            Join our local festivities and create unforgettable memories.
+            Únete a nuestras festividades locales y crea recuerdos inolvidables.
           </p>
         </div>
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">

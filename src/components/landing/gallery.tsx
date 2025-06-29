@@ -1,12 +1,12 @@
 import Image from 'next/image';
 
 const galleryImages = [
-  { src: 'https://placehold.co/600x400.png', alt: 'Talampaya canyon walls', hint: 'canyon walls' },
-  { src: 'https://placehold.co/600x800.png', alt: 'Vicuñas at Laguna Brava', hint: 'wildlife lagoon' },
-  { src: 'https://placehold.co/600x400.png', alt: 'The winding Cuesta de Miranda road', hint: 'mountain road' },
-  { src: 'https://placehold.co/600x400.png', alt: 'Rock formation known as "The Monk"', hint: 'rock formation' },
-  { src: 'https://placehold.co/600x400.png', alt: 'Flamingos in the high-altitude lagoon', hint: 'flamingos lagoon' },
-  { src: 'https://placehold.co/600x800.png', alt: 'A starry night sky over the desert', hint: 'night sky' },
+  { src: 'https://placehold.co/600x400.png', alt: 'Paredes del cañón de Talampaya', hint: 'canyon walls' },
+  { src: 'https://placehold.co/600x800.png', alt: 'Vicuñas en Laguna Brava', hint: 'wildlife lagoon' },
+  { src: 'https://placehold.co/600x400.png', alt: 'La sinuosa Cuesta de Miranda', hint: 'mountain road' },
+  { src: 'https://placehold.co/600x400.png', alt: 'Formación rocosa conocida como "El Monje"', hint: 'rock formation' },
+  { src: 'https://placehold.co/600x400.png', alt: 'Flamencos en la laguna de altura', hint: 'flamingos lagoon' },
+  { src: 'https://placehold.co/600x800.png', alt: 'Cielo nocturno estrellado sobre el desierto', hint: 'night sky' },
 ];
 
 export function Gallery() {
@@ -15,10 +15,10 @@ export function Gallery() {
       <div className="container mx-auto px-4 md:px-6">
         <div className="mb-12 text-center">
           <h2 className="font-headline text-3xl font-bold tracking-tight text-primary md:text-4xl">
-            Visual Journey
+            Viaje Visual
           </h2>
           <p className="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">
-            Experience the breathtaking beauty of our landscapes through our lens.
+            Experimenta la impresionante belleza de nuestros paisajes a través de nuestro lente.
           </p>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">

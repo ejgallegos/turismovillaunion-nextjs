@@ -8,7 +8,7 @@ export function Hero() {
       <div className="absolute inset-0 z-0">
         <Image
           src="https://placehold.co/1920x1080.png"
-          alt="Panoramic view of the Talampaya Canyon at sunset"
+          alt="Vista panorámica del Cañón de Talampaya al atardecer"
           data-ai-hint="canyon sunset"
           fill
           className="object-cover"
@@ -21,14 +21,14 @@ export function Hero() {
           Villa Unión del Talampaya
         </h1>
         <p className="mt-4 max-w-2xl text-lg text-primary-foreground/90 md:text-xl">
-          Where nature sculpted masterpieces in stone and time stands still.
+          Donde la naturaleza esculpió obras maestras en piedra y el tiempo se detiene.
         </p>
         <div className="mt-8 flex gap-4">
           <Button size="lg" asChild>
-            <Link href="#attractions">Explore Now</Link>
+            <Link href="#attractions">Explora Ahora</Link>
           </Button>
           <Button size="lg" variant="secondary" asChild>
-            <Link href="#contact">Plan Your Trip</Link>
+            <Link href="#contact">Planifica tu Viaje</Link>
           </Button>
         </div>
       </div>
