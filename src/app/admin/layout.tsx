@@ -1,79 +1,52 @@
 'use client';
-
 import type { ReactNode } from 'react';
-import {
-  SidebarProvider,
-  Sidebar,
-  SidebarHeader,
-  SidebarContent,
-  SidebarMenu,
-  SidebarMenuItem,
-  SidebarMenuButton,
-  SidebarInset,
-  SidebarTrigger,
-  SidebarFooter,
-} from '@/components/ui/sidebar';
 import Link from 'next/link';
-import { Logo } from '@/components/icons';
-import { UserButton, useUser } from '@clerk/nextjs';
+import { UserButton } from '@clerk/nextjs';
 import { Home, Mountain, Calendar, BedDouble, Map, FileText, Bot } from 'lucide-react';
-import { usePathname } from 'next/navigation';
 
 export default function AdminLayout({ children }: { children: ReactNode }) {
-  const pathname = usePathname();
-  const { user } = useUser();
-
   const menuItems = [
-    { href: '/admin', icon: <Home />, label: 'Dashboard', tooltip: 'Dashboard' },
-    { href: '/admin/attractions', icon: <Mountain />, label: 'Atractivos', tooltip: 'Atractivos' },
-    { href: '/admin/events', icon: <Calendar />, label: 'Eventos', tooltip: 'Eventos' },
-    { href: '/admin/services', icon: <BedDouble />, label: 'Servicios', tooltip: 'Servicios' },
-    { href: '/admin/maps', icon: <Map />, label: 'Mapas', tooltip: 'Mapas' },
-    { href: '/admin/brochures', icon: <FileText />, label: 'Folletos', tooltip: 'Folletos' },
-    { href: '/admin/seo', icon: <Bot />, label: 'SEO', tooltip: 'SEO' },
+    { href: '/admin', icon: <Home className="h-4 w-4" />, label: 'Dashboard' },
+    { href: '/admin/attractions', icon: <Mountain className="h-4 w-4" />, label: 'Atractivos' },
+    { href: '/admin/events', icon: <Calendar className="h-4 w-4" />, label: 'Eventos' },
+    { href: '/admin/services', icon: <BedDouble className="h-4 w-4" />, label: 'Servicios' },
+    { href: '/admin/maps', icon: <Map className="h-4 w-4" />, label: 'Mapas' },
+    { href: '/admin/brochures', icon: <FileText className="h-4 w-4" />, label: 'Folletos' },
+    { href: '/admin/seo', icon: <Bot className="h-4 w-4" />, label: 'SEO' },
   ];
 
   return (
-    <SidebarProvider>
-      <Sidebar>
-        <SidebarHeader>
-          <div className="flex h-16 items-center gap-2 p-2">
-            <Logo />
-            <span className="duration-200 group-data-[collapsible=icon]:hidden">
-              Admin Panel
-            </span>
-          </div>
-        </SidebarHeader>
-        <SidebarContent>
-          <SidebarMenu>
+    <div className="flex min-h-screen w-full flex-col">
+      <header className="sticky top-0 flex h-16 items-center justify-between gap-4 border-b bg-background px-4 md:px-6">
+        <Link href="/admin" className="flex items-center gap-2">
+            <h1 className="text-lg font-semibold">Admin Panel</h1>
+        </Link>
+        <div className="flex items-center gap-4">
+          <Link href="/" className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary">
+            Volver al sitio
+          </Link>
+          <UserButton afterSignOutUrl="/" />
+        </div>
+      </header>
+      <div className="flex flex-1">
+        <aside className="hidden w-60 flex-col border-r bg-muted/40 p-4 md:flex">
+          <nav className="flex flex-col gap-1">
             {menuItems.map((item) => (
-              <SidebarMenuItem key={item.href}>
-                <SidebarMenuButton asChild tooltip={item.tooltip} isActive={pathname === item.href}>
-                  <Link href={item.href}>
-                    {item.icon}
-                    <span>{item.label}</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
+              <Link
+                key={item.href}
+                href={item.href}
+                className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+              >
+                {item.icon}
+                {item.label}
+              </Link>
             ))}
-          </SidebarMenu>
-        </SidebarContent>
-        <SidebarFooter>
-            <div className="flex items-center gap-2 p-2">
-                <UserButton afterSignOutUrl="/" />
-                 <div className="duration-200 group-data-[collapsible=icon]:hidden">
-                    <p className="text-sm font-medium">{user?.firstName || 'Usuario'}</p>
-                 </div>
-            </div>
-        </SidebarFooter>
-      </Sidebar>
-      <SidebarInset>
-        <header className="flex h-16 items-center justify-between border-b px-4 lg:justify-end">
-           <SidebarTrigger className="lg:hidden" />
-           <Link href="/" className="font-medium text-sm hover:underline">Volver al sitio</Link>
-        </header>
-        <main className="flex-1 p-4 md:p-6">{children}</main>
-      </SidebarInset>
-    </SidebarProvider>
+          </nav>
+        </aside>
+        <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
+            {children}
+        </main>
+      </div>
+    </div>
   );
 }
