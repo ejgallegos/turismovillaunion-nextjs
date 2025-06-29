@@ -27,13 +27,6 @@ export function Maps() {
                   fill
                   className="object-cover"
                 />
-                 <div className="absolute inset-0 flex items-center justify-center bg-black/30">
-                  <div className="text-center text-white">
-                    <MapPin className="h-16 w-16 mx-auto text-white" />
-                    <h3 className="mt-4 text-2xl font-bold">Mapa Interactivo Próximamente</h3>
-                    <p className="mt-2">Mientras tanto, descarga nuestros mapas en PDF.</p>
-                  </div>
-                </div>
               </div>
             </CardContent>
           </Card>
