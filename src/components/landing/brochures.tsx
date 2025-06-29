@@ -31,7 +31,7 @@ export function Brochures() {
       <div className="container mx-auto px-4 md:px-6">
         <div className="mb-12 text-center">
           <h2 className="font-headline text-3xl font-bold tracking-tight text-primary md:text-4xl">
-            Folletos Digitales
+            Folletos
           </h2>
           <p className="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">
             Descarga nuestras guías y folletos en formato PDF para llevarlos contigo en tu viaje.

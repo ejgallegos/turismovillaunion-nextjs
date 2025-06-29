@@ -22,7 +22,7 @@ const navLinks = [
   { href: '/eventos', label: 'Eventos' },
   { href: '/servicios', label: 'Servicios' },
   { href: '/mapas', label: 'Mapas' },
-  { href: '/folletos', label: 'Folletos Digitales' },
+  { href: '/folletos', label: 'Folletos' },
   { href: '/contacto', label: 'Contacto' },
 ];
 
