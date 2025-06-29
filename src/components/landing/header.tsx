@@ -18,9 +18,12 @@ import { Menu } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 
 const navLinks = [
-  { href: '/atracciones', label: 'Atractivos' },
+  { href: '/atractivos', label: 'Atractivos' },
   { href: '/galeria', label: 'Galería' },
   { href: '/eventos', label: 'Eventos' },
+  { href: '/servicios', label: 'Servicios' },
+  { href: '/mapas', label: 'Mapas' },
+  { href: '/folletos', label: 'Folletos Digitales' },
   { href: '/contacto', label: 'Contacto' },
 ];
 
