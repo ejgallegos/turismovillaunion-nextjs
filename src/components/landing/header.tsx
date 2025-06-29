@@ -5,6 +5,17 @@ import { Logo } from '@/components/icons';
 import { cn } from '@/lib/utils';
 import { useEffect, useState } from 'react';
 import { ThemeToggle } from '../theme-toggle';
+import { Button } from '@/components/ui/button';
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+  SheetClose,
+} from '@/components/ui/sheet';
+import { Menu } from 'lucide-react';
+import { Separator } from '@/components/ui/separator';
 
 const navLinks = [
   { href: '/atracciones', label: 'Atracciones' },
@@ -38,19 +49,59 @@ export function Header() {
             Villa Unión
           </span>
         </Link>
-        <div className="flex items-center gap-2">
-          <nav className="hidden items-center gap-6 md:flex">
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className="font-medium text-foreground/80 transition-colors hover:text-primary"
-              >
-                {link.label}
-              </Link>
-            ))}
-          </nav>
+
+        <nav className="hidden items-center gap-6 md:flex">
+          {navLinks.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className="font-medium text-foreground/80 transition-colors hover:text-primary"
+            >
+              {link.label}
+            </Link>
+          ))}
           <ThemeToggle />
+        </nav>
+
+        <div className="md:hidden">
+          <Sheet>
+            <SheetTrigger asChild>
+              <Button variant="ghost" size="icon">
+                <Menu className="h-6 w-6" />
+                <span className="sr-only">Abrir menú</span>
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="right">
+              <SheetHeader>
+                <SheetTitle>
+                  <SheetClose asChild>
+                    <Link href="/" className="flex items-center gap-2">
+                      <Logo />
+                      <span className="font-headline text-xl font-bold text-primary">
+                        Villa Unión
+                      </span>
+                    </Link>
+                  </SheetClose>
+                </SheetTitle>
+              </SheetHeader>
+              <Separator className="my-4" />
+              <div className="flex flex-col gap-4">
+                {navLinks.map((link) => (
+                  <SheetClose asChild key={link.href}>
+                    <Link
+                      href={link.href}
+                      className="text-lg font-medium text-foreground/80 transition-colors hover:text-primary"
+                    >
+                      {link.label}
+                    </Link>
+                  </SheetClose>
+                ))}
+              </div>
+              <div className="absolute bottom-6 left-6">
+                <ThemeToggle />
+              </div>
+            </SheetContent>
+          </Sheet>
         </div>
       </div>
     </header>
