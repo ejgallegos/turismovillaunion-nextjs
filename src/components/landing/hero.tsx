@@ -43,49 +43,81 @@ const heroSlides = [
 
 export function Hero() {
   const plugin = React.useRef(Autoplay({ delay: 5000, stopOnInteraction: true }));
+  const firstSlide = heroSlides[0];
 
   return (
-    <Carousel
-      plugins={[plugin.current]}
-      opts={{
-        loop: true,
-      }}
-      className="relative -mt-20 w-full h-screen"
-      onMouseEnter={plugin.current.stop}
-      onMouseLeave={plugin.current.reset}
-    >
-      <CarouselContent>
-        {heroSlides.map((slide, index) => (
-          <CarouselItem key={index}>
-            <section className="relative flex h-screen w-full items-center justify-center">
-              <div className="absolute inset-0 z-0">
-                <Image
-                  src={slide.src}
-                  alt={slide.alt}
-                  data-ai-hint={slide.hint}
-                  fill
-                  className="object-cover"
-                  priority={index === 0}
-                />
-                <div className="absolute inset-0 bg-black/50" />
-              </div>
-              <div className="relative z-10 flex flex-col items-center text-center text-white p-4">
-                <h1 className="font-headline text-4xl font-bold tracking-tight sm:text-6xl md:text-7xl">
-                  {slide.title}
-                </h1>
-                <p className="mt-4 max-w-2xl text-lg text-primary-foreground/90 md:text-xl">
-                  {slide.subtitle}
-                </p>
-                <div className="mt-8 flex gap-4">
-                  <Button size="lg" asChild>
-                    <Link href={slide.buttonLink}>{slide.buttonText}</Link>
-                  </Button>
+    <>
+      {/* Mobile View: Static with first slide content */}
+      <section className="relative -mt-20 flex h-screen w-full items-center justify-center md:hidden">
+        <div className="absolute inset-0 z-0">
+          <Image
+            src={firstSlide.src}
+            alt={firstSlide.alt}
+            data-ai-hint={firstSlide.hint}
+            fill
+            className="object-cover"
+            priority
+          />
+          <div className="absolute inset-0 bg-black/50" />
+        </div>
+        <div className="relative z-10 flex flex-col items-center p-4 text-center text-white">
+          <h1 className="font-headline text-4xl font-bold tracking-tight sm:text-6xl">
+            {firstSlide.title}
+          </h1>
+          <p className="mt-4 max-w-2xl text-lg text-primary-foreground/90">
+            {firstSlide.subtitle}
+          </p>
+          <div className="mt-8 flex gap-4">
+            <Button size="lg" asChild>
+              <Link href={firstSlide.buttonLink}>{firstSlide.buttonText}</Link>
+            </Button>
+          </div>
+        </div>
+      </section>
+
+      {/* Desktop View: Carousel */}
+      <Carousel
+        plugins={[plugin.current]}
+        opts={{
+          loop: true,
+        }}
+        className="relative -mt-20 hidden h-screen w-full md:block"
+        onMouseEnter={plugin.current.stop}
+        onMouseLeave={plugin.current.reset}
+      >
+        <CarouselContent>
+          {heroSlides.map((slide, index) => (
+            <CarouselItem key={index}>
+              <section className="relative flex h-screen w-full items-center justify-center">
+                <div className="absolute inset-0 z-0">
+                  <Image
+                    src={slide.src}
+                    alt={slide.alt}
+                    data-ai-hint={slide.hint}
+                    fill
+                    className="object-cover"
+                    priority={index === 0}
+                  />
+                  <div className="absolute inset-0 bg-black/50" />
                 </div>
-              </div>
-            </section>
-          </CarouselItem>
-        ))}
-      </CarouselContent>
-    </Carousel>
+                <div className="relative z-10 flex flex-col items-center p-4 text-center text-white">
+                  <h1 className="font-headline text-4xl font-bold tracking-tight sm:text-6xl md:text-7xl">
+                    {slide.title}
+                  </h1>
+                  <p className="mt-4 max-w-2xl text-lg text-primary-foreground/90 md:text-xl">
+                    {slide.subtitle}
+                  </p>
+                  <div className="mt-8 flex gap-4">
+                    <Button size="lg" asChild>
+                      <Link href={slide.buttonLink}>{slide.buttonText}</Link>
+                    </Button>
+                  </div>
+                </div>
+              </section>
+            </CarouselItem>
+          ))}
+        </CarouselContent>
+      </Carousel>
+    </>
   );
 }
