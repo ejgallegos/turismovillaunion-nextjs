@@ -31,14 +31,14 @@ export async function Atractivos() {
                   className="object-cover"
                 />
               </div>
-              <CardHeader className="flex flex-grow flex-row items-start gap-4">
-                <MapPin className="mt-1 h-6 w-6 flex-shrink-0 text-primary" />
+              <CardHeader className="flex flex-grow flex-row items-start gap-4 p-6">
+                <MapPin className="hidden md:block mt-1 h-6 w-6 flex-shrink-0 text-primary" />
                 <div className="flex-1">
                    <h3 className="font-headline text-xl font-bold"><Link href={`/atractivos/${attraction.id}`} className="hover:underline">{attraction.title}</Link></h3>
                   <CardDescription className="mt-2 text-base">{attraction.description}</CardDescription>
                 </div>
               </CardHeader>
-              <CardContent className="flex justify-end">
+              <CardContent className="flex justify-end p-6 pt-0">
                 <Button variant="link" className="text-accent" asChild>
                   <Link href={`/atractivos/${attraction.id}`}>
                     Saber Más <ArrowRight className="ml-2 h-4 w-4" />
