@@ -82,3 +82,13 @@
     @apply bg-background text-foreground;
   }
 }
+
+.swiper-pagination-bullet {
+  background: hsl(var(--primary));
+  opacity: 0.5;
+}
+
+.swiper-pagination-bullet-active {
+  background: hsl(var(--primary));
+  opacity: 1;
+}
