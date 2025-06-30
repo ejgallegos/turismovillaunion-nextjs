@@ -3,7 +3,6 @@
 import Link from 'next/link';
 import { Logo } from '@/components/icons';
 import { cn } from '@/lib/utils';
-import { useEffect, useState } from 'react';
 import { ThemeToggle } from '../theme-toggle';
 import { Button } from '@/components/ui/button';
 import {
@@ -27,21 +26,10 @@ const navLinks = [
 ];
 
 export function Header() {
-  const [isScrolled, setIsScrolled] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 10);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
   return (
     <header
       className={cn(
-        'sticky top-0 z-50 w-full transition-all duration-300',
-        isScrolled ? 'border-b bg-background shadow-sm' : 'bg-transparent'
+        'sticky top-0 z-50 w-full border-b bg-background shadow-sm'
       )}
     >
       <div className="container mx-auto flex h-20 items-center justify-between px-4 md:px-6">
