@@ -1,6 +1,5 @@
 import { MetadataRoute } from 'next';
 import { getAttractions } from './lib/atractivos.service';
-import { getEventos } from './lib/eventos.service';
 import { getServicios } from './lib/servicios.service';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
@@ -10,7 +9,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticRoutes = [
     '/',
     '/atractivos',
-    '/eventos',
     '/servicios',
     '/mapas',
     '/folletos',
@@ -31,15 +29,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.7,
   }));
 
-  // Dynamic eventos routes
-  const eventos = await getEventos();
-  const eventoRoutes = eventos.map((evento) => ({
-    url: `${baseUrl}/eventos/${evento.id}`,
-    lastModified: new Date(),
-    changeFrequency: 'weekly' as const,
-    priority: 0.6,
-  }));
-
   // Dynamic servicios routes
   const servicios = await getServicios();
   const servicioRoutes = servicios.map((servicio) => ({
@@ -52,7 +41,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   return [
     ...staticRoutes,
     ...attractionRoutes,
-    ...eventoRoutes,
     ...servicioRoutes,
   ];
 }
