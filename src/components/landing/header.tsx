@@ -27,71 +27,82 @@ const navLinks = [
 
 export function Header() {
   return (
-    <header
-      className={cn(
-        'sticky top-0 z-50 w-full border-b bg-background shadow-sm'
-      )}
-    >
-      <div className="container mx-auto flex h-20 items-center justify-between px-4 md:px-6">
-        <Link href="/" className="flex items-center gap-2" aria-label="Volver a la página principal">
-          <Logo />
-          <span className="hidden font-headline text-xl font-bold text-primary sm:inline-block">
-            Villa Unión
-          </span>
-        </Link>
+		<header
+			className={cn(
+				"sticky top-0 z-50 w-full border-b bg-background shadow-sm"
+			)}
+		>
+			<div className="container mx-auto flex h-20 items-center justify-between px-4 md:px-6">
+				<Link
+					href="/"
+					className="flex items-center gap-2"
+					aria-label="Volver a la página principal"
+				>
+					<Logo
+						src="/images/Logos/logo-sec.png"
+						alt={"Secretaría de Turísmo"}
+						width={125}
+						height={125}
+					/>
+				</Link>
 
-        <nav className="hidden items-center gap-6 lg:flex">
-          {navLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="font-medium text-foreground/80 transition-colors hover:text-primary"
-            >
-              {link.label}
-            </Link>
-          ))}
-          <ThemeToggle />
-        </nav>
+				<nav className="hidden items-center gap-6 lg:flex">
+					{navLinks.map((link) => (
+						<Link
+							key={link.href}
+							href={link.href}
+							className="font-medium text-foreground/80 transition-colors hover:text-primary"
+						>
+							{link.label}
+						</Link>
+					))}
+					<ThemeToggle />
+				</nav>
 
-        <div className="flex items-center gap-2 lg:hidden">
-          <ThemeToggle />
-          <Sheet>
-            <SheetTrigger asChild>
-              <Button variant="ghost" size="icon">
-                <Menu className="h-6 w-6" />
-                <span className="sr-only">Abrir menú</span>
-              </Button>
-            </SheetTrigger>
-            <SheetContent side="right">
-              <SheetHeader>
-                <SheetTitle>
-                  <SheetClose asChild>
-                    <Link href="/" className="flex items-center gap-2">
-                      <Logo />
-                      <span className="font-headline text-xl font-bold text-primary">
-                        Villa Unión
-                      </span>
-                    </Link>
-                  </SheetClose>
-                </SheetTitle>
-              </SheetHeader>
-              <Separator className="my-4" />
-              <div className="flex flex-col gap-4">
-                {navLinks.map((link) => (
-                  <SheetClose asChild key={link.href}>
-                    <Link
-                      href={link.href}
-                      className="text-lg font-medium text-foreground/80 transition-colors hover:text-primary"
-                    >
-                      {link.label}
-                    </Link>
-                  </SheetClose>
-                ))}
-              </div>
-            </SheetContent>
-          </Sheet>
-        </div>
-      </div>
-    </header>
+				<div className="flex items-center gap-2 lg:hidden">
+					<ThemeToggle />
+					<Sheet>
+						<SheetTrigger asChild>
+							<Button variant="ghost" size="icon">
+								<Menu className="h-6 w-6" />
+								<span className="sr-only">Abrir menú</span>
+							</Button>
+						</SheetTrigger>
+						<SheetContent side="right">
+							<SheetHeader>
+								<SheetTitle>
+									<SheetClose asChild>
+										<Link
+											href="/"
+											className="flex items-center gap-2"
+										>
+											<Logo
+												src="/images/Logos/logo.png"
+												alt={"Villa Unión del Talampaya"}
+												width={80}
+												height={80}
+											/>
+										</Link>
+									</SheetClose>
+								</SheetTitle>
+							</SheetHeader>
+							<Separator className="my-4" />
+							<div className="flex flex-col gap-4">
+								{navLinks.map((link) => (
+									<SheetClose asChild key={link.href}>
+										<Link
+											href={link.href}
+											className="text-lg font-medium text-foreground/80 transition-colors hover:text-primary"
+										>
+											{link.label}
+										</Link>
+									</SheetClose>
+								))}
+							</div>
+						</SheetContent>
+					</Sheet>
+				</div>
+			</div>
+		</header>
   );
 }

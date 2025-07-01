@@ -18,33 +18,34 @@ import 'swiper/css/navigation';
 import { Autoplay, Pagination, Navigation, EffectFade } from 'swiper/modules';
 
 const heroSlides = [
-  {
-    src: 'https://placehold.co/1920x1080.png',
-    alt: 'Vista panorámica del Cañón de Talampaya al atardecer',
-    hint: 'canyon sunset',
-    title: 'Villa Unión del Talampaya',
-    subtitle: 'Donde la naturaleza esculpió obras maestras en piedra y el tiempo se detiene.',
-    buttonText: 'Explora Ahora',
-    buttonLink: '#atractivos',
-  },
-  {
-    src: 'https://placehold.co/1920x1080.png',
-    alt: 'Vista de la Laguna Brava con flamencos',
-    hint: 'salt lake',
-    title: 'Descubre la Mágica Laguna Brava',
-    subtitle: 'Un espejo de sal en el corazón de los Andes.',
-    buttonText: 'Ver Atractivos',
-    buttonLink: '/atractivos',
-  },
-  {
-    src: 'https://placehold.co/1920x1080.png',
-    alt: 'La sinuosa Cuesta de Miranda',
-    hint: 'winding road',
-    title: 'Aventúrate en la Cuesta de Miranda',
-    subtitle: 'Un camino de colores y vistas que te quitarán el aliento.',
-    buttonText: 'Ver Más',
-    buttonLink: '/atractivos',
-  },
+	{
+		src: "/images/Banner/slider/home-slider-sec-turismo.png",
+		alt: "",
+		hint: "canyon sunset",
+		title: "Secretaría de Turismo Felipe Varela",
+		subtitle:
+			"Tierra de tradiciones y paisajes apasionantes que no podes dejar de visitar. Sus distintas localidades, sus bellezas naturales y sobre todo su gente harán de tu recorrido una experiencia muy especial.",
+		buttonText: "Explora Ahora",
+		buttonLink: "#atractivos",
+	},
+	// {
+	//   src: 'https://placehold.co/1920x1080.png',
+	//   alt: 'Vista de la Laguna Brava con flamencos',
+	//   hint: 'salt lake',
+	//   title: 'Descubre la Mágica Laguna Brava',
+	//   subtitle: 'Un espejo de sal en el corazón de los Andes.',
+	//   buttonText: 'Ver Atractivos',
+	//   buttonLink: '/atractivos',
+	// },
+	// {
+	//   src: 'https://placehold.co/1920x1080.png',
+	//   alt: 'La sinuosa Cuesta de Miranda',
+	//   hint: 'winding road',
+	//   title: 'Aventúrate en la Cuesta de Miranda',
+	//   subtitle: 'Un camino de colores y vistas que te quitarán el aliento.',
+	//   buttonText: 'Ver Más',
+	//   buttonLink: '/atractivos',
+	// },
 ];
 
 export function Hero() {
@@ -78,7 +79,7 @@ export function Hero() {
                   className="object-cover"
                   priority={index === 0}
                 />
-                <div className="absolute inset-0 bg-black/50" />
+                <div className="absolute inset-0 bg-black/25" />
               </div>
               <div className="relative z-10 flex flex-col items-center p-4 text-center text-white">
                 <h1 className="font-headline text-4xl font-bold tracking-tight sm:text-6xl md:text-7xl">
