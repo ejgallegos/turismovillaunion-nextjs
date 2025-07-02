@@ -5,16 +5,12 @@ import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import * as LucideIcons from 'lucide-react';
 
-type Props = {
-  params: { id: string };
-};
-
 const getServiceIcon = (iconName: string, props: any) => {
     const IconComponent = (LucideIcons as any)[iconName] || LucideIcons.HelpCircle;
     return <IconComponent {...props} />;
 };
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
   const servicios = await getServicios();
   const servicio = servicios.find((s) => s.id === params.id);
 
@@ -49,7 +45,7 @@ export async function generateStaticParams() {
   }));
 }
 
-export default async function ServicioDetailPage({ params }: Props) {
+export default async function ServicioDetailPage({ params }: { params: { id: string } }) {
   const servicios = await getServicios();
   const servicio = servicios.find((s) => s.id === params.id);
 
