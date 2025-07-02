@@ -76,10 +76,10 @@ export function Header() {
 											className="flex items-center gap-2"
 										>
 											<Logo
-												src="/images/Logos/logo.png"
-												alt={"Villa Unión del Talampaya"}
-												width={80}
-												height={80}
+												src="/images/Logos/logo-sec.png"
+												alt={"Secretaría de Turísmo"}
+												width={125}
+												height={125}
 											/>
 										</Link>
 									</SheetClose>
