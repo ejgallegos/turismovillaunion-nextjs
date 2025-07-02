@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import Image from 'next/image';
+import Link from 'next/link';
 
 import { upsertFolleto } from './actions';
 import type { Folleto } from '@/lib/folletos.service';
@@ -14,21 +15,29 @@ import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { Form, FormControl, FormField, FormItem, FormMessage, FormLabel } from '@/components/ui/form';
 import { Sheet, SheetContent, SheetFooter, SheetHeader, SheetTitle, SheetDescription, SheetTrigger } from '@/components/ui/sheet';
+import { FileText } from 'lucide-react';
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
+const ACCEPTED_DOWNLOAD_TYPES = ['application/pdf', 'image/jpeg', 'image/png', 'image/webp'];
 
 const folletoSchema = z.object({
   id: z.string().optional(),
   title: z.string().min(3, { message: 'El título debe tener al menos 3 caracteres.' }),
   description: z.string().min(10, { message: 'La descripción debe tener al menos 10 caracteres.' }),
-  downloadUrl: z.string().url({ message: 'URL de descarga no válida. Déjalo vacío si no hay.' }).optional().or(z.literal('')),
   image: z.any()
     .optional()
     .refine((files) => !files || files.length === 0 || files?.[0]?.size <= MAX_FILE_SIZE, `El tamaño máximo del archivo es 5MB.`)
     .refine(
       (files) => !files || files.length === 0 || ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type),
       'Solo se aceptan formatos .jpg, .png y .webp.'
+    ),
+  downloadFile: z.any()
+    .optional()
+    .refine((files) => !files || files.length === 0 || files?.[0]?.size <= MAX_FILE_SIZE, `El tamaño máximo del archivo es 5MB.`)
+    .refine(
+      (files) => !files || files.length === 0 || ACCEPTED_DOWNLOAD_TYPES.includes(files?.[0]?.type),
+      'Solo se aceptan archivos PDF, .jpg, .png y .webp.'
     ),
 });
 
@@ -49,8 +58,8 @@ export function FolletoFormSheet({ children, folleto }: FolletoFormSheetProps) {
       id: folleto?.id,
       title: folleto?.title || '',
       description: folleto?.description || '',
-      downloadUrl: folleto?.downloadUrl || '',
       image: undefined,
+      downloadFile: undefined,
     },
   });
 
@@ -62,8 +71,8 @@ export function FolletoFormSheet({ children, folleto }: FolletoFormSheetProps) {
         id: folleto?.id,
         title: folleto?.title || '',
         description: folleto?.description || '',
-        downloadUrl: folleto?.downloadUrl || '',
         image: undefined,
+        downloadFile: undefined,
       });
     }
   }, [open, folleto, form]);
@@ -75,14 +84,16 @@ export function FolletoFormSheet({ children, folleto }: FolletoFormSheetProps) {
     }
     formData.append('title', values.title);
     formData.append('description', values.description);
-    if (values.downloadUrl) {
-      formData.append('downloadUrl', values.downloadUrl);
-    }
+    
     if (values.image && values.image.length > 0) {
       formData.append('image', values.image[0]);
     } else if (!folleto?.id) {
-        form.setError('image', { type: 'manual', message: 'La imagen es requerida para un nuevo folleto.' });
+        form.setError('image', { type: 'manual', message: 'La imagen de portada es requerida.' });
         return;
+    }
+    
+    if (values.downloadFile && values.downloadFile.length > 0) {
+      formData.append('downloadFile', values.downloadFile[0]);
     }
     
     const result = await upsertFolleto(formData);
@@ -94,7 +105,7 @@ export function FolletoFormSheet({ children, folleto }: FolletoFormSheetProps) {
       });
       setOpen(false);
     } else {
-       const errorMessage = result.errors ? (result.errors.image?.[0] || result.errors.title?.[0] || result.errors.description?.[0]) : result.error;
+       const errorMessage = result.errors ? (result.errors.image?.[0] || result.errors.title?.[0] || result.errors.description?.[0] || (result.errors as any).downloadFile?.[0]) : result.error;
        toast({
         title: 'Error',
         description: errorMessage || 'Hubo un problema al guardar el folleto.',
@@ -149,7 +160,7 @@ export function FolletoFormSheet({ children, folleto }: FolletoFormSheetProps) {
                     <FormItem>
                       <FormLabel>Imagen de Portada</FormLabel>
                       <FormControl>
-                         <Input type="file" {...register("image")} />
+                         <Input type="file" {...register("image")} accept="image/jpeg,image/png,image/webp" />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -169,17 +180,26 @@ export function FolletoFormSheet({ children, folleto }: FolletoFormSheetProps) {
                 )}
                  <FormField
                   control={form.control}
-                  name="downloadUrl"
-                  render={({ field }) => (
+                  name="downloadFile"
+                  render={() => (
                     <FormItem>
-                      <FormLabel>URL de Descarga (PDF)</FormLabel>
+                      <FormLabel>Archivo de Descarga (PDF o Imagen)</FormLabel>
                       <FormControl>
-                        <Input {...field} placeholder="https://ejemplo.com/folleto.pdf"/>
+                        <Input type="file" {...register("downloadFile")} accept="application/pdf,image/jpeg,image/png,image/webp" />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
+                {folleto?.downloadUrl && (
+                  <div className="mt-2 text-sm">
+                    <p className="text-muted-foreground mb-2">Archivo actual:</p>
+                    <Link href={folleto.downloadUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-primary hover:underline">
+                      <FileText className="h-4 w-4" />
+                      <span>{folleto.downloadUrl.split('/').pop()}</span>
+                    </Link>
+                  </div>
+                )}
               </div>
               <SheetFooter className="p-6 bg-secondary mt-auto">
                   <Button type="button" variant="outline" onClick={() => setOpen(false)}>Cancelar</Button>

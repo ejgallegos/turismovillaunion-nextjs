@@ -12,16 +12,21 @@ const slugify = (text: string) => text.toLowerCase().replace(/[^a-z0-9]+/g, '-')
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
+const ACCEPTED_DOWNLOAD_TYPES = ['application/pdf', 'image/jpeg', 'image/png', 'image/webp'];
 
 const folletoSchema = z.object({
   id: z.string().optional(),
   title: z.string().min(3, 'El título es requerido.'),
   description: z.string().min(10, 'La descripción es requerida.'),
-  downloadUrl: z.string().url('La URL de descarga no es válida.').optional().or(z.literal('')),
   image: z
     .any()
     .refine((file) => !file || file.size <= MAX_FILE_SIZE, `El tamaño máximo es 5MB.`)
     .refine((file) => !file || ACCEPTED_IMAGE_TYPES.includes(file.type), 'Solo se aceptan .jpg, .png y .webp.')
+    .optional(),
+  downloadFile: z
+    .any()
+    .refine((file) => !file || file.size <= MAX_FILE_SIZE, `El tamaño máximo es 5MB.`)
+    .refine((file) => !file || ACCEPTED_DOWNLOAD_TYPES.includes(file.type), 'Solo se aceptan PDF, JPG, PNG y WebP.')
     .optional(),
 });
 
@@ -30,13 +35,16 @@ export async function upsertFolleto(formData: FormData) {
     id: formData.get('id')?.toString(),
     title: formData.get('title')?.toString(),
     description: formData.get('description')?.toString(),
-    downloadUrl: formData.get('downloadUrl')?.toString() || '',
     image: formData.get('image') as File | null,
+    downloadFile: formData.get('downloadFile') as File | null,
   };
 
-  // Filter out empty image file so validation passes if no file is uploaded
+  // Filter out empty files so validation passes if no file is uploaded
   if (rawData.image && rawData.image.size === 0) {
     rawData.image = null;
+  }
+  if (rawData.downloadFile && rawData.downloadFile.size === 0) {
+    rawData.downloadFile = null;
   }
 
   const validatedFields = folletoSchema.safeParse(rawData);
@@ -48,25 +56,40 @@ export async function upsertFolleto(formData: FormData) {
     };
   }
 
-  const { id, title, description, downloadUrl, image } = validatedFields.data;
+  const { id, title, description, image, downloadFile } = validatedFields.data;
   const folletos = await getFolletos();
-  let imageUrl: string | undefined = undefined;
+  const existingFolleto = id ? folletos.find((f) => f.id === id) : undefined;
+  
+  let imageUrl: string | undefined = existingFolleto?.imageUrl;
+  let downloadUrl: string | undefined = existingFolleto?.downloadUrl;
 
   try {
-    // Handle file upload if an image is provided
+    const slug = slugify(title);
+    const uploadDir = path.join(process.cwd(), 'public/uploads/folletos', slug);
+    
+    // Create directory if we are uploading any file
+    if (image || downloadFile) {
+        await fs.mkdir(uploadDir, { recursive: true });
+    }
+
+    // Handle cover image upload
     if (image) {
-      const slug = slugify(title);
-      const uploadDir = path.join(process.cwd(), 'public/uploads/folletos', slug);
-      await fs.mkdir(uploadDir, { recursive: true });
-
       const fileExtension = path.extname(image.name);
-      const filename = `${Date.now()}${fileExtension}`;
+      const filename = `cover-${Date.now()}${fileExtension}`;
       const filePath = path.join(uploadDir, filename);
-
       const buffer = Buffer.from(await image.arrayBuffer());
       await fs.writeFile(filePath, buffer);
-
       imageUrl = `/uploads/folletos/${slug}/${filename}`;
+    }
+    
+    // Handle downloadable file upload
+    if (downloadFile) {
+      const fileExtension = path.extname(downloadFile.name);
+      const filename = `download-${Date.now()}${fileExtension}`;
+      const filePath = path.join(uploadDir, filename);
+      const buffer = Buffer.from(await downloadFile.arrayBuffer());
+      await fs.writeFile(filePath, buffer);
+      downloadUrl = `/uploads/folletos/${slug}/${filename}`;
     }
 
     if (id) {
@@ -77,9 +100,8 @@ export async function upsertFolleto(formData: FormData) {
           ...folletos[index], 
           title, 
           description,
-          downloadUrl,
-          // Only update imageUrl if a new one was uploaded
-          ...(imageUrl && { imageUrl }),
+          imageUrl, // Updated or existing
+          downloadUrl, // Updated or existing
         };
       } else {
         return { success: false, error: 'Folleto no encontrado.' };
@@ -87,7 +109,7 @@ export async function upsertFolleto(formData: FormData) {
     } else {
       // Create
       if (!imageUrl) {
-        return { success: false, errors: { image: ['La imagen es requerida.'] } };
+        return { success: false, errors: { image: ['La imagen de portada es requerida.'] } };
       }
       const newId = slugify(title);
       const existing = folletos.find(f => f.id === newId);
