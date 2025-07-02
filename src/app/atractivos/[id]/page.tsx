@@ -1,18 +1,22 @@
+
 import { getAttractions } from '@/lib/atractivos.service';
 import { Header } from '@/components/landing/header';
 import { Footer } from '@/components/landing/footer';
 import Image from 'next/image';
-import type { Metadata } from 'next';
+import type { Metadata, ResolvingMetadata } from 'next';
 import { notFound } from 'next/navigation';
 
-// Generate metadata for the page
-export async function generateMetadata({
-  params: { id },
-}: {
+type Props = {
   params: { id: string };
-}): Promise<Metadata> {
+};
+
+// Generate metadata for the page
+export async function generateMetadata(
+  { params }: Props,
+  parent: ResolvingMetadata
+): Promise<Metadata> {
   const attractions = await getAttractions();
-  const attraction = attractions.find((a) => a.id === id);
+  const attraction = attractions.find((a) => a.id === params.id);
 
   if (!attraction) {
     return {
@@ -55,13 +59,9 @@ export async function generateStaticParams() {
   }));
 }
 
-export default async function AttractionDetailPage({
-  params: { id },
-}: {
-  params: { id: string };
-}) {
+export default async function AttractionDetailPage({ params }: Props) {
   const attractions = await getAttractions();
-  const attraction = attractions.find((a) => a.id === id);
+  const attraction = attractions.find((a) => a.id === params.id);
 
   if (!attraction) {
     notFound();

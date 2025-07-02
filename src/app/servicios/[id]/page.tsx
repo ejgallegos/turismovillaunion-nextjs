@@ -1,8 +1,9 @@
+
 import { getServicios } from '@/lib/servicios.service';
 import { Header } from '@/components/landing/header';
 import { Footer } from '@/components/landing/footer';
 import { notFound } from 'next/navigation';
-import type { Metadata } from 'next';
+import type { Metadata, ResolvingMetadata } from 'next';
 import * as LucideIcons from 'lucide-react';
 
 const getServiceIcon = (iconName: string, props: any) => {
@@ -10,13 +11,16 @@ const getServiceIcon = (iconName: string, props: any) => {
     return <IconComponent {...props} />;
 };
 
-export async function generateMetadata({
-  params: { id },
-}: {
+type Props = {
   params: { id: string };
-}): Promise<Metadata> {
+};
+
+export async function generateMetadata(
+  { params }: Props,
+  parent: ResolvingMetadata
+): Promise<Metadata> {
   const servicios = await getServicios();
-  const servicio = servicios.find((s) => s.id === id);
+  const servicio = servicios.find((s) => s.id === params.id);
 
   if (!servicio) {
     return {
@@ -49,13 +53,9 @@ export async function generateStaticParams() {
   }));
 }
 
-export default async function ServicioDetailPage({
-  params: { id },
-}: {
-  params: { id: string };
-}) {
+export default async function ServicioDetailPage({ params }: Props) {
   const servicios = await getServicios();
-  const servicio = servicios.find((s) => s.id === id);
+  const servicio = servicios.find((s) => s.id === params.id);
 
   if (!servicio) {
     notFound();
