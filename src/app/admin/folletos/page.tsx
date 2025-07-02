@@ -6,6 +6,7 @@ import { PlusCircle, Pencil, Trash2 } from "lucide-react";
 import { FolletoFormSheet } from './folleto-form-sheet';
 import { DeleteFolletoAlert } from './delete-folleto-alert';
 
+export const dynamic = 'force-dynamic';
 
 export default async function AdminFolletosPage() {
   const folletos = await getFolletos();

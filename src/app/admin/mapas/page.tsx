@@ -6,6 +6,7 @@ import { PlusCircle, Pencil, Trash2 } from "lucide-react";
 import { MapaFormSheet } from './mapa-form-sheet';
 import { DeleteMapaAlert } from './delete-mapa-alert';
 
+export const dynamic = 'force-dynamic';
 
 export default async function AdminMapasPage() {
   const mapas = await getMapas();

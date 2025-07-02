@@ -6,6 +6,7 @@ import { PlusCircle, Pencil, Trash2 } from "lucide-react";
 import { AtractivoFormSheet } from './atractivo-form-sheet';
 import { DeleteAtractivoAlert } from './delete-atractivo-alert';
 
+export const dynamic = 'force-dynamic';
 
 export default async function AdminAtractivosPage() {
   const attractions = await getAttractions();

@@ -6,6 +6,8 @@ import { PlusCircle, Pencil, Trash2 } from "lucide-react";
 import { ServicioFormSheet } from './servicio-form-sheet';
 import { DeleteServicioAlert } from './delete-servicio-alert';
 
+export const dynamic = 'force-dynamic';
+
 export default async function AdminServiciosPage() {
   const servicios = await getServicios();
 
