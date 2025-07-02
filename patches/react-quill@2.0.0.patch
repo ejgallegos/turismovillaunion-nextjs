@@ -1,0 +1,11 @@
+--- a/node_modules/react-quill/lib/index.js
++++ b/node_modules/react-quill/lib/index.js
+@@ -320,7 +320,7 @@
+ 	 * a Quill instance.
+ 	 */
+ 	getEditingArea: function getEditingArea() {
+-		return _reactDom2.default.findDOMNode(this.editingArea);
++		return this.editingArea;
+ 	},
+ 
+ 	/**
