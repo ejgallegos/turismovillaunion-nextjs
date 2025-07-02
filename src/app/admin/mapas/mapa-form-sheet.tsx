@@ -122,23 +122,21 @@ export function MapaFormSheet({ children, mapa }: MapaFormSheetProps) {
                     </FormItem>
                   )}
                 />
-                <FormField
-                  control={form.control}
-                  name="description"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Descripción</FormLabel>
-                      <FormControl>
-                        <RichTextEditor
-                          value={field.value}
-                          onChange={field.onChange}
-                          placeholder="Describe el contenido o propósito del mapa..."
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
+                <FormItem>
+                  <FormLabel>Descripción</FormLabel>
+                  <RichTextEditor
+                    value={form.watch('description')}
+                    onChange={(value) => {
+                      form.setValue('description', value, { shouldValidate: true, shouldDirty: true });
+                    }}
+                    placeholder="Describe el contenido o propósito del mapa..."
+                  />
+                  {form.formState.errors.description && (
+                    <p className="text-sm font-medium text-destructive">
+                      {form.formState.errors.description.message}
+                    </p>
                   )}
-                />
+                </FormItem>
                 <FormField
                   control={form.control}
                   name="downloadFile"

@@ -123,23 +123,21 @@ export function AtractivoFormSheet({ children, attraction }: AtractivoFormSheetP
                     </FormItem>
                   )}
                 />
-                <FormField
-                  control={form.control}
-                  name="description"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Descripción</FormLabel>
-                      <FormControl>
-                        <RichTextEditor
-                          value={field.value}
-                          onChange={field.onChange}
-                          placeholder="Describe el atractivo, puedes usar negritas, listas, etc."
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
+                <FormItem>
+                  <FormLabel>Descripción</FormLabel>
+                  <RichTextEditor
+                    value={form.watch('description')}
+                    onChange={(value) => {
+                      form.setValue('description', value, { shouldValidate: true, shouldDirty: true });
+                    }}
+                    placeholder="Describe el atractivo, puedes usar negritas, listas, etc."
+                  />
+                  {form.formState.errors.description && (
+                    <p className="text-sm font-medium text-destructive">
+                      {form.formState.errors.description.message}
+                    </p>
                   )}
-                />
+                </FormItem>
                 <FormField
                   control={form.control}
                   name="image"
