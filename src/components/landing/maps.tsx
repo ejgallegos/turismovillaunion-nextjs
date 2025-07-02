@@ -1,7 +1,6 @@
-import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { Download, MapPin } from 'lucide-react';
+import { Download } from 'lucide-react';
 import Link from 'next/link';
 import { getMapas } from '@/lib/mapas.service';
 
@@ -20,19 +19,6 @@ export async function Maps() {
           </p>
         </div>
         <div className="grid grid-cols-1 gap-8">
-          <Card className="overflow-hidden">
-            <CardContent className="p-0">
-              <div className="relative aspect-video w-full">
-                <Image
-                  src="https://placehold.co/1200x600.png"
-                  alt="Mapa interactivo de Villa Unión"
-                  data-ai-hint="region map"
-                  fill
-                  className="object-cover"
-                />
-              </div>
-            </CardContent>
-          </Card>
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
              {maps.map((map) => (
               <Card key={map.id}>
