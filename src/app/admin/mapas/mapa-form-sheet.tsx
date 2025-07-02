@@ -4,22 +4,32 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+import Link from 'next/link';
 
 import { upsertMapa } from './actions';
 import type { Mapa } from '@/lib/mapas.service';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import { Form, FormControl, FormField, FormItem, FormMessage, FormLabel } from '@/components/ui/form';
 import { Sheet, SheetContent, SheetFooter, SheetHeader, SheetTitle, SheetDescription, SheetTrigger } from '@/components/ui/sheet';
+import { FileText } from 'lucide-react';
+
+const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+const ACCEPTED_DOWNLOAD_TYPES = ['application/pdf', 'image/jpeg', 'image/png', 'image/webp'];
 
 const mapaSchema = z.object({
   id: z.string().optional(),
   title: z.string().min(3, { message: 'El título debe tener al menos 3 caracteres.' }),
   description: z.string().min(10, { message: 'La descripción debe tener al menos 10 caracteres.' }),
-  downloadUrl: z.string().url({ message: 'URL de descarga no válida. Déjalo vacío si no hay.' }).optional().or(z.literal('')),
+  downloadFile: z.any()
+    .optional()
+    .refine((files) => !files || files.length === 0 || files?.[0]?.size <= MAX_FILE_SIZE, `El tamaño máximo del archivo es 5MB.`)
+    .refine(
+      (files) => !files || files.length === 0 || ACCEPTED_DOWNLOAD_TYPES.includes(files?.[0]?.type),
+      'Solo se aceptan archivos PDF, .jpg, .png y .webp.'
+    ),
 });
 
 type MapaFormValues = z.infer<typeof mapaSchema>;
@@ -35,25 +45,40 @@ export function MapaFormSheet({ children, mapa }: MapaFormSheetProps) {
   
   const form = useForm<MapaFormValues>({
     resolver: zodResolver(mapaSchema),
-    defaultValues: mapa || {
-      title: '',
-      description: '',
-      downloadUrl: '',
+    defaultValues: {
+      id: mapa?.id,
+      title: mapa?.title || '',
+      description: mapa?.description || '',
+      downloadFile: undefined,
     },
   });
 
+  const { register } = form;
+
   useEffect(() => {
     if (open) {
-      form.reset(mapa || {
-        title: '',
-        description: '',
-        downloadUrl: '',
+      form.reset({
+        id: mapa?.id,
+        title: mapa?.title || '',
+        description: mapa?.description || '',
+        downloadFile: undefined,
       });
     }
   }, [open, mapa, form]);
 
   const onSubmit = async (values: MapaFormValues) => {
-    const result = await upsertMapa(values);
+    const formData = new FormData();
+    if (values.id) {
+      formData.append('id', values.id);
+    }
+    formData.append('title', values.title);
+    formData.append('description', values.description);
+    
+    if (values.downloadFile && values.downloadFile.length > 0) {
+      formData.append('downloadFile', values.downloadFile[0]);
+    }
+    
+    const result = await upsertMapa(formData);
 
     if (result.success) {
       toast({
@@ -62,11 +87,10 @@ export function MapaFormSheet({ children, mapa }: MapaFormSheetProps) {
       });
       setOpen(false);
     } else {
-       const firstError = result.errors ? Object.values(result.errors).flat()[0] : result.error;
-       const errorMessage = firstError || 'Hubo un problema al guardar el mapa.';
+       const errorMessage = result.errors ? (Object.values(result.errors).flat()[0] as string) : result.error;
        toast({
         title: 'Error',
-        description: errorMessage,
+        description: errorMessage || 'Hubo un problema al guardar el mapa.',
         variant: 'destructive',
       });
     }
@@ -113,17 +137,26 @@ export function MapaFormSheet({ children, mapa }: MapaFormSheetProps) {
                 />
                 <FormField
                   control={form.control}
-                  name="downloadUrl"
-                  render={({ field }) => (
+                  name="downloadFile"
+                  render={() => (
                     <FormItem>
-                      <FormLabel>URL de Descarga (PDF)</FormLabel>
+                      <FormLabel>Archivo de Descarga (PDF o Imagen)</FormLabel>
                       <FormControl>
-                        <Input {...field} placeholder="https://ejemplo.com/mapa.pdf" />
+                        <Input type="file" {...register("downloadFile")} accept="application/pdf,image/jpeg,image/png,image/webp" />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
+                {mapa?.downloadUrl && (
+                  <div className="mt-2 text-sm">
+                    <p className="text-muted-foreground mb-2">Archivo actual:</p>
+                    <Link href={mapa.downloadUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-primary hover:underline">
+                      <FileText className="h-4 w-4" />
+                      <span>{mapa.downloadUrl.split('/').pop()}</span>
+                    </Link>
+                  </div>
+                )}
               </div>
               <SheetFooter className="p-6 bg-secondary mt-auto">
                   <Button type="button" variant="outline" onClick={() => setOpen(false)}>Cancelar</Button>
