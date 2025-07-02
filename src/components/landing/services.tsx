@@ -33,7 +33,10 @@ export async function Services() {
                     <CardTitle className="font-headline pt-6 text-xl">{service.title}</CardTitle>
                 </CardHeader>
                 <CardContent className="flex-grow pt-4">
-                    <p className="text-base text-muted-foreground">{service.description}</p>
+                    <div
+                      className="text-base text-muted-foreground line-clamp-4 prose prose-sm dark:prose-invert max-w-none text-center"
+                      dangerouslySetInnerHTML={{ __html: service.description }}
+                    />
                 </CardContent>
                 </Card>
             </Link>

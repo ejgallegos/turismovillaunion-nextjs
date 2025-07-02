@@ -25,7 +25,7 @@ export async function generateMetadata(
   }
 
   const title = `${servicio.title} | Servicios en Villa Unión`;
-  const description = servicio.description;
+  const description = servicio.description.replace(/<[^>]*>/g, '');
 
   return {
     title,
@@ -76,7 +76,7 @@ export default async function ServicioDetailPage({ params }: { params: { id: str
         <div className="py-12 md:py-16">
           <div className="container mx-auto max-w-3xl px-4 md:px-6">
             <div className="prose prose-lg dark:prose-invert max-w-none">
-              <p className="text-xl text-muted-foreground">{servicio.description}</p>
+              <div dangerouslySetInnerHTML={{ __html: servicio.description }} />
               <p>
                 En Villa Unión, nos enorgullecemos de ofrecer servicios de alta calidad para que tu única preocupación sea disfrutar. Ya sea que busques un lugar para descansar después de un día de exploración, un plato de comida que capture la esencia de nuestra tierra, o una aventura guiada por expertos, tenemos lo que necesitas.
               </p>

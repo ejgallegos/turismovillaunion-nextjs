@@ -42,7 +42,9 @@ export default async function AdminServiciosPage() {
               {servicios.map((servicio) => (
                 <TableRow key={servicio.id}>
                   <TableCell className="font-medium">{servicio.title}</TableCell>
-                  <TableCell className="hidden md:table-cell max-w-sm truncate">{servicio.description}</TableCell>
+                  <TableCell className="hidden md:table-cell max-w-sm truncate">
+                    {servicio.description.replace(/<[^>]*>/g, '')}
+                  </TableCell>
                   <TableCell className="text-right">
                     <ServicioFormSheet servicio={servicio}>
                       <Button variant="ghost" size="icon">

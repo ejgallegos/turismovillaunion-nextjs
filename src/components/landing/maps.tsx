@@ -24,7 +24,10 @@ export async function Maps() {
               <Card key={map.id}>
                   <CardContent className="p-6 flex flex-col items-center text-center gap-4">
                       <h3 className="font-headline text-xl font-bold">{map.title}</h3>
-                      <p className="text-muted-foreground flex-grow">{map.description}</p>
+                      <div
+                        className="text-muted-foreground flex-grow line-clamp-3 prose prose-sm dark:prose-invert max-w-none"
+                        dangerouslySetInnerHTML={{ __html: map.description }}
+                      />
                       <Button asChild disabled={!map.downloadUrl || map.downloadUrl === '#'}>
                           <Link href={map.downloadUrl || '#'} target="_blank" rel="noopener noreferrer">
                               <Download className="mr-2 h-4 w-4" />

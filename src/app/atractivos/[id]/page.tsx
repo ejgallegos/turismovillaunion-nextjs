@@ -21,7 +21,7 @@ export async function generateMetadata(
   }
 
   const title = `${attraction.title} | Villa Unión del Talampaya`;
-  const description = attraction.description;
+  const description = attraction.description.replace(/<[^>]*>/g, ''); // Plain text for meta
 
   return {
     title,
@@ -85,7 +85,7 @@ export default async function AttractionDetailPage({ params }: { params: { id: s
           </header>
           <div className="container mx-auto max-w-4xl px-4 py-12 md:px-6 md:py-16">
             <div className="prose prose-lg dark:prose-invert max-w-none">
-               <p className="text-xl text-muted-foreground">{attraction.description}</p>
+                <div dangerouslySetInnerHTML={{ __html: attraction.description }} />
                <p>
                 Este lugar extraordinario, esculpido por el viento y el agua durante milenios, ofrece un espectáculo visual de formaciones rocosas, cañones y colores que te transportarán a otra época. Cada rincón del parque cuenta una historia, desde antiguos petroglifos hasta fósiles de dinosaurios que habitaron estas tierras.
                </p>

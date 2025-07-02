@@ -9,11 +9,10 @@ import { upsertServicio } from './actions';
 import type { Servicio } from '@/lib/servicios.service';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import { Form, FormControl, FormField, FormItem, FormMessage, FormLabel } from '@/components/ui/form';
 import { Sheet, SheetContent, SheetFooter, SheetHeader, SheetTitle, SheetDescription, SheetTrigger } from '@/components/ui/sheet';
+import { RichTextEditor } from '@/components/ui/rich-text-editor';
 
 const servicioSchema = z.object({
   id: z.string().optional(),
@@ -105,7 +104,11 @@ export function ServicioFormSheet({ children, servicio }: ServicioFormSheetProps
                     <FormItem>
                       <FormLabel>Descripción</FormLabel>
                       <FormControl>
-                        <Textarea {...field} rows={5}/>
+                        <RichTextEditor
+                           value={field.value}
+                           onChange={field.onChange}
+                           placeholder="Describe el tipo de servicio ofrecido..."
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>

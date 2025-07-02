@@ -34,7 +34,10 @@ export async function Brochures() {
               </CardHeader>
               <CardContent className="flex-grow p-6">
                 <CardTitle className="font-headline text-xl">{brochure.title}</CardTitle>
-                <p className="mt-2 text-muted-foreground">{brochure.description}</p>
+                <div
+                  className="mt-2 text-muted-foreground line-clamp-3 prose prose-sm dark:prose-invert max-w-none"
+                  dangerouslySetInnerHTML={{ __html: brochure.description }}
+                />
               </CardContent>
               <CardFooter className="p-6 pt-0">
                 <Button asChild className="w-full" disabled={!brochure.downloadUrl || brochure.downloadUrl === '#'}>
