@@ -85,7 +85,7 @@ export function Hero() {
                 <h1 className="font-headline text-4xl font-bold tracking-tight sm:text-6xl md:text-7xl">
                   {slide.title}
                 </h1>
-                <p className="mt-4 max-w-2xl text-lg text-primary-foreground/90 md:text-xl">
+                <p className="mt-4 max-w-2xl text-lg text-white/90 md:text-xl">
                   {slide.subtitle}
                 </p>
                 <div className="mt-8 flex gap-4">
