@@ -41,7 +41,7 @@ export async function Atractivos() {
               <CardContent className="flex justify-end p-6 pt-0">
                 <Button variant="link" className="text-accent" asChild>
                   <Link href={`/atractivos/${attraction.id}`}>
-                    Saber Más <ArrowRight className="ml-2 h-4 w-4" />
+                    Conocer <ArrowRight className="ml-2 h-4 w-4" />
                   </Link>
                 </Button>
               </CardContent>
