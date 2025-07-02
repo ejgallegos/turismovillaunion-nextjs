@@ -8,6 +8,7 @@ import { notFound } from 'next/navigation';
 
 type Props = {
   params: { id: string };
+  searchParams: { [key: string]: string | string[] | undefined };
 };
 
 // Generate metadata for the page

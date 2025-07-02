@@ -13,6 +13,7 @@ const getServiceIcon = (iconName: string, props: any) => {
 
 type Props = {
   params: { id: string };
+  searchParams: { [key: string]: string | string[] | undefined };
 };
 
 export async function generateMetadata(
