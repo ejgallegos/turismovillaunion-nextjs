@@ -26,7 +26,6 @@ export async function Atractivos() {
                 <Image
                   src={attraction.imageUrl}
                   alt={`Imagen de ${attraction.title}`}
-                  data-ai-hint={attraction.aiHint}
                   fill
                   className="object-cover"
                 />

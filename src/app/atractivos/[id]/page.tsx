@@ -72,7 +72,6 @@ export default async function AttractionDetailPage({ params }: { params: { id: s
             <Image
               src={attraction.imageUrl}
               alt={`Imagen panorámica de ${attraction.title}`}
-              data-ai-hint={attraction.aiHint}
               fill
               className="object-cover"
               priority

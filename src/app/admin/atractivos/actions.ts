@@ -10,7 +10,6 @@ const attractionSchema = z.object({
   title: z.string().min(3, 'El título es requerido.'),
   description: z.string().min(10, 'La descripción es requerida.'),
   imageUrl: z.string().url('La URL de la imagen no es válida.'),
-  aiHint: z.string().min(2, 'La pista para IA es requerida.'),
 });
 
 export async function upsertAttraction(data: unknown) {

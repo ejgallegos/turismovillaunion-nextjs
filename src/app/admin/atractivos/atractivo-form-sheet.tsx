@@ -20,7 +20,6 @@ const attractionSchema = z.object({
   title: z.string().min(3, { message: 'El título debe tener al menos 3 caracteres.' }),
   description: z.string().min(10, { message: 'La descripción debe tener al menos 10 caracteres.' }),
   imageUrl: z.string().url({ message: 'Por favor, ingresa una URL de imagen válida.' }).default('https://placehold.co/600x400.png'),
-  aiHint: z.string().min(2, { message: 'La pista para la IA debe tener al menos 2 caracteres.' }),
 });
 
 type AttractionFormValues = z.infer<typeof attractionSchema>;
@@ -40,7 +39,6 @@ export function AtractivoFormSheet({ children, attraction }: AtractivoFormSheetP
       title: '',
       description: '',
       imageUrl: 'https://placehold.co/600x400.png',
-      aiHint: '',
     },
   });
 
@@ -50,7 +48,6 @@ export function AtractivoFormSheet({ children, attraction }: AtractivoFormSheetP
         title: '',
         description: '',
         imageUrl: 'https://placehold.co/600x400.png',
-        aiHint: '',
       });
     }
   }, [open, attraction, form]);
@@ -120,19 +117,6 @@ export function AtractivoFormSheet({ children, attraction }: AtractivoFormSheetP
                   render={({ field }) => (
                     <FormItem>
                       <Label>URL de la Imagen</Label>
-                      <FormControl>
-                        <Input {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="aiHint"
-                  render={({ field }) => (
-                    <FormItem>
-                      <Label>Pista para IA (ej: "red canyon")</Label>
                       <FormControl>
                         <Input {...field} />
                       </FormControl>

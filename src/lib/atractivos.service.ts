@@ -6,7 +6,6 @@ export interface Attraction {
   title: string;
   description: string;
   imageUrl: string;
-  aiHint: string;
 }
 
 const dataFilePath = path.join(process.cwd(), 'src/data/atractivos.json');

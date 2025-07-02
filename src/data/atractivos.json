@@ -3,21 +3,18 @@
     "id": "talampaya",
     "title": "Parque Nacional Talampaya",
     "description": "Patrimonio de la Humanidad por la UNESCO, famoso por sus imponentes cañones de roca roja y antiguos petroglifos.",
-    "imageUrl": "https://placehold.co/600x400.png",
-    "aiHint": "red canyon"
+    "imageUrl": "https://placehold.co/600x400.png"
   },
   {
     "id": "laguna-brava",
     "title": "Reserva Provincial Laguna Brava",
     "description": "Una impresionante laguna salada de gran altitud, hogar de flamencos y rodeada de majestuosos picos andinos.",
-    "imageUrl": "https://placehold.co/600x400.png",
-    "aiHint": "salt lake"
+    "imageUrl": "https://placehold.co/600x400.png"
   },
   {
     "id": "cuesta-de-miranda",
     "title": "Cuesta de Miranda",
     "description": "Un impresionante paso de montaña con caminos sinuosos que ofrecen vistas panorámicas de cerros multicolores.",
-    "imageUrl": "https://placehold.co/600x400.png",
-    "aiHint": "winding road"
+    "imageUrl": "https://placehold.co/600x400.png"
   }
 ]

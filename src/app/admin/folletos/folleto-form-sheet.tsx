@@ -20,7 +20,6 @@ const folletoSchema = z.object({
   title: z.string().min(3, { message: 'El título debe tener al menos 3 caracteres.' }),
   description: z.string().min(10, { message: 'La descripción debe tener al menos 10 caracteres.' }),
   imageUrl: z.string().url({ message: 'Por favor, ingresa una URL de imagen válida.' }).default('https://placehold.co/400x566.png'),
-  aiHint: z.string().min(2, { message: 'La pista para la IA debe tener al menos 2 caracteres.' }),
   downloadUrl: z.string().url({ message: 'URL de descarga no válida. Déjalo vacío si no hay.' }).optional().or(z.literal('')),
 });
 
@@ -41,7 +40,6 @@ export function FolletoFormSheet({ children, folleto }: FolletoFormSheetProps) {
       title: '',
       description: '',
       imageUrl: 'https://placehold.co/400x566.png',
-      aiHint: '',
       downloadUrl: '',
     },
   });
@@ -52,7 +50,6 @@ export function FolletoFormSheet({ children, folleto }: FolletoFormSheetProps) {
         title: '',
         description: '',
         imageUrl: 'https://placehold.co/400x566.png',
-        aiHint: '',
         downloadUrl: '',
       });
     }
@@ -123,19 +120,6 @@ export function FolletoFormSheet({ children, folleto }: FolletoFormSheetProps) {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>URL de la Imagen</FormLabel>
-                      <FormControl>
-                        <Input {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="aiHint"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Pista para IA</FormLabel>
                       <FormControl>
                         <Input {...field} />
                       </FormControl>

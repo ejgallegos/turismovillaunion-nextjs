@@ -27,7 +27,6 @@ export async function Brochures() {
                   <Image
                     src={brochure.imageUrl}
                     alt={`Portada del folleto ${brochure.title}`}
-                    data-ai-hint={brochure.aiHint}
                     fill
                     className="object-cover"
                   />

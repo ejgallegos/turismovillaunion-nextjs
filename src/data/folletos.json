@@ -4,7 +4,6 @@
     "title": "Guía Completa de Villa Unión",
     "description": "Todo lo que necesitas saber: atractivos, servicios y más.",
     "imageUrl": "https://placehold.co/400x566.png",
-    "aiHint": "travel guide",
     "downloadUrl": "#"
   },
   {
@@ -12,7 +11,6 @@
     "title": "Aventura en Talampaya",
     "description": "Un recorrido detallado por el Parque Nacional.",
     "imageUrl": "https://placehold.co/400x566.png",
-    "aiHint": "canyon brochure",
     "downloadUrl": "#"
   },
   {
@@ -20,7 +18,6 @@
     "title": "Explorando Laguna Brava",
     "description": "Consejos y rutas para tu visita a la laguna de altura.",
     "imageUrl": "https://placehold.co/400x566.png",
-    "aiHint": "lake brochure",
     "downloadUrl": "#"
   }
 ]
