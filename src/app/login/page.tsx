@@ -8,12 +8,8 @@ const LoadingSkeleton = () => (
   <div className="flex min-h-screen items-center justify-center bg-secondary">
       <Card className="w-full max-w-sm">
         <CardHeader className="text-center">
-          <CardTitle className="text-2xl font-bold">
-             <Skeleton className="h-8 w-3/4 mx-auto" />
-          </CardTitle>
-          <CardDescription>
-             <Skeleton className="h-4 w-full mt-2" />
-          </CardDescription>
+          <Skeleton className="h-8 w-3/4 mx-auto" />
+          <Skeleton className="h-4 w-full" />
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
