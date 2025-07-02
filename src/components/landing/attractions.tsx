@@ -34,10 +34,9 @@ export async function Atractivos() {
                 <MapPin className="hidden md:block mt-1 h-6 w-6 flex-shrink-0 text-primary" />
                 <div className="flex-1">
                    <h3 className="font-headline text-xl font-bold"><Link href={`/atractivos/${attraction.id}`} className="hover:underline">{attraction.title}</Link></h3>
-                  <div
-                    className="mt-2 text-base text-muted-foreground line-clamp-3 prose prose-sm dark:prose-invert max-w-none"
-                    dangerouslySetInnerHTML={{ __html: attraction.description }}
-                   />
+                  <p className="mt-2 text-base text-muted-foreground line-clamp-3">
+                    {attraction.description.replace(/<[^>]*>/g, '')}
+                  </p>
                 </div>
               </CardHeader>
               <CardContent className="flex justify-end p-6 pt-0">

@@ -15,7 +15,7 @@ import { useToast } from '@/hooks/use-toast';
 import { Form, FormControl, FormField, FormItem, FormMessage, FormLabel } from '@/components/ui/form';
 import { Sheet, SheetContent, SheetFooter, SheetHeader, SheetTitle, SheetDescription, SheetTrigger } from '@/components/ui/sheet';
 import { FileText } from 'lucide-react';
-import { RichTextEditor } from '@/components/ui/rich-text-editor';
+import { Textarea } from '@/components/ui/textarea';
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
@@ -140,21 +140,22 @@ export function FolletoFormSheet({ children, folleto }: FolletoFormSheetProps) {
                     </FormItem>
                   )}
                 />
-                <FormItem>
-                  <FormLabel>Descripción</FormLabel>
-                  <RichTextEditor
-                    value={form.watch('description')}
-                    onChange={(value) => {
-                      form.setValue('description', value, { shouldValidate: true, shouldDirty: true });
-                    }}
-                    placeholder="Describe el contenido del folleto..."
-                  />
-                  {form.formState.errors.description && (
-                    <p className="text-sm font-medium text-destructive">
-                      {form.formState.errors.description.message}
-                    </p>
+                <FormField
+                  control={form.control}
+                  name="description"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Descripción</FormLabel>
+                      <FormControl>
+                        <Textarea
+                          placeholder="Describe el contenido del folleto..."
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
                   )}
-                </FormItem>
+                />
                 <FormField
                   control={form.control}
                   name="image"
