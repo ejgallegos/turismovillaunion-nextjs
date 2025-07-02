@@ -4,17 +4,9 @@ import dynamic from 'next/dynamic';
 import { useMemo } from 'react';
 
 // Dynamically import ReactQuill to avoid SSR issues, as it relies on browser APIs.
-const ReactQuill = dynamic(
-  async () => {
-    const { default: RQ } = await import('react-quill');
-    // ReactQuill doesn't pass the ref correctly with forwardRef, so this is a workaround.
-    // eslint-disable-next-line react/display-name
-    return ({ forwardedRef, ...props }: any) => <RQ ref={forwardedRef} {...props} />;
-  },
-  {
-    ssr: false,
-  }
-);
+const ReactQuill = dynamic(() => import('react-quill'), {
+  ssr: false,
+});
 
 interface RichTextEditorProps {
   value: string;
