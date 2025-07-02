@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
 import { ThemeProvider } from '@/components/theme-provider';
@@ -29,8 +29,13 @@ export const metadata: Metadata = {
     images: ['https://placehold.co/1200x630.png'],
   },
   keywords: 'Villa Unión, Talampaya, La Rioja, Argentina, turismo, viajes, Laguna Brava, Cuesta de Miranda, aventura',
-  viewport: 'width=device-width, initial-scale=1',
 };
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+};
+
 
 export default function RootLayout({
   children,
