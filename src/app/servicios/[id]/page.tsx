@@ -11,13 +11,13 @@ const getServiceIcon = (iconName: string, props: any) => {
     return <IconComponent {...props} />;
 };
 
-type Props = {
+type ServicioPageProps = {
   params: { id: string };
   searchParams: { [key: string]: string | string[] | undefined };
 };
 
 export async function generateMetadata(
-  { params }: Props,
+  { params }: ServicioPageProps,
   parent: ResolvingMetadata
 ): Promise<Metadata> {
   const servicios = await getServicios();
@@ -54,7 +54,7 @@ export async function generateStaticParams() {
   }));
 }
 
-export default async function ServicioDetailPage({ params }: Props) {
+export default async function ServicioDetailPage({ params }: ServicioPageProps) {
   const servicios = await getServicios();
   const servicio = servicios.find((s) => s.id === params.id);
 
