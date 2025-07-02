@@ -146,11 +146,13 @@ export function FolletoFormSheet({ children, folleto }: FolletoFormSheetProps) {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Descripción</FormLabel>
-                      <RichTextEditor 
-                        value={field.value}
-                        onChange={field.onChange}
-                        placeholder="Describe el contenido del folleto..."
-                      />
+                      <FormControl>
+                        <RichTextEditor 
+                          value={field.value}
+                          onChange={field.onChange}
+                          placeholder="Describe el contenido del folleto..."
+                        />
+                      </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}

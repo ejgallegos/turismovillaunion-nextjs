@@ -103,11 +103,13 @@ export function ServicioFormSheet({ children, servicio }: ServicioFormSheetProps
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Descripción</FormLabel>
-                      <RichTextEditor
-                         value={field.value}
-                         onChange={field.onChange}
-                         placeholder="Describe el tipo de servicio ofrecido..."
-                      />
+                      <FormControl>
+                        <RichTextEditor
+                           value={field.value}
+                           onChange={field.onChange}
+                           placeholder="Describe el tipo de servicio ofrecido..."
+                        />
+                      </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}

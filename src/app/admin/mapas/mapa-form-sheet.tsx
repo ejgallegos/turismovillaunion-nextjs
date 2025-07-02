@@ -128,11 +128,13 @@ export function MapaFormSheet({ children, mapa }: MapaFormSheetProps) {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Descripción</FormLabel>
-                      <RichTextEditor
-                        value={field.value}
-                        onChange={field.onChange}
-                        placeholder="Describe el contenido o propósito del mapa..."
-                      />
+                      <FormControl>
+                        <RichTextEditor
+                          value={field.value}
+                          onChange={field.onChange}
+                          placeholder="Describe el contenido o propósito del mapa..."
+                        />
+                      </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}

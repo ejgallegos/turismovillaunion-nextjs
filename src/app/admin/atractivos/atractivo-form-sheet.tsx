@@ -129,11 +129,13 @@ export function AtractivoFormSheet({ children, attraction }: AtractivoFormSheetP
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Descripción</FormLabel>
-                      <RichTextEditor
-                        value={field.value}
-                        onChange={field.onChange}
-                        placeholder="Describe el atractivo, puedes usar negritas, listas, etc."
-                      />
+                      <FormControl>
+                        <RichTextEditor
+                          value={field.value}
+                          onChange={field.onChange}
+                          placeholder="Describe el atractivo, puedes usar negritas, listas, etc."
+                        />
+                      </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
