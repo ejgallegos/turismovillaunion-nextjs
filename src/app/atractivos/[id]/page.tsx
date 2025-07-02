@@ -6,9 +6,13 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
 // Generate metadata for the page
-export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
+export async function generateMetadata({
+  params: { id },
+}: {
+  params: { id: string };
+}): Promise<Metadata> {
   const attractions = await getAttractions();
-  const attraction = attractions.find((a) => a.id === params.id);
+  const attraction = attractions.find((a) => a.id === id);
 
   if (!attraction) {
     return {
@@ -51,9 +55,13 @@ export async function generateStaticParams() {
   }));
 }
 
-export default async function AttractionDetailPage({ params }: { params: { id: string } }) {
+export default async function AttractionDetailPage({
+  params: { id },
+}: {
+  params: { id: string };
+}) {
   const attractions = await getAttractions();
-  const attraction = attractions.find((a) => a.id === params.id);
+  const attraction = attractions.find((a) => a.id === id);
 
   if (!attraction) {
     notFound();
