@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import React, { useEffect } from 'react';
+import React from 'react';
 
 const WhatsappIcon = (props: React.SVGProps<SVGSVGElement>) => (
     <svg viewBox="0 0 32 32" {...props} className="h-8 w-8 text-white">
@@ -20,15 +20,7 @@ export function WhatsAppButton() {
     const phoneNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER;
     const message = process.env.NEXT_PUBLIC_WHATSAPP_MESSAGE;
 
-    useEffect(() => {
-        console.log('WhatsApp Button phoneNumber:', process.env.NEXT_PUBLIC_WHATSAPP_NUMBER);
-    }, []);
-
-    if (!phoneNumber) {
-        return null;
-    }
-
-    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(
+    const whatsappUrl = `https://wa.me/${phoneNumber || ''}?text=${encodeURIComponent(
         message || ''
     )}`;
 
