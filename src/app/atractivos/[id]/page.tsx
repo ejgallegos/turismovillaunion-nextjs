@@ -6,14 +6,9 @@ import Image from 'next/image';
 import type { Metadata, ResolvingMetadata } from 'next';
 import { notFound } from 'next/navigation';
 
-type Props = {
-  params: { id: string };
-  searchParams: { [key: string]: string | string[] | undefined };
-};
-
 // Generate metadata for the page
 export async function generateMetadata(
-  { params }: Props,
+  { params }: { params: { id: string } },
   parent: ResolvingMetadata
 ): Promise<Metadata> {
   const attractions = await getAttractions();
@@ -60,7 +55,7 @@ export async function generateStaticParams() {
   }));
 }
 
-export default async function AttractionDetailPage({ params }: Props) {
+export default async function AttractionDetailPage({ params }: { params: { id: string } }) {
   const attractions = await getAttractions();
   const attraction = attractions.find((a) => a.id === params.id);
 
