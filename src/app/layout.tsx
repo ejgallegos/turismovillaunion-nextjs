@@ -4,6 +4,7 @@ import { Toaster } from '@/components/ui/toaster';
 import { ThemeProvider } from '@/components/theme-provider';
 import { WhatsAppButton } from '@/components/whatsapp-button';
 import { GoogleAnalytics } from '@/components/google-analytics';
+import { Suspense } from 'react';
 
 export const metadata: Metadata = {
   title: 'Villa Unión del Talampaya | Tu Aventura te Espera',
@@ -62,7 +63,9 @@ export default function RootLayout({
           <WhatsAppButton />
           <Toaster />
         </ThemeProvider>
-        <GoogleAnalytics />
+        <Suspense fallback={null}>
+          <GoogleAnalytics />
+        </Suspense>
       </body>
     </html>
   );
