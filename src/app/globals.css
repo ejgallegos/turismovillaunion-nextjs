@@ -84,12 +84,12 @@
 }
 
 .swiper-pagination-bullet {
-  background: hsl(var(--primary));
+  background: hsl(var(--accent));
   opacity: 0.5;
 }
 
 .swiper-pagination-bullet-active {
-  background: hsl(var(--primary));
+  background: hsl(var(--accent));
   opacity: 1;
 }
 
