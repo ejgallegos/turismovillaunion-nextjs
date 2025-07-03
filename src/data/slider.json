@@ -1,16 +1,16 @@
 [
   {
-    "uuid": "65b3842a-ca90-4158-8743-ef6bc6a2a437",
-    "type": "atractivo",
-    "id": "talampaya",
-    "title": "Parque Nacional Talampaya",
-    "subtitle": "Probando el subtitulo"
-  },
-  {
     "uuid": "9f6ff608-dd01-44a2-b299-acf162e68174",
     "type": "novedad",
     "id": "secretar-a-de-turismo-felipe-varela",
     "title": "Secretaría de Turismo Felipe Varela",
     "subtitle": "Tierra de tradiciones y paisajes apasionantes que no podes dejar de visitar."
+  },
+  {
+    "uuid": "65b3842a-ca90-4158-8743-ef6bc6a2a437",
+    "type": "atractivo",
+    "id": "talampaya",
+    "title": "Parque Nacional Talampaya",
+    "subtitle": "Probando el subtitulo"
   }
 ]

@@ -5,10 +5,12 @@ import { useRouter } from 'next/navigation';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
+import Link from 'next/link';
+import { ArrowLeft } from 'lucide-react';
 
 export default function LoginForm() {
   const [email, setEmail] = useState('');
@@ -75,6 +77,14 @@ export default function LoginForm() {
             </Button>
           </form>
         </CardContent>
+        <CardFooter>
+          <Button variant="link" asChild className="mx-auto text-sm text-muted-foreground">
+              <Link href="/">
+                  <ArrowLeft className="mr-2 h-4 w-4" />
+                  Volver al sitio principal
+              </Link>
+          </Button>
+        </CardFooter>
       </Card>
     </div>
   );
