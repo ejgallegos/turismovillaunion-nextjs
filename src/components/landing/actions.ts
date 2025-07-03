@@ -17,10 +17,10 @@ export async function getHeroSlidesData() {
             if (!attraction) return null;
             return {
                 src: attraction.imageUrl,
-                alt: `Imagen de ${attraction.title}`,
+                alt: `Imagen de ${item.title}`,
                 hint: "landscape",
-                title: attraction.title,
-                subtitle: attraction.description.replace(/<[^>]*>/g, ''),
+                title: item.title,
+                subtitle: item.subtitle,
                 buttonText: "Conocer Más",
                 buttonLink: `/atractivos/${attraction.id}`
             };
@@ -30,10 +30,10 @@ export async function getHeroSlidesData() {
             if (!novedad) return null;
             return {
                 src: novedad.imageUrl,
-                alt: `Imagen de ${novedad.title}`,
+                alt: `Imagen de ${item.title}`,
                 hint: "event news",
-                title: novedad.title,
-                subtitle: novedad.description.replace(/<[^>]*>/g, ''),
+                title: item.title,
+                subtitle: item.subtitle,
                 buttonText: "Leer Más",
                 buttonLink: `/novedades/${novedad.id}`
             };

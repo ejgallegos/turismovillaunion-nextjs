@@ -1,4 +1,4 @@
-import { getSliderItems } from '@/lib/slider.service';
+import { getSliderItems, type SliderItem } from '@/lib/slider.service';
 import { getAttractions, Attraction } from '@/lib/atractivos.service';
 import { getNovedades, Novedad } from '@/lib/novedades.service';
 import { Button } from "@/components/ui/button";
@@ -10,16 +10,24 @@ import { DeleteSliderItemAlert } from './delete-slider-item-alert';
 
 export const dynamic = 'force-dynamic';
 
-function getItemData(item: { type: string, id: string }, attractions: Attraction[], novedades: Novedad[]) {
+function getItemDisplayData(item: SliderItem, attractions: Attraction[], novedades: Novedad[]) {
     if (item.type === 'atractivo') {
         const attraction = attractions.find(a => a.id === item.id);
-        return { title: attraction?.title, type: 'Atractivo', icon: <Film className="h-4 w-4 text-muted-foreground" /> };
+        return { 
+            type: 'Atractivo', 
+            icon: <Film className="h-4 w-4 text-muted-foreground" />,
+            originalExists: !!attraction
+        };
     }
     if (item.type === 'novedad') {
         const novedad = novedades.find(n => n.id === item.id);
-        return { title: novedad?.title, type: 'Novedad', icon: <Newspaper className="h-4 w-4 text-muted-foreground" /> };
+        return { 
+            type: 'Novedad', 
+            icon: <Newspaper className="h-4 w-4 text-muted-foreground" />,
+            originalExists: !!novedad
+        };
     }
-    return { title: 'Elemento no encontrado', type: 'Desconocido', icon: null };
+    return { type: 'Desconocido', icon: null, originalExists: false };
 }
 
 export default async function AdminSliderPage() {
@@ -50,14 +58,21 @@ export default async function AdminSliderPage() {
               </TableHeader>
               <TableBody>
                 {sliderItems.map((item) => {
-                  const data = getItemData(item, attractions, novedades);
+                  const displayData = getItemDisplayData(item, attractions, novedades);
                   return (
                     <TableRow key={item.uuid}>
-                      <TableCell className="font-medium flex items-center gap-2">
-                        {data.icon}
-                        {data.title || 'Elemento no encontrado'}
+                      <TableCell className="font-medium">
+                        <div className="flex items-center gap-2">
+                          {displayData.icon}
+                          <span>{item.title}</span>
+                        </div>
+                        {!displayData.originalExists && (
+                            <p className="pl-6 text-xs text-destructive">
+                                (El atractivo/novedad original fue eliminado)
+                            </p>
+                        )}
                       </TableCell>
-                      <TableCell className="hidden md:table-cell">{data.type}</TableCell>
+                      <TableCell className="hidden md:table-cell">{displayData.type}</TableCell>
                       <TableCell className="text-right">
                         <DeleteSliderItemAlert uuid={item.uuid}>
                           <Button variant="ghost" size="icon" className="text-destructive hover:text-destructive">

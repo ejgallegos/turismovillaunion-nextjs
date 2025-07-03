@@ -8,12 +8,16 @@ import { randomUUID } from 'crypto';
 const sliderItemSchema = z.object({
   type: z.enum(['atractivo', 'novedad']),
   id: z.string().min(1, 'Debe seleccionar un elemento.'),
+  title: z.string().min(3, 'El título es requerido.'),
+  subtitle: z.string().min(10, 'El subtítulo es requerido.'),
 });
 
 export async function addSliderItem(formData: FormData) {
   const rawData = {
     type: formData.get('type'),
     id: formData.get('id'),
+    title: formData.get('title'),
+    subtitle: formData.get('subtitle'),
   };
 
   const validatedFields = sliderItemSchema.safeParse(rawData);
@@ -32,6 +36,8 @@ export async function addSliderItem(formData: FormData) {
       uuid: randomUUID(),
       type: validatedFields.data.type,
       id: validatedFields.data.id,
+      title: validatedFields.data.title,
+      subtitle: validatedFields.data.subtitle,
     };
 
     sliderItems.push(newItem);

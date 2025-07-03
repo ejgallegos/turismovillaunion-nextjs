@@ -5,6 +5,8 @@ export interface SliderItem {
   uuid: string;
   type: 'atractivo' | 'novedad';
   id: string; // id of the attraction or novelty
+  title: string;
+  subtitle: string;
 }
 
 const dataFilePath = path.join(process.cwd(), 'src/data/slider.json');

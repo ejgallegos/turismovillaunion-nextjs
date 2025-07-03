@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -13,10 +13,14 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
 
 const sliderItemSchema = z.object({
   type: z.enum(['atractivo', 'novedad'], { required_error: 'Debe seleccionar un tipo.' }),
   id: z.string().min(1, 'Debe seleccionar un elemento.'),
+  title: z.string().min(3, { message: 'El título debe tener al menos 3 caracteres.' }),
+  subtitle: z.string().min(10, { message: 'El subtítulo debe tener al menos 10 caracteres.' }),
 });
 
 type SliderItemFormValues = z.infer<typeof sliderItemSchema>;
@@ -32,6 +36,8 @@ export function AddSliderItemForm({ attractions, novedades }: AddSliderItemFormP
     resolver: zodResolver(sliderItemSchema),
     defaultValues: {
       id: '',
+      title: '',
+      subtitle: '',
     },
   });
 
@@ -51,6 +57,8 @@ export function AddSliderItemForm({ attractions, novedades }: AddSliderItemFormP
     const formData = new FormData();
     formData.append('type', values.type);
     formData.append('id', values.id);
+    formData.append('title', values.title);
+    formData.append('subtitle', values.subtitle);
 
     const result = await addSliderItem(formData);
     if (result.success) {
@@ -60,9 +68,10 @@ export function AddSliderItemForm({ attractions, novedades }: AddSliderItemFormP
       });
       form.reset();
     } else {
-      toast({
+       const errorMessage = result.errors ? (Object.values(result.errors).flat()[0] as string) : result.error;
+       toast({
         title: 'Error',
-        description: result.error || 'No se pudo añadir el elemento.',
+        description: errorMessage || 'No se pudo añadir el elemento.',
         variant: 'destructive',
       });
     }
@@ -121,6 +130,32 @@ export function AddSliderItemForm({ attractions, novedades }: AddSliderItemFormP
                       ))}
                     </SelectContent>
                   </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="title"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Título para el Slider</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Título personalizado..." {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+             <FormField
+              control={form.control}
+              name="subtitle"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Subtítulo para el Slider</FormLabel>
+                  <FormControl>
+                    <Textarea placeholder="Subtítulo personalizado..." {...field} />
+                  </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
