@@ -62,6 +62,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <Link href="/admin/mapas" className="text-muted-foreground transition-colors hover:text-foreground">
             Mapas
           </Link>
+           <Link href="/admin/slider" className="text-muted-foreground transition-colors hover:text-foreground">
+            Slider
+          </Link>
         </nav>
         <div className="flex w-full items-center justify-end gap-4 md:ml-auto md:gap-2 lg:gap-4">
            <div className='text-sm text-muted-foreground'>

@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 // Import Swiper React components
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -17,38 +17,100 @@ import 'swiper/css/navigation';
 // import required modules
 import { Autoplay, Pagination, Navigation, EffectFade } from 'swiper/modules';
 
-const heroSlides = [
-	{
-		src: "/images/Banner/slider/home-slider-sec-turismo.png",
-		alt: "",
-		hint: "canyon sunset",
-		title: "Secretaría de Turismo Felipe Varela",
-		subtitle:
-			"Tierra de tradiciones y paisajes apasionantes que no podes dejar de visitar. Sus distintas localidades, sus bellezas naturales y sobre todo su gente harán de tu recorrido una experiencia muy especial.",
-		buttonText: "Explora Ahora",
-		buttonLink: "#atractivos",
-	},
-	// {
-	//   src: 'https://placehold.co/1920x1080.png',
-	//   alt: 'Vista de la Laguna Brava con flamencos',
-	//   hint: 'salt lake',
-	//   title: 'Descubre la Mágica Laguna Brava',
-	//   subtitle: 'Un espejo de sal en el corazón de los Andes.',
-	//   buttonText: 'Ver Atractivos',
-	//   buttonLink: '/atractivos',
-	// },
-	// {
-	//   src: 'https://placehold.co/1920x1080.png',
-	//   alt: 'La sinuosa Cuesta de Miranda',
-	//   hint: 'winding road',
-	//   title: 'Aventúrate en la Cuesta de Miranda',
-	//   subtitle: 'Un camino de colores y vistas que te quitarán el aliento.',
-	//   buttonText: 'Ver Más',
-	//   buttonLink: '/atractivos',
-	// },
-];
+import { getHeroSlidesData } from './actions';
+import { Skeleton } from '../ui/skeleton';
+
+interface HeroSlide {
+  src: string;
+  alt: string;
+  hint: string;
+  title: string;
+  subtitle: string;
+  buttonText: string;
+  buttonLink: string;
+}
+
+const HeroSkeleton = () => (
+    <div className="relative flex h-full w-full items-center justify-center">
+        <Skeleton className="absolute inset-0 z-0" />
+        <div className="relative z-10 flex flex-col items-center p-4 text-center">
+            <Skeleton className="h-16 w-3/4 mb-4" />
+            <Skeleton className="h-6 w-1/2" />
+            <Skeleton className="h-11 w-32 mt-8" />
+        </div>
+    </div>
+);
 
 export function Hero() {
+  const [slides, setSlides] = useState<HeroSlide[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const data = await getHeroSlidesData();
+        setSlides(data);
+      } catch (error) {
+        console.error("Failed to fetch hero slides data", error);
+        setSlides([
+            {
+                src: "/images/Banner/slider/home-slider-sec-turismo.png",
+                alt: "Paisaje de Talampaya",
+                hint: "canyon sunset",
+                title: "Secretaría de Turismo Felipe Varela",
+                subtitle: "Tierra de tradiciones y paisajes apasionantes que no podes dejar de visitar.",
+                buttonText: "Explora Ahora",
+                buttonLink: "#atractivos",
+            }
+        ]);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchData();
+  }, []);
+
+  if (loading) {
+      return (
+          <section className="relative h-[calc(100vh-theme(spacing.20))] w-full">
+              <HeroSkeleton />
+          </section>
+      );
+  }
+
+  if (slides.length === 0) {
+      return (
+        <section className="relative h-[calc(100vh-theme(spacing.20))] w-full">
+            <div className="relative flex h-full w-full items-center justify-center">
+              <div className="absolute inset-0 z-0">
+                <Image
+                  src="/images/Banner/slider/home-slider-sec-turismo.png"
+                  alt="Paisaje de Talampaya"
+                  data-ai-hint="canyon sunset"
+                  fill
+                  className="object-cover"
+                  priority
+                />
+                <div className="absolute inset-0 bg-black/25" />
+              </div>
+              <div className="relative z-10 flex flex-col items-center p-4 text-center text-white">
+                <h1 className="font-headline text-4xl font-bold tracking-tight sm:text-6xl md:text-7xl">
+                    Bienvenido a Villa Unión
+                </h1>
+                <p className="mt-4 max-w-2xl text-lg text-white/90 md:text-xl">
+                    Añada elementos al slider desde el panel de administración para comenzar.
+                </p>
+                <div className="mt-8 flex gap-4">
+                  <Button size="lg" asChild>
+                    <Link href="#atractivos">Explorar</Link>
+                  </Button>
+                </div>
+              </div>
+            </div>
+        </section>
+      );
+  }
+
   return (
     <section className="relative h-[calc(100vh-theme(spacing.20))] w-full">
       <Swiper
@@ -58,16 +120,16 @@ export function Hero() {
         centeredSlides={true}
         autoplay={{
           delay: 5000,
-          disableOnInteraction: true,
+          disableOnInteraction: false,
         }}
         pagination={{
           clickable: true,
         }}
-        loop={true}
+        loop={slides.length > 1}
         modules={[Autoplay, Pagination, Navigation, EffectFade]}
         className="h-full w-full"
       >
-        {heroSlides.map((slide, index) => (
+        {slides.map((slide, index) => (
           <SwiperSlide key={index}>
             <div className="relative flex h-full w-full items-center justify-center">
               <div className="absolute inset-0 z-0">
@@ -85,7 +147,7 @@ export function Hero() {
                 <h1 className="font-headline text-4xl font-bold tracking-tight sm:text-6xl md:text-7xl">
                   {slide.title}
                 </h1>
-                <p className="mt-4 max-w-2xl text-lg text-white/90 md:text-xl">
+                <p className="mt-4 max-w-2xl text-lg text-white/90 md:text-xl line-clamp-3">
                   {slide.subtitle}
                 </p>
                 <div className="mt-8 flex gap-4">
