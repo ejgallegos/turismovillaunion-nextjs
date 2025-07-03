@@ -37,6 +37,9 @@
     --sidebar-accent-foreground: 240 5.9% 10%;
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+    --swiper-pagination-color: #F57C00;
+    --swiper-pagination-bullet-inactive-color: #F57C00;
+    --swiper-pagination-bullet-inactive-opacity: 0.5;
   }
   .dark {
     --background: 0 20% 10%;
@@ -81,16 +84,6 @@
   body {
     @apply bg-background text-foreground;
   }
-}
-
-.swiper-pagination-bullet {
-  background: #F57C00;
-  opacity: 0.5;
-}
-
-.swiper-pagination-bullet-active {
-  background: #F57C00;
-  opacity: 1;
 }
 
 /* React Quill Snow Theme Customization */
