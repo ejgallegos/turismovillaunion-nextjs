@@ -84,12 +84,12 @@
 }
 
 .swiper-pagination-bullet {
-  background: hsl(var(--accent));
+  background: #F57C00;
   opacity: 0.5;
 }
 
 .swiper-pagination-bullet-active {
-  background: hsl(var(--accent));
+  background: #F57C00;
   opacity: 1;
 }
 
