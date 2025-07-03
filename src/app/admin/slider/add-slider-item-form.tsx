@@ -21,6 +21,7 @@ const sliderItemSchema = z.object({
   id: z.string().min(1, 'Debe seleccionar un elemento.'),
   title: z.string().min(3, { message: 'El título debe tener al menos 3 caracteres.' }),
   subtitle: z.string().min(10, { message: 'El subtítulo debe tener al menos 10 caracteres.' }),
+  buttonText: z.string().optional(),
 });
 
 type SliderItemFormValues = z.infer<typeof sliderItemSchema>;
@@ -38,6 +39,7 @@ export function AddSliderItemForm({ attractions, novedades }: AddSliderItemFormP
       id: '',
       title: '',
       subtitle: '',
+      buttonText: '',
     },
   });
 
@@ -59,6 +61,9 @@ export function AddSliderItemForm({ attractions, novedades }: AddSliderItemFormP
     formData.append('id', values.id);
     formData.append('title', values.title);
     formData.append('subtitle', values.subtitle);
+    if (values.buttonText) {
+      formData.append('buttonText', values.buttonText);
+    }
 
     const result = await addSliderItem(formData);
     if (result.success) {
@@ -155,6 +160,19 @@ export function AddSliderItemForm({ attractions, novedades }: AddSliderItemFormP
                   <FormLabel>Subtítulo para el Slider</FormLabel>
                   <FormControl>
                     <Textarea placeholder="Subtítulo personalizado..." {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="buttonText"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Texto del Botón (Opcional)</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Ej: Ver más, Explorar..." {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

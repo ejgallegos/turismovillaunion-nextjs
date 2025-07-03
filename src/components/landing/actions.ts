@@ -21,7 +21,7 @@ export async function getHeroSlidesData() {
                 hint: "landscape",
                 title: item.title,
                 subtitle: item.subtitle,
-                buttonText: "Conocer Más",
+                buttonText: item.buttonText,
                 buttonLink: `/atractivos/${attraction.id}`
             };
         }
@@ -34,7 +34,7 @@ export async function getHeroSlidesData() {
                 hint: "event news",
                 title: item.title,
                 subtitle: item.subtitle,
-                buttonText: "Leer Más",
+                buttonText: item.buttonText,
                 buttonLink: `/novedades/${novedad.id}`
             };
         }

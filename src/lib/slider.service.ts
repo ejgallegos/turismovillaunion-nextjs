@@ -7,6 +7,7 @@ export interface SliderItem {
   id: string; // id of the attraction or novelty
   title: string;
   subtitle: string;
+  buttonText?: string;
 }
 
 const dataFilePath = path.join(process.cwd(), 'src/data/slider.json');

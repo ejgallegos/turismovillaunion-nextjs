@@ -26,7 +26,7 @@ interface HeroSlide {
   hint: string;
   title: string;
   subtitle: string;
-  buttonText: string;
+  buttonText?: string;
   buttonLink: string;
 }
 
@@ -150,11 +150,13 @@ export function Hero() {
                 <p className="mt-4 max-w-2xl text-lg text-white/90 md:text-xl line-clamp-3">
                   {slide.subtitle}
                 </p>
-                <div className="mt-8 flex gap-4">
-                  <Button size="lg" asChild>
-                    <Link href={slide.buttonLink}>{slide.buttonText}</Link>
-                  </Button>
-                </div>
+                {slide.buttonText && (
+                  <div className="mt-8 flex gap-4">
+                    <Button size="lg" asChild>
+                      <Link href={slide.buttonLink}>{slide.buttonText}</Link>
+                    </Button>
+                  </div>
+                )}
               </div>
             </div>
           </SwiperSlide>

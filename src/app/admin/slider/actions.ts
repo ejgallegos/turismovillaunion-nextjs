@@ -10,6 +10,7 @@ const sliderItemSchema = z.object({
   id: z.string().min(1, 'Debe seleccionar un elemento.'),
   title: z.string().min(3, 'El título es requerido.'),
   subtitle: z.string().min(10, 'El subtítulo es requerido.'),
+  buttonText: z.string().optional(),
 });
 
 export async function addSliderItem(formData: FormData) {
@@ -18,6 +19,7 @@ export async function addSliderItem(formData: FormData) {
     id: formData.get('id'),
     title: formData.get('title'),
     subtitle: formData.get('subtitle'),
+    buttonText: formData.get('buttonText')?.toString() || undefined,
   };
 
   const validatedFields = sliderItemSchema.safeParse(rawData);
@@ -38,6 +40,7 @@ export async function addSliderItem(formData: FormData) {
       id: validatedFields.data.id,
       title: validatedFields.data.title,
       subtitle: validatedFields.data.subtitle,
+      buttonText: validatedFields.data.buttonText,
     };
 
     sliderItems.push(newItem);
