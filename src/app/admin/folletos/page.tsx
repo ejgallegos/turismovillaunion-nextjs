@@ -43,7 +43,7 @@ export default async function AdminFolletosPage() {
                 <TableRow key={folleto.id}>
                   <TableCell className="font-medium">{folleto.title}</TableCell>
                   <TableCell className="hidden md:table-cell max-w-sm truncate">
-                     {folleto.description.replace(/<[^>]*>/g, '')}
+                     {folleto.description}
                   </TableCell>
                   <TableCell className="text-right">
                     <FolletoFormSheet folleto={folleto}>

@@ -1,32 +1,32 @@
-import { getServicios } from '@/lib/servicios.service';
+import { getLocalidades } from '@/lib/localidades.service';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { PlusCircle, Pencil, Trash2 } from "lucide-react";
-import { ServicioFormSheet } from './servicio-form-sheet';
-import { DeleteServicioAlert } from './delete-servicio-alert';
+import { LocalidadFormSheet } from './localidad-form-sheet';
+import { DeleteLocalidadAlert } from './delete-localidad-alert';
 
 export const dynamic = 'force-dynamic';
 
-export default async function AdminServiciosPage() {
-  const servicios = await getServicios();
+export default async function AdminLocalidadesPage() {
+  const localidades = await getLocalidades();
 
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold">Gestionar Servicios</h1>
-        <ServicioFormSheet>
+        <h1 className="text-2xl font-bold">Gestionar Localidades</h1>
+        <LocalidadFormSheet>
           <Button>
             <PlusCircle className="mr-2 h-4 w-4" />
-            Añadir Servicio
+            Añadir Localidad
           </Button>
-        </ServicioFormSheet>
+        </LocalidadFormSheet>
       </div>
       <Card>
         <CardHeader>
-          <CardTitle>Lista de Servicios</CardTitle>
+          <CardTitle>Lista de Localidades</CardTitle>
           <CardDescription>
-            Aquí podrás editar y eliminar los tipos de servicios ofrecidos.
+            Aquí podrás editar y eliminar las localidades.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -39,32 +39,32 @@ export default async function AdminServiciosPage() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {servicios.map((servicio) => (
-                <TableRow key={servicio.id}>
-                  <TableCell className="font-medium">{servicio.title}</TableCell>
+              {localidades.map((localidad) => (
+                <TableRow key={localidad.id}>
+                  <TableCell className="font-medium">{localidad.title}</TableCell>
                   <TableCell className="hidden md:table-cell max-w-sm truncate">
-                    {servicio.description}
+                    {localidad.description}
                   </TableCell>
                   <TableCell className="text-right">
-                    <ServicioFormSheet servicio={servicio}>
+                    <LocalidadFormSheet localidad={localidad}>
                       <Button variant="ghost" size="icon">
                         <Pencil className="h-4 w-4" />
                         <span className="sr-only">Editar</span>
                       </Button>
-                    </ServicioFormSheet>
-                    <DeleteServicioAlert servicioId={servicio.id}>
+                    </LocalidadFormSheet>
+                    <DeleteLocalidadAlert localidadId={localidad.id}>
                       <Button variant="ghost" size="icon" className="text-destructive hover:text-destructive">
                         <Trash2 className="h-4 w-4" />
                         <span className="sr-only">Eliminar</span>
                       </Button>
-                    </DeleteServicioAlert>
+                    </DeleteLocalidadAlert>
                   </TableCell>
                 </TableRow>
               ))}
-               {servicios.length === 0 && (
+               {localidades.length === 0 && (
                 <TableRow>
                   <TableCell colSpan={3} className="text-center">
-                    No hay servicios para mostrar.
+                    No hay localidades para mostrar.
                   </TableCell>
                 </TableRow>
               )}

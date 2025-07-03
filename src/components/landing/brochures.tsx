@@ -4,6 +4,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/componen
 import { Download } from 'lucide-react';
 import Link from 'next/link';
 import { getFolletos } from '@/lib/folletos.service';
+import { EmptyState } from '../empty-state';
 
 export async function Brochures() {
   const brochures = await getFolletos();
@@ -19,39 +20,38 @@ export async function Brochures() {
             Descarga nuestras guías y folletos en formato PDF para llevarlos contigo en tu viaje.
           </p>
         </div>
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-          {brochures.map((brochure) => (
-            <Card key={brochure.id} className="flex flex-col overflow-hidden">
-              <CardHeader className="p-0">
-                <div className="relative aspect-[3/4] w-full">
-                  <Image
-                    src={brochure.imageUrl}
-                    alt={`Portada del folleto ${brochure.title}`}
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-              </CardHeader>
-              <CardContent className="flex-grow p-6">
-                <CardTitle className="font-headline text-xl">{brochure.title}</CardTitle>
-                <p className="mt-2 text-muted-foreground line-clamp-3">
-                  {brochure.description.replace(/<[^>]*>/g, '')}
-                </p>
-              </CardContent>
-              <CardFooter className="p-6 pt-0">
-                <Button asChild className="w-full" disabled={!brochure.downloadUrl || brochure.downloadUrl === '#'}>
-                  <Link href={brochure.downloadUrl || '#'} target="_blank" rel="noopener noreferrer">
-                    <Download className="mr-2 h-4 w-4" />
-                    Descargar
-                  </Link>
-                </Button>
-              </CardFooter>
-            </Card>
-          ))}
-           {brochures.length === 0 && (
-            <div className="col-span-full text-center text-muted-foreground">
-              <p>No hay folletos disponibles en este momento.</p>
-            </div>
+        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+          {brochures.length > 0 ? (
+            brochures.map((brochure) => (
+              <Card key={brochure.id} className="flex flex-col overflow-hidden">
+                <CardHeader className="p-0">
+                  <div className="relative aspect-[3/4] w-full">
+                    <Image
+                      src={brochure.imageUrl}
+                      alt={`Portada del folleto ${brochure.title}`}
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+                </CardHeader>
+                <CardContent className="flex-grow p-6">
+                  <CardTitle className="font-headline text-xl">{brochure.title}</CardTitle>
+                  <p className="mt-2 text-muted-foreground line-clamp-3">
+                    {brochure.description}
+                  </p>
+                </CardContent>
+                <CardFooter className="p-6 pt-0">
+                  <Button asChild className="w-full" disabled={!brochure.downloadUrl || brochure.downloadUrl === '#'}>
+                    <Link href={brochure.downloadUrl || '#'} target="_blank" rel="noopener noreferrer">
+                      <Download className="mr-2 h-4 w-4" />
+                      Descargar
+                    </Link>
+                  </Button>
+                </CardFooter>
+              </Card>
+            ))
+          ) : (
+            <EmptyState title="No hay folletos" description="No hay folletos disponibles en este momento. Vuelve a consultar más tarde." />
           )}
         </div>
       </div>

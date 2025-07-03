@@ -20,7 +20,7 @@ export async function generateMetadata(
   }
 
   const title = `${novedad.title} | Novedades | Villa Unión del Talampaya`;
-  const description = novedad.description.replace(/<[^>]*>/g, '').substring(0, 160);
+  const description = novedad.description.substring(0, 160);
 
   return {
     title,

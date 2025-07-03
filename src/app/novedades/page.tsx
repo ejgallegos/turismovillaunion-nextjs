@@ -7,6 +7,7 @@ import Link from 'next/link';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { EmptyState } from '@/components/empty-state';
 
 export const metadata: Metadata = {
   title: 'Novedades | Villa Unión del Talampaya',
@@ -31,37 +32,38 @@ export default async function NovedadesPage() {
                     </p>
                 </div>
                 <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-                    {novedades.map((novedad) => (
-                         <Card key={novedad.id} className="flex transform flex-col overflow-hidden rounded-lg shadow-lg transition-transform duration-300 hover:-translate-y-2">
-                            <Link href={`/novedades/${novedad.id}`} className="block">
-                                <div className="relative h-56 w-full">
-                                <Image
-                                    src={novedad.imageUrl}
-                                    alt={`Imagen de ${novedad.title}`}
-                                    fill
-                                    className="object-cover"
-                                />
-                                </div>
-                            </Link>
-                            <CardHeader className="flex flex-grow flex-col items-start p-6">
-                                <h2 className="mt-2 font-headline text-xl font-bold">
-                                    <Link href={`/novedades/${novedad.id}`} className="hover:underline">{novedad.title}</Link>
-                                </h2>
-                                <p className="mt-2 flex-grow text-base text-muted-foreground line-clamp-3">
-                                    {novedad.description}
-                                </p>
-                            </CardHeader>
-                             <CardContent className="flex justify-end p-6 pt-0">
-                                <Button variant="link" className="text-accent" asChild>
-                                <Link href={`/novedades/${novedad.id}`}>
-                                    Leer más <ArrowRight className="ml-2 h-4 w-4" />
+                    {novedades.length > 0 ? (
+                        novedades.map((novedad) => (
+                            <Card key={novedad.id} className="flex transform flex-col overflow-hidden rounded-lg shadow-lg transition-transform duration-300 hover:-translate-y-2">
+                                <Link href={`/novedades/${novedad.id}`} className="block">
+                                    <div className="relative h-56 w-full">
+                                    <Image
+                                        src={novedad.imageUrl}
+                                        alt={`Imagen de ${novedad.title}`}
+                                        fill
+                                        className="object-cover"
+                                    />
+                                    </div>
                                 </Link>
-                                </Button>
-                            </CardContent>
-                        </Card>
-                    ))}
-                    {novedades.length === 0 && (
-                        <p className="col-span-full text-center text-muted-foreground">No hay novedades para mostrar.</p>
+                                <CardHeader className="flex flex-grow flex-col items-start p-6">
+                                    <h2 className="mt-2 font-headline text-xl font-bold">
+                                        <Link href={`/novedades/${novedad.id}`} className="hover:underline">{novedad.title}</Link>
+                                    </h2>
+                                    <p className="mt-2 flex-grow text-base text-muted-foreground line-clamp-3">
+                                        {novedad.description}
+                                    </p>
+                                </CardHeader>
+                                <CardContent className="flex justify-end p-6 pt-0">
+                                    <Button variant="link" className="text-accent" asChild>
+                                    <Link href={`/novedades/${novedad.id}`}>
+                                        Leer más <ArrowRight className="ml-2 h-4 w-4" />
+                                    </Link>
+                                    </Button>
+                                </CardContent>
+                            </Card>
+                        ))
+                    ) : (
+                        <EmptyState title="No hay novedades" description="No se han publicado noticias recientemente. Vuelve a consultar más tarde." />
                     )}
                 </div>
             </div>

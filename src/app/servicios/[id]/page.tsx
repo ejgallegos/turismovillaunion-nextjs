@@ -25,7 +25,7 @@ export async function generateMetadata(
   }
 
   const title = `${servicio.title} | Servicios en Villa Unión`;
-  const description = servicio.description.replace(/<[^>]*>/g, '');
+  const description = servicio.description;
 
   return {
     title,
@@ -77,12 +77,6 @@ export default async function ServicioDetailPage({ params }: { params: { id: str
           <div className="container mx-auto max-w-3xl px-4 md:px-6">
             <div className="prose prose-lg dark:prose-invert max-w-none">
               <p>{servicio.description}</p>
-              <p>
-                En Villa Unión, nos enorgullecemos de ofrecer servicios de alta calidad para que tu única preocupación sea disfrutar. Ya sea que busques un lugar para descansar después de un día de exploración, un plato de comida que capture la esencia de nuestra tierra, o una aventura guiada por expertos, tenemos lo que necesitas.
-              </p>
-              <p>
-                Nuestro compromiso es con tu comodidad y satisfacción, asegurando que cada aspecto de tu viaje sea tan memorable como los paisajes que vienes a descubrir. Confía en nuestros prestadores de servicios locales para hacer de tu estadía una experiencia auténtica e inolvidable.
-              </p>
             </div>
           </div>
         </div>
