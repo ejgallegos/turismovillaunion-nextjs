@@ -1,3 +1,4 @@
+'use server';
 import fs from 'fs/promises';
 import path from 'path';
 
@@ -6,7 +7,6 @@ export interface Novedad {
   title: string;
   description: string;
   imageUrl: string;
-  date: string; // YYYY-MM-DD
 }
 
 const dataFilePath = path.join(process.cwd(), 'src/data/novedades.json');
@@ -15,8 +15,6 @@ export async function getNovedades(): Promise<Novedad[]> {
   try {
     const fileContents = await fs.readFile(dataFilePath, 'utf8');
     const novedades = JSON.parse(fileContents);
-    // Sort by date descending
-    novedades.sort((a: Novedad, b: Novedad) => new Date(b.date).getTime() - new Date(a.date).getTime());
     return novedades;
   } catch (error) {
     console.error('Error reading novedades data:', error);

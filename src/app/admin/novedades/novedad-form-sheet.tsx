@@ -5,7 +5,6 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import Image from 'next/image';
-import { format } from 'date-fns';
 
 import { upsertNovedad } from './actions';
 import type { Novedad } from '@/lib/novedades.service';
@@ -23,7 +22,6 @@ const novedadSchema = z.object({
   id: z.string().optional(),
   title: z.string().min(3, { message: 'El título debe tener al menos 3 caracteres.' }),
   description: z.string().min(10, { message: 'La descripción debe tener al menos 10 caracteres.' }),
-  date: z.string().refine((date) => !isNaN(Date.parse(date)), { message: 'La fecha no es válida.' }),
   image: z.any()
     .optional()
     .refine((files) => !files || files.length === 0 || files?.[0]?.size <= MAX_FILE_SIZE, `El tamaño máximo del archivo es 5MB.`)
@@ -50,7 +48,6 @@ export function NovedadFormSheet({ children, novedad }: NovedadFormSheetProps) {
       id: novedad?.id,
       title: novedad?.title || '',
       description: novedad?.description || '',
-      date: novedad?.date ? format(new Date(novedad.date), 'yyyy-MM-dd') : format(new Date(), 'yyyy-MM-dd'),
       image: undefined,
     },
   });
@@ -63,7 +60,6 @@ export function NovedadFormSheet({ children, novedad }: NovedadFormSheetProps) {
         id: novedad?.id,
         title: novedad?.title || '',
         description: novedad?.description || '',
-        date: novedad?.date ? format(new Date(novedad.date), 'yyyy-MM-dd') : format(new Date(), 'yyyy-MM-dd'),
         image: undefined,
       });
     }
@@ -76,7 +72,6 @@ export function NovedadFormSheet({ children, novedad }: NovedadFormSheetProps) {
     }
     formData.append('title', values.title);
     formData.append('description', values.description);
-    formData.append('date', values.date);
     if (values.image && values.image.length > 0) {
       formData.append('image', values.image[0]);
     } else if (!novedad?.id) {
@@ -93,7 +88,7 @@ export function NovedadFormSheet({ children, novedad }: NovedadFormSheetProps) {
       });
       setOpen(false);
     } else {
-       const errorMessage = result.errors ? (result.errors.image?.[0] || result.errors.title?.[0] || result.errors.description?.[0] || result.errors.date?.[0]) : result.error;
+       const errorMessage = result.errors ? (result.errors.image?.[0] || result.errors.title?.[0] || result.errors.description?.[0]) : result.error;
        toast({
         title: 'Error',
         description: errorMessage || 'Hubo un problema al guardar la novedad.',
@@ -123,19 +118,6 @@ export function NovedadFormSheet({ children, novedad }: NovedadFormSheetProps) {
                       <FormLabel>Título</FormLabel>
                       <FormControl>
                         <Input {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                 <FormField
-                  control={form.control}
-                  name="date"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Fecha</FormLabel>
-                      <FormControl>
-                        <Input type="date" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>

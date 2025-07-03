@@ -35,7 +35,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const novedades = await getNovedades();
   const novedadRoutes = novedades.map((novedad) => ({
     url: `${baseUrl}/novedades/${novedad.id}`,
-    lastModified: new Date(novedad.date),
+    lastModified: new Date(),
     changeFrequency: 'weekly' as const,
     priority: 0.7,
   }));

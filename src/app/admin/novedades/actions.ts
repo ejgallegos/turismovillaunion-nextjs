@@ -17,7 +17,6 @@ const novedadSchema = z.object({
   id: z.string().optional(),
   title: z.string().min(3, 'El título es requerido.'),
   description: z.string().min(10, 'La descripción es requerida.'),
-  date: z.string().refine((date) => !isNaN(Date.parse(date)), { message: 'La fecha no es válida.' }),
   image: z
     .any()
     .refine((file) => !file || file.size <= MAX_FILE_SIZE, `El tamaño máximo es 5MB.`)
@@ -30,7 +29,6 @@ export async function upsertNovedad(formData: FormData) {
     id: formData.get('id')?.toString(),
     title: formData.get('title')?.toString(),
     description: formData.get('description')?.toString(),
-    date: formData.get('date')?.toString(),
     image: formData.get('image') as File | null,
   };
   
@@ -48,7 +46,7 @@ export async function upsertNovedad(formData: FormData) {
     };
   }
   
-  const { id, title, description, date, image } = validatedFields.data;
+  const { id, title, description, image } = validatedFields.data;
   const novedades = await getNovedades();
   let imageUrl: string | undefined = undefined;
 
@@ -77,7 +75,6 @@ export async function upsertNovedad(formData: FormData) {
           ...novedades[index], 
           title, 
           description,
-          date,
           ...(imageUrl && { imageUrl }),
         };
       } else {
@@ -94,7 +91,6 @@ export async function upsertNovedad(formData: FormData) {
         id: existing ? `${newId}-${randomUUID().slice(0, 4)}` : newId,
         title,
         description,
-        date,
         imageUrl,
       };
       novedades.push(newNovedad);

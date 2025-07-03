@@ -4,9 +4,6 @@ import { Footer } from '@/components/landing/footer';
 import Image from 'next/image';
 import type { Metadata, ResolvingMetadata } from 'next';
 import { notFound } from 'next/navigation';
-import { format, parseISO } from 'date-fns';
-import { es } from 'date-fns/locale';
-import { Calendar } from 'lucide-react';
 
 // Generate metadata for the page
 export async function generateMetadata(
@@ -83,12 +80,6 @@ export default async function NovedadDetailPage({ params }: { params: { id: stri
               <h1 className="font-headline text-4xl font-bold tracking-tight text-white sm:text-6xl md:text-7xl">
                 {novedad.title}
               </h1>
-              <div className="mt-4 flex items-center text-lg text-white/90">
-                <Calendar className="mr-2 h-5 w-5" />
-                <time dateTime={novedad.date}>
-                  {format(parseISO(novedad.date), "dd 'de' MMMM 'de' yyyy", { locale: es })}
-                </time>
-              </div>
             </div>
           </header>
           <div className="container mx-auto max-w-4xl px-4 py-12 md:px-6 md:py-16">

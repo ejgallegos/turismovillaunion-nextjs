@@ -5,9 +5,7 @@ import { getNovedades } from '@/lib/novedades.service';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
-import { format, parseISO } from 'date-fns';
-import { es } from 'date-fns/locale';
-import { Calendar, ArrowRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 export const metadata: Metadata = {
@@ -16,7 +14,7 @@ export const metadata: Metadata = {
 };
 
 export default async function NovedadesPage() {
-    const novedades = await getNovedades();
+    const novedades = (await getNovedades()).reverse();
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -46,12 +44,6 @@ export default async function NovedadesPage() {
                                 </div>
                             </Link>
                             <CardHeader className="flex flex-grow flex-col items-start p-6">
-                                <div className="flex items-center text-sm text-muted-foreground">
-                                    <Calendar className="mr-2 h-4 w-4" />
-                                    <time dateTime={novedad.date}>
-                                    {format(parseISO(novedad.date), "dd 'de' MMMM, yyyy", { locale: es })}
-                                    </time>
-                                </div>
                                 <h2 className="mt-2 font-headline text-xl font-bold">
                                     <Link href={`/novedades/${novedad.id}`} className="hover:underline">{novedad.title}</Link>
                                 </h2>

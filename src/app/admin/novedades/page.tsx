@@ -5,13 +5,11 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { PlusCircle, Pencil, Trash2 } from "lucide-react";
 import { NovedadFormSheet } from './novedad-form-sheet';
 import { DeleteNovedadAlert } from './delete-novedad-alert';
-import { format, parseISO } from 'date-fns';
-import { es } from 'date-fns/locale';
 
 export const dynamic = 'force-dynamic';
 
 export default async function AdminNovedadesPage() {
-  const novedades = await getNovedades();
+  const novedades = (await getNovedades()).reverse();
 
   return (
     <div>
@@ -36,7 +34,6 @@ export default async function AdminNovedadesPage() {
             <TableHeader>
               <TableRow>
                 <TableHead>Título</TableHead>
-                <TableHead className="hidden md:table-cell">Fecha</TableHead>
                 <TableHead className="text-right">Acciones</TableHead>
               </TableRow>
             </TableHeader>
@@ -44,9 +41,6 @@ export default async function AdminNovedadesPage() {
               {novedades.map((novedad) => (
                 <TableRow key={novedad.id}>
                   <TableCell className="font-medium">{novedad.title}</TableCell>
-                   <TableCell className="hidden md:table-cell">
-                    {format(parseISO(novedad.date), 'dd MMMM yyyy', { locale: es })}
-                  </TableCell>
                   <TableCell className="text-right">
                     <NovedadFormSheet novedad={novedad}>
                       <Button variant="ghost" size="icon">
@@ -65,7 +59,7 @@ export default async function AdminNovedadesPage() {
               ))}
                {novedades.length === 0 && (
                 <TableRow>
-                  <TableCell colSpan={3} className="text-center">
+                  <TableCell colSpan={2} className="text-center">
                     No hay novedades para mostrar.
                   </TableCell>
                 </TableRow>
