@@ -9,8 +9,9 @@ import { Textarea } from '@/components/ui/textarea';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { useToast } from '@/hooks/use-toast';
 import { Card, CardContent } from '@/components/ui/card';
-import { Mail, MapPin, Phone } from 'lucide-react';
+import { Clock, MapPin, Phone } from 'lucide-react';
 import { sendContactEmail } from '@/app/contacto/actions';
+import { Separator } from '@/components/ui/separator';
 
 const formSchema = z.object({
   name: z.string().min(2, { message: 'El nombre debe tener al menos 2 caracteres.' }),
@@ -62,20 +63,62 @@ export function Contact() {
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-5">
           <div className="lg:col-span-2">
             <Card className="h-full">
-              <CardContent className="p-8 space-y-6">
-                <h3 className="font-headline text-2xl font-bold">Información de Contacto</h3>
-                <div className="space-y-4 text-muted-foreground">
-                  <div className="flex items-start gap-4">
-                    <MapPin className="h-6 w-6 flex-shrink-0 text-accent" />
-                    <span>Ruta 40, F5360 Villa Unión, La Rioja, Argentina</span>
+              <CardContent className="p-8">
+                <h3 className="font-headline text-2xl font-bold mb-6">Información de Contacto</h3>
+                <div className="space-y-6">
+
+                  <div>
+                    <h4 className="font-semibold text-lg text-foreground mb-3">Oficina de Turismo Villa Unión</h4>
+                    <div className="space-y-3 text-muted-foreground">
+                      <div className="flex items-start gap-4">
+                        <Clock className="h-5 w-5 flex-shrink-0 text-accent mt-0.5" />
+                        <span>Todos los días de 8.30 a 21.30</span>
+                      </div>
+                      <div className="flex items-start gap-4">
+                        <MapPin className="h-5 w-5 flex-shrink-0 text-accent mt-0.5" />
+                        <span>Nicolás Dávila Sur</span>
+                      </div>
+                      <div className="flex items-start gap-4">
+                        <Phone className="h-5 w-5 flex-shrink-0 text-accent mt-0.5" />
+                        <span>3804617137</span>
+                      </div>
+                    </div>
                   </div>
-                  <div className="flex items-start gap-4">
-                    <Phone className="h-6 w-6 flex-shrink-0 text-accent" />
-                    <span>+54 (3825) 47-0543</span>
+
+                  <Separator />
+
+                  <div>
+                    <h4 className="font-semibold text-lg text-foreground mb-3">Posta de Turismo Pagancillo</h4>
+                    <div className="space-y-3 text-muted-foreground">
+                      <div className="flex items-start gap-4">
+                        <Clock className="h-5 w-5 flex-shrink-0 text-accent mt-0.5" />
+                        <span>Todos los días de 8.30 a 22.00</span>
+                      </div>
+                      <div className="flex items-start gap-4">
+                        <MapPin className="h-5 w-5 flex-shrink-0 text-accent mt-0.5" />
+                        <span>Ruta Nro. 76</span>
+                      </div>
+                      <div className="flex items-start gap-4">
+                        <Phone className="h-5 w-5 flex-shrink-0 text-accent mt-0.5" />
+                        <span>3825587085</span>
+                      </div>
+                    </div>
                   </div>
-                  <div className="flex items-start gap-4">
-                    <Mail className="h-6 w-6 flex-shrink-0 text-accent" />
-                    <span>info@villaunion.tur.ar</span>
+
+                  <Separator />
+
+                  <div>
+                    <h4 className="font-semibold text-lg text-foreground mb-3">Oficina de Turismo Guandacol</h4>
+                    <div className="space-y-3 text-muted-foreground">
+                      <div className="flex items-start gap-4">
+                        <Clock className="h-5 w-5 flex-shrink-0 text-accent mt-0.5" />
+                        <span>Todos los días de 9.00 a 21.00</span>
+                      </div>
+                      <div className="flex items-start gap-4">
+                        <MapPin className="h-5 w-5 flex-shrink-0 text-accent mt-0.5" />
+                        <span>San Martín s/n - Casa de Felipe Varela</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </CardContent>
