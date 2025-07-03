@@ -1,6 +1,7 @@
 import { MetadataRoute } from 'next';
 import { getAttractions } from '@/lib/atractivos.service';
 import { getServicios } from '@/lib/servicios.service';
+import { getNovedades } from '@/lib/novedades.service';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = 'https://villaunion.tur.ar';
@@ -10,6 +11,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     '/',
     '/atractivos',
     '/servicios',
+    '/novedades',
     '/mapas',
     '/folletos',
     '/contacto',
@@ -29,6 +31,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.7,
   }));
 
+  // Dynamic novedades routes
+  const novedades = await getNovedades();
+  const novedadRoutes = novedades.map((novedad) => ({
+    url: `${baseUrl}/novedades/${novedad.id}`,
+    lastModified: new Date(novedad.date),
+    changeFrequency: 'weekly' as const,
+    priority: 0.7,
+  }));
+
   // Dynamic servicios routes
   const servicios = await getServicios();
   const servicioRoutes = servicios.map((servicio) => ({
@@ -41,6 +52,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   return [
     ...staticRoutes,
     ...attractionRoutes,
+    ...novedadRoutes,
     ...servicioRoutes,
   ];
 }
