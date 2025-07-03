@@ -48,10 +48,13 @@ export async function upsertNovedad(formData: FormData) {
   
   const { id, title, description, image } = validatedFields.data;
   const novedades = await getNovedades();
-  let imageUrl: string | undefined = undefined;
+  const existingNovedad = id ? novedades.find((n) => n.id === id) : undefined;
+  
+  // Initialize with the existing image URL to prevent accidental deletion on update
+  let imageUrl: string | undefined = existingNovedad?.imageUrl;
 
   try {
-    // Handle file upload if an image is provided
+    // Handle file upload if a new image is provided
     if (image) {
       const slug = slugify(title);
       const uploadDir = path.join(process.cwd(), 'public/uploads/novedades', slug);
@@ -64,6 +67,7 @@ export async function upsertNovedad(formData: FormData) {
       const buffer = Buffer.from(await image.arrayBuffer());
       await fs.writeFile(filePath, buffer);
 
+      // Overwrite imageUrl with the new URL
       imageUrl = `/uploads/novedades/${slug}/${filename}`;
     }
 
@@ -75,7 +79,8 @@ export async function upsertNovedad(formData: FormData) {
           ...novedades[index], 
           title, 
           description,
-          ...(imageUrl && { imageUrl }),
+          // This must have a value, either the old one or the newly uploaded one.
+          imageUrl: imageUrl!, 
         };
       } else {
         return { success: false, error: 'Novedad no encontrada.' };
