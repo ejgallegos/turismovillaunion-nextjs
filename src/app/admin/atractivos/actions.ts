@@ -49,6 +49,7 @@ export async function upsertAttraction(formData: FormData) {
   const { id, title, description, image } = validatedFields.data;
   const attractions = await getAttractions();
   let imageUrl: string | undefined = undefined;
+  let finalId = id;
 
   try {
     // Handle file upload if an image is provided
@@ -95,12 +96,16 @@ export async function upsertAttraction(formData: FormData) {
         imageUrl,
       };
       attractions.push(newAttraction);
+      finalId = newAttraction.id;
     }
   
     await saveAttractions(attractions);
     revalidatePath('/admin/atractivos');
     revalidatePath('/atractivos');
     revalidatePath('/');
+    if (finalId) {
+      revalidatePath(`/atractivos/${finalId}`);
+    }
   
     return { success: true };
   } catch (e) {
@@ -138,6 +143,7 @@ export async function deleteAttraction(id: string) {
       revalidatePath('/admin/atractivos');
       revalidatePath('/atractivos');
       revalidatePath('/');
+      revalidatePath(`/atractivos/${id}`);
       return { success: true };
     } catch (e) {
        return { success: false, error: 'Error al eliminar el atractivo.' };

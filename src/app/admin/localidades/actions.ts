@@ -48,6 +48,7 @@ export async function upsertLocalidad(formData: FormData) {
   const { id, title, description, image } = validatedFields.data;
   const localidades = await getLocalidades();
   let imageUrl: string | undefined = undefined;
+  let finalId = id;
 
   try {
     if (image) {
@@ -90,11 +91,15 @@ export async function upsertLocalidad(formData: FormData) {
         imageUrl,
       };
       localidades.push(newLocalidad);
+      finalId = newLocalidad.id;
     }
   
     await saveLocalidades(localidades);
     revalidatePath('/admin/localidades');
     revalidatePath('/localidades');
+    if (finalId) {
+      revalidatePath(`/localidades/${finalId}`);
+    }
   
     return { success: true };
   } catch (e) {
@@ -129,6 +134,7 @@ export async function deleteLocalidad(id: string) {
       await saveLocalidades(updatedLocalidades);
       revalidatePath('/admin/localidades');
       revalidatePath('/localidades');
+      revalidatePath(`/localidades/${id}`);
       return { success: true };
     } catch (e) {
        return { success: false, error: 'Error al eliminar la localidad.' };

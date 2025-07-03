@@ -49,9 +49,8 @@ export async function upsertNovedad(formData: FormData) {
   const { id, title, description, image } = validatedFields.data;
   const novedades = await getNovedades();
   const existingNovedad = id ? novedades.find((n) => n.id === id) : undefined;
-  
-  // Initialize with the existing image URL to prevent accidental deletion on update
   let imageUrl: string | undefined = existingNovedad?.imageUrl;
+  let finalId = id;
 
   try {
     // Handle file upload if a new image is provided
@@ -67,7 +66,6 @@ export async function upsertNovedad(formData: FormData) {
       const buffer = Buffer.from(await image.arrayBuffer());
       await fs.writeFile(filePath, buffer);
 
-      // Overwrite imageUrl with the new URL
       imageUrl = `/uploads/novedades/${slug}/${filename}`;
     }
 
@@ -79,7 +77,6 @@ export async function upsertNovedad(formData: FormData) {
           ...novedades[index], 
           title, 
           description,
-          // This must have a value, either the old one or the newly uploaded one.
           imageUrl: imageUrl!, 
         };
       } else {
@@ -99,12 +96,16 @@ export async function upsertNovedad(formData: FormData) {
         imageUrl,
       };
       novedades.push(newNovedad);
+      finalId = newNovedad.id;
     }
   
     await saveNovedades(novedades);
     revalidatePath('/admin/novedades');
     revalidatePath('/novedades');
     revalidatePath('/');
+    if(finalId) {
+      revalidatePath(`/novedades/${finalId}`);
+    }
   
     return { success: true };
   } catch (e) {
@@ -140,6 +141,7 @@ export async function deleteNovedad(id: string) {
       revalidatePath('/admin/novedades');
       revalidatePath('/novedades');
       revalidatePath('/');
+      revalidatePath(`/novedades/${id}`);
       return { success: true };
     } catch (e) {
        return { success: false, error: 'Error al eliminar la novedad.' };

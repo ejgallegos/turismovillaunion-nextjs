@@ -24,6 +24,7 @@ export async function upsertServicio(data: unknown) {
   
   const servicios = await getServicios();
   const { id, ...servicioData } = validatedFields.data;
+  let finalId = id;
   
   try {
     if (id) {
@@ -43,11 +44,15 @@ export async function upsertServicio(data: unknown) {
         ...servicioData,
       };
       servicios.push(newServicio);
+      finalId = newServicio.id;
     }
   
     await saveServicios(servicios);
     revalidatePath('/admin/servicios');
     revalidatePath('/servicios');
+    if (finalId) {
+      revalidatePath(`/servicios/${finalId}`);
+    }
   
     return { success: true };
   } catch (e) {
@@ -70,6 +75,7 @@ export async function deleteServicio(id: string) {
       await saveServicios(updatedServicios);
       revalidatePath('/admin/servicios');
       revalidatePath('/servicios');
+      revalidatePath(`/servicios/${id}`);
       return { success: true };
     } catch (e) {
        return { success: false, error: 'Error al eliminar el servicio.' };
