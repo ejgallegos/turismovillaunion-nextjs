@@ -14,14 +14,16 @@ const dataFilePath = path.join(process.cwd(), 'src/data/folletos.json');
 export async function getFolletos(): Promise<Folleto[]> {
   try {
     const fileContents = await fs.readFile(dataFilePath, 'utf8');
-    const folletos = JSON.parse(fileContents);
-    return folletos;
+    if (!fileContents.trim()) {
+      return [];
+    }
+    return JSON.parse(fileContents);
   } catch (error) {
-    console.error('Error reading folletos data:', error);
     if (error instanceof Error && (error as NodeJS.ErrnoException).code === 'ENOENT') {
       await saveFolletos([]);
       return [];
     }
+    console.warn(`Could not read or parse folletos data from ${dataFilePath}. Returning empty array.`, error);
     return [];
   }
 }

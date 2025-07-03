@@ -14,14 +14,16 @@ const dataFilePath = path.join(process.cwd(), 'src/data/novedades.json');
 export async function getNovedades(): Promise<Novedad[]> {
   try {
     const fileContents = await fs.readFile(dataFilePath, 'utf8');
-    const novedades = JSON.parse(fileContents);
-    return novedades;
+    if (!fileContents.trim()) {
+      return [];
+    }
+    return JSON.parse(fileContents);
   } catch (error) {
-    console.error('Error reading novedades data:', error);
     if (error instanceof Error && (error as NodeJS.ErrnoException).code === 'ENOENT') {
       await saveNovedades([]);
       return [];
     }
+    console.warn(`Could not read or parse novedades data from ${dataFilePath}. Returning empty array.`, error);
     return [];
   }
 }

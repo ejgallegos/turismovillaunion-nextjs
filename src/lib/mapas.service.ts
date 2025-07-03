@@ -13,14 +13,16 @@ const dataFilePath = path.join(process.cwd(), 'src/data/mapas.json');
 export async function getMapas(): Promise<Mapa[]> {
   try {
     const fileContents = await fs.readFile(dataFilePath, 'utf8');
-    const mapas = JSON.parse(fileContents);
-    return mapas;
+    if (!fileContents.trim()) {
+      return [];
+    }
+    return JSON.parse(fileContents);
   } catch (error) {
-    console.error('Error reading mapas data:', error);
     if (error instanceof Error && (error as NodeJS.ErrnoException).code === 'ENOENT') {
       await saveMapas([]);
       return [];
     }
+    console.warn(`Could not read or parse mapas data from ${dataFilePath}. Returning empty array.`, error);
     return [];
   }
 }

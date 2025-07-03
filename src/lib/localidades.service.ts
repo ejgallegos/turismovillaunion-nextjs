@@ -13,14 +13,16 @@ const dataFilePath = path.join(process.cwd(), 'src/data/localidades.json');
 export async function getLocalidades(): Promise<Localidad[]> {
   try {
     const fileContents = await fs.readFile(dataFilePath, 'utf8');
-    const localidades = JSON.parse(fileContents);
-    return localidades;
+    if (!fileContents.trim()) {
+      return [];
+    }
+    return JSON.parse(fileContents);
   } catch (error) {
-    console.error('Error reading localidades data:', error);
     if (error instanceof Error && (error as NodeJS.ErrnoException).code === 'ENOENT') {
       await saveLocalidades([]);
       return [];
     }
+    console.warn(`Could not read or parse localidades data from ${dataFilePath}. Returning empty array.`, error);
     return [];
   }
 }

@@ -13,14 +13,16 @@ const dataFilePath = path.join(process.cwd(), 'src/data/servicios.json');
 export async function getServicios(): Promise<Servicio[]> {
   try {
     const fileContents = await fs.readFile(dataFilePath, 'utf8');
-    const servicios = JSON.parse(fileContents);
-    return servicios;
+    if (!fileContents.trim()) {
+      return [];
+    }
+    return JSON.parse(fileContents);
   } catch (error) {
-    console.error('Error reading servicios data:', error);
     if (error instanceof Error && (error as NodeJS.ErrnoException).code === 'ENOENT') {
       await saveServicios([]);
       return [];
     }
+    console.warn(`Could not read or parse servicios data from ${dataFilePath}. Returning empty array.`, error);
     return [];
   }
 }

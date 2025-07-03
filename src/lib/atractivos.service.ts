@@ -13,14 +13,16 @@ const dataFilePath = path.join(process.cwd(), 'src/data/atractivos.json');
 export async function getAttractions(): Promise<Attraction[]> {
   try {
     const fileContents = await fs.readFile(dataFilePath, 'utf8');
-    const attractions = JSON.parse(fileContents);
-    return attractions;
-  } catch (error) {
-    console.error('Error reading attractions data:', error);
-    // If the file doesn't exist or is empty, return an empty array
-    if (error instanceof Error && (error as NodeJS.ErrnoException).code === 'ENOENT') {
+    if (!fileContents.trim()) {
       return [];
     }
+    return JSON.parse(fileContents);
+  } catch (error) {
+    if (error instanceof Error && (error as NodeJS.ErrnoException).code === 'ENOENT') {
+      await saveAttractions([]);
+      return [];
+    }
+    console.warn(`Could not read or parse attractions data from ${dataFilePath}. Returning empty array.`, error);
     return [];
   }
 }
