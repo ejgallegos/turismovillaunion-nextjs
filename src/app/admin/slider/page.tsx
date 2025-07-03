@@ -4,9 +4,10 @@ import { getNovedades, Novedad } from '@/lib/novedades.service';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Trash2, Film, Newspaper } from "lucide-react";
+import { Trash2, Film, Newspaper, ArrowUp, ArrowDown } from "lucide-react";
 import { AddSliderItemForm } from './add-slider-item-form';
 import { DeleteSliderItemAlert } from './delete-slider-item-alert';
+import { moveSliderItem } from './actions';
 
 export const dynamic = 'force-dynamic';
 
@@ -44,7 +45,7 @@ export default async function AdminSliderPage() {
           <CardHeader>
             <CardTitle>Elementos del Slider Principal</CardTitle>
             <CardDescription>
-              Esta es la lista de elementos que aparecen en el slider de la página de inicio.
+              Esta es la lista de elementos que aparecen en el slider de la página de inicio. Puede reordenarlos usando las flechas.
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -57,7 +58,7 @@ export default async function AdminSliderPage() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {sliderItems.map((item) => {
+                {sliderItems.map((item, index) => {
                   const displayData = getItemDisplayData(item, attractions, novedades);
                   return (
                     <TableRow key={item.uuid}>
@@ -74,12 +75,26 @@ export default async function AdminSliderPage() {
                       </TableCell>
                       <TableCell className="hidden md:table-cell">{displayData.type}</TableCell>
                       <TableCell className="text-right">
-                        <DeleteSliderItemAlert uuid={item.uuid}>
-                          <Button variant="ghost" size="icon" className="text-destructive hover:text-destructive">
-                            <Trash2 className="h-4 w-4" />
-                            <span className="sr-only">Eliminar</span>
-                          </Button>
-                        </DeleteSliderItemAlert>
+                        <div className="inline-flex items-center">
+                          <form action={async () => { 'use server'; await moveSliderItem(item.uuid, 'up'); }}>
+                            <Button variant="ghost" size="icon" disabled={index === 0} title="Mover hacia arriba">
+                                <ArrowUp className="h-4 w-4" />
+                                <span className="sr-only">Mover hacia arriba</span>
+                            </Button>
+                          </form>
+                          <form action={async () => { 'use server'; await moveSliderItem(item.uuid, 'down'); }}>
+                            <Button variant="ghost" size="icon" disabled={index === sliderItems.length - 1} title="Mover hacia abajo">
+                                <ArrowDown className="h-4 w-4" />
+                                <span className="sr-only">Mover hacia abajo</span>
+                            </Button>
+                          </form>
+                          <DeleteSliderItemAlert uuid={item.uuid}>
+                            <Button variant="ghost" size="icon" className="text-destructive hover:text-destructive">
+                              <Trash2 className="h-4 w-4" />
+                              <span className="sr-only">Eliminar</span>
+                            </Button>
+                          </DeleteSliderItemAlert>
+                        </div>
                       </TableCell>
                     </TableRow>
                   );
