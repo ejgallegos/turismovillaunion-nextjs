@@ -3,7 +3,6 @@ import { Header } from '@/components/landing/header';
 import { Hero } from '@/components/landing/hero';
 import { Atractivos } from '@/components/landing/attractions';
 import { Footer } from '@/components/landing/footer';
-import { News } from '@/components/landing/news';
 
 export const metadata: Metadata = {
   title: 'Villa Unión del Talampaya | Tu Aventura te Espera',
@@ -17,7 +16,6 @@ export default function Home() {
       <main className="flex-1">
         <Hero />
         <Atractivos />
-        <News />
       </main>
       <Footer />
     </div>
