@@ -5,7 +5,8 @@ import { Footer } from '@/components/landing/footer';
 import { notFound } from 'next/navigation';
 import type { Metadata, ResolvingMetadata } from 'next';
 import * as LucideIcons from 'lucide-react';
-import { serializeSlate, plainTextFromSlate } from '@/lib/slate-serializer';
+import { plainTextFromSlate } from '@/lib/slate-serializer';
+import { SlateRenderer } from '@/components/slate-renderer';
 
 const getServiceIcon = (iconName: string, props: any) => {
     const IconComponent = (LucideIcons as any)[iconName] || LucideIcons.HelpCircle;
@@ -59,8 +60,6 @@ export default async function ServicioDetailPage({ params }: { params: { id: str
     notFound();
   }
 
-  const serializedDescription = serializeSlate(servicio.description);
-
   return (
     <div className="flex min-h-screen flex-col">
       <Header />
@@ -81,8 +80,9 @@ export default async function ServicioDetailPage({ params }: { params: { id: str
           <div className="container mx-auto max-w-3xl px-4 md:px-6">
             <div
                 className="prose prose-lg dark:prose-invert max-w-none"
-                dangerouslySetInnerHTML={{ __html: serializedDescription }}
-            />
+            >
+              <SlateRenderer content={servicio.description} />
+            </div>
           </div>
         </div>
       </main>

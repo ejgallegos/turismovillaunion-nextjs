@@ -5,8 +5,9 @@ import { Footer } from '@/components/landing/footer';
 import Image from 'next/image';
 import type { Metadata, ResolvingMetadata } from 'next';
 import { notFound } from 'next/navigation';
-import { serializeSlate, plainTextFromSlate } from '@/lib/slate-serializer';
+import { plainTextFromSlate } from '@/lib/slate-serializer';
 import { generateMetaTags } from '@/ai/flows/generate-meta-tags';
+import { SlateRenderer } from '@/components/slate-renderer';
 
 export async function generateMetadata(
   { params }: { params: { id: string } },
@@ -66,8 +67,6 @@ export default async function LocalidadDetailPage({ params }: { params: { id: st
     notFound();
   }
   
-  const serializedDescription = serializeSlate(localidad.description);
-
   return (
     <div className="flex min-h-screen flex-col">
       <Header />
@@ -91,8 +90,9 @@ export default async function LocalidadDetailPage({ params }: { params: { id: st
           <div className="container mx-auto max-w-4xl px-4 py-12 md:px-6 md:py-16">
             <div
                 className="prose prose-lg dark:prose-invert max-w-none"
-                dangerouslySetInnerHTML={{ __html: serializedDescription }}
-            />
+            >
+              <SlateRenderer content={localidad.description} />
+            </div>
           </div>
         </article>
       </main>
