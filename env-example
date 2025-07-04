@@ -1,0 +1,19 @@
+# Reemplaza estos valores con la configuración real de tu proyecto de Firebase.
+NEXT_PUBLIC_FIREBASE_API_KEY="AIzaSyD-EXAMPLE-API-KEY"
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN="your-project-id.firebaseapp.com"
+NEXT_PUBLIC_FIREBASE_PROJECT_ID="your-project-id"
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET="your-project-id.appspot.com"
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID="123456789012"
+NEXT_PUBLIC_FIREBASE_APP_ID="1:123456789012:web:a1b2c3d4e5f6g7h8i9j0k1"
+
+# Reemplaza estos valores con la configuración real de tu servidor de correo para el formulario de contacto.
+EMAIL_SERVER_HOST="smtp.example.com"
+EMAIL_SERVER_PORT="587"
+EMAIL_SERVER_USER="user@example.com"
+EMAIL_SERVER_PASSWORD="your-password"
+EMAIL_FROM="noreply@example.com"
+EMAIL_TO="contact@example.com"
+
+# WhatsApp Button
+NEXT_PUBLIC_WHATSAPP_NUMBER="5493825000000"
+NEXT_PUBLIC_WHATSAPP_MESSAGE="¡Hola! Quisiera más información sobre Villa Unión."
