@@ -1,23 +1,9 @@
+'use client';
 
 import React from 'react';
-import { Text } from 'slate';
+import { Text, Descendant } from 'slate';
 
-// Basic types for Slate nodes.
-interface SlateTextNode {
-  text: string;
-  bold?: boolean;
-  italic?: boolean;
-  code?: boolean;
-}
-
-interface SlateElementNode {
-  type: 'heading-one' | 'heading-two' | 'paragraph' | 'bulleted-list' | 'list-item';
-  children: SlateNode[];
-}
-
-type SlateNode = SlateTextNode | SlateElementNode;
-
-const renderNode = (node: SlateNode, index: number): JSX.Element => {
+const renderNode = (node: Descendant, index: number): JSX.Element => {
   if (Text.isText(node)) {
     let children: React.ReactNode = node.text;
     if (node.bold) {
@@ -29,7 +15,7 @@ const renderNode = (node: SlateNode, index: number): JSX.Element => {
     if (node.code) {
       children = <code>{children}</code>;
     }
-    // Using fragment here as key is applied by the parent map
+    // The key is provided by the parent .map() call, wrapping in a fragment is fine.
     return <>{children}</>;
   }
 
@@ -51,7 +37,7 @@ const renderNode = (node: SlateNode, index: number): JSX.Element => {
 };
 
 export function SlateRenderer({ content }: { content: string }) {
-  let parsedNodes: SlateNode[];
+  let parsedNodes: Descendant[];
 
   try {
     parsedNodes = JSON.parse(content);
