@@ -86,16 +86,15 @@
   }
 }
 
-/* React Quill Snow Theme Customization */
 .ql-toolbar.ql-snow {
-  @apply rounded-t-md font-sans;
   border: 1px solid hsl(var(--input));
   border-bottom: none;
+  @apply rounded-t-md font-sans;
 }
 
 .ql-container.ql-snow {
-  @apply rounded-b-md text-base;
   border: 1px solid hsl(var(--input));
+  @apply rounded-b-md text-base;
 }
 
 .ql-editor {
