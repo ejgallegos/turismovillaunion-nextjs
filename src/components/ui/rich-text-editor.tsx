@@ -3,7 +3,7 @@
 
 import React, { useCallback, useMemo, useState } from 'react';
 import { createEditor, Descendant, Transforms, Editor, Text } from 'slate';
-import { Slate, Editable, withReact, ReactEditor } from 'slate-react';
+import { Slate, Editable, withReact, ReactEditor, useSlate } from 'slate-react';
 import { withHistory } from 'slate-history';
 import { Bold, Italic, Code, List, Heading1, Heading2 } from 'lucide-react';
 
