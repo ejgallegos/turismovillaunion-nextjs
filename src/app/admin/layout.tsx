@@ -14,6 +14,13 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const router = useRouter();
 
   useEffect(() => {
+    if (!auth) {
+        // This can happen if Firebase keys are not in .env
+        // Redirect to login, where the form will show an error message.
+        router.push('/login');
+        return;
+    }
+
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       if (!currentUser) {
         router.push('/login');
@@ -27,6 +34,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   }, [router]);
 
   const handleSignOut = async () => {
+    if (!auth) return;
     await auth.signOut();
     router.push('/login');
   };
