@@ -22,57 +22,62 @@ export async function generateMetadata(
     };
   }
 
-  try {
-    const content = plainTextFromSlate(localidad.description);
-    const metaTags = await generateMetaTags({ content });
-    const previousImages = (await parent).openGraph?.images || [];
+  // Only attempt to generate AI metadata if an API key is available.
+  if (process.env.GOOGLE_API_KEY) {
+    try {
+      const content = plainTextFromSlate(localidad.description);
+      const metaTags = await generateMetaTags({ content });
+      const previousImages = (await parent).openGraph?.images || [];
 
-    return {
-      title: metaTags.title,
-      description: metaTags.description,
-      keywords: metaTags.keywords,
-      openGraph: {
+      return {
         title: metaTags.title,
         description: metaTags.description,
-        images: [
-          {
-            url: localidad.imageUrl,
-            width: 1200,
-            height: 630,
-            alt: `Imagen de ${localidad.title}`,
-          },
-          ...previousImages
-        ],
-      },
-      twitter: {
-        card: 'summary_large_image',
-        title: metaTags.title,
-        description: metaTags.description,
-        images: [localidad.imageUrl],
-      },
-    };
-  } catch (error) {
-    console.error(`[Metadata Error] Failed to generate AI metadata for localidad "${params.id}". Falling back to basic metadata.`, error);
-    const descriptionText = plainTextFromSlate(localidad.description).substring(0, 160);
-    const previousImages = (await parent).openGraph?.images || [];
-    return {
-      title: localidad.title,
-      description: descriptionText,
-      openGraph: {
-          title: localidad.title,
-          description: descriptionText,
+        keywords: metaTags.keywords,
+        openGraph: {
+          title: metaTags.title,
+          description: metaTags.description,
           images: [
-              {
-                  url: localidad.imageUrl,
-                  width: 1200,
-                  height: 630,
-                  alt: `Imagen de ${localidad.title}`,
-              },
-              ...previousImages
-          ]
-      }
-    };
+            {
+              url: localidad.imageUrl,
+              width: 1200,
+              height: 630,
+              alt: `Imagen de ${localidad.title}`,
+            },
+            ...previousImages
+          ],
+        },
+        twitter: {
+          card: 'summary_large_image',
+          title: metaTags.title,
+          description: metaTags.description,
+          images: [localidad.imageUrl],
+        },
+      };
+    } catch (error) {
+      console.warn(`[AI Metadata Warning] Failed to generate AI metadata for localidad "${params.id}". This can happen due to API errors or content restrictions. Falling back to basic metadata.`, error);
+    }
   }
+  
+  // Fallback to basic metadata if AI generation is skipped or fails
+  const descriptionText = plainTextFromSlate(localidad.description).substring(0, 160);
+  const previousImages = (await parent).openGraph?.images || [];
+  return {
+    title: localidad.title,
+    description: descriptionText,
+    openGraph: {
+        title: localidad.title,
+        description: descriptionText,
+        images: [
+            {
+                url: localidad.imageUrl,
+                width: 1200,
+                height: 630,
+                alt: `Imagen de ${localidad.title}`,
+            },
+            ...previousImages
+        ]
+    }
+  };
 }
 
 export async function generateStaticParams() {

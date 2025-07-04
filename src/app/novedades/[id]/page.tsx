@@ -23,57 +23,62 @@ export async function generateMetadata(
     };
   }
 
-  try {
-    const content = plainTextFromSlate(novedad.description);
-    const metaTags = await generateMetaTags({ content });
-    const previousImages = (await parent).openGraph?.images || [];
+  // Only attempt to generate AI metadata if an API key is available.
+  if (process.env.GOOGLE_API_KEY) {
+    try {
+      const content = plainTextFromSlate(novedad.description);
+      const metaTags = await generateMetaTags({ content });
+      const previousImages = (await parent).openGraph?.images || [];
 
-    return {
-      title: metaTags.title,
-      description: metaTags.description,
-      keywords: metaTags.keywords,
-      openGraph: {
+      return {
         title: metaTags.title,
         description: metaTags.description,
-        images: [
-          {
-            url: novedad.imageUrl,
-            width: 1200,
-            height: 630,
-            alt: `Imagen de ${novedad.title}`,
-          },
-          ...previousImages
-        ],
-      },
-      twitter: {
-        card: 'summary_large_image',
-        title: metaTags.title,
-        description: metaTags.description,
-        images: [novedad.imageUrl],
-      },
-    };
-  } catch (error) {
-    console.error(`[Metadata Error] Failed to generate AI metadata for novedad "${params.id}". Falling back to basic metadata.`, error);
-    const descriptionText = plainTextFromSlate(novedad.description).substring(0, 160);
-    const previousImages = (await parent).openGraph?.images || [];
-    return {
-      title: novedad.title,
-      description: descriptionText,
-      openGraph: {
-          title: novedad.title,
-          description: descriptionText,
+        keywords: metaTags.keywords,
+        openGraph: {
+          title: metaTags.title,
+          description: metaTags.description,
           images: [
-              {
-                  url: novedad.imageUrl,
-                  width: 1200,
-                  height: 630,
-                  alt: `Imagen de ${novedad.title}`,
-              },
-              ...previousImages
-          ]
-      }
-    };
+            {
+              url: novedad.imageUrl,
+              width: 1200,
+              height: 630,
+              alt: `Imagen de ${novedad.title}`,
+            },
+            ...previousImages
+          ],
+        },
+        twitter: {
+          card: 'summary_large_image',
+          title: metaTags.title,
+          description: metaTags.description,
+          images: [novedad.imageUrl],
+        },
+      };
+    } catch (error) {
+      console.warn(`[AI Metadata Warning] Failed to generate AI metadata for novedad "${params.id}". This can happen due to API errors or content restrictions. Falling back to basic metadata.`, error);
+    }
   }
+
+  // Fallback to basic metadata if AI generation is skipped or fails
+  const descriptionText = plainTextFromSlate(novedad.description).substring(0, 160);
+  const previousImages = (await parent).openGraph?.images || [];
+  return {
+    title: novedad.title,
+    description: descriptionText,
+    openGraph: {
+        title: novedad.title,
+        description: descriptionText,
+        images: [
+            {
+                url: novedad.imageUrl,
+                width: 1200,
+                height: 630,
+                alt: `Imagen de ${novedad.title}`,
+            },
+            ...previousImages
+        ]
+    }
+  };
 }
 
 // Generate static paths for all news

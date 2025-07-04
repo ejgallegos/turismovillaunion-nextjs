@@ -23,58 +23,63 @@ export async function generateMetadata(
     };
   }
   
-  try {
-    const content = plainTextFromSlate(attraction.description);
-    const metaTags = await generateMetaTags({ content });
+  // Only attempt to generate AI metadata if an API key is available.
+  if (process.env.GOOGLE_API_KEY) {
+    try {
+      const content = plainTextFromSlate(attraction.description);
+      const metaTags = await generateMetaTags({ content });
 
-    const previousImages = (await parent).openGraph?.images || [];
-
-    return {
-      title: metaTags.title,
-      description: metaTags.description,
-      keywords: metaTags.keywords,
-      openGraph: {
-        title: metaTags.title,
-        description: metaTags.description,
-        images: [
-          {
-            url: attraction.imageUrl,
-            width: 1200,
-            height: 630,
-            alt: `Imagen de ${attraction.title}`,
-          },
-          ...previousImages
-        ],
-      },
-      twitter: {
-        card: 'summary_large_image',
-        title: metaTags.title,
-        description: metaTags.description,
-        images: [attraction.imageUrl],
-      },
-    };
-  } catch (error) {
-      console.error(`[Metadata Error] Failed to generate AI metadata for attraction "${params.id}". Falling back to basic metadata.`, error);
-      const descriptionText = plainTextFromSlate(attraction.description).substring(0, 160);
       const previousImages = (await parent).openGraph?.images || [];
+
       return {
+        title: metaTags.title,
+        description: metaTags.description,
+        keywords: metaTags.keywords,
+        openGraph: {
+          title: metaTags.title,
+          description: metaTags.description,
+          images: [
+            {
+              url: attraction.imageUrl,
+              width: 1200,
+              height: 630,
+              alt: `Imagen de ${attraction.title}`,
+            },
+            ...previousImages
+          ],
+        },
+        twitter: {
+          card: 'summary_large_image',
+          title: metaTags.title,
+          description: metaTags.description,
+          images: [attraction.imageUrl],
+        },
+      };
+    } catch (error) {
+        console.warn(`[AI Metadata Warning] Failed to generate AI metadata for attraction "${params.id}". This can happen due to API errors or content restrictions. Falling back to basic metadata.`, error);
+    }
+  }
+
+  // Fallback to basic metadata if AI generation is skipped or fails
+  const descriptionText = plainTextFromSlate(attraction.description).substring(0, 160);
+  const previousImages = (await parent).openGraph?.images || [];
+  return {
+    title: attraction.title,
+    description: descriptionText,
+    openGraph: {
         title: attraction.title,
         description: descriptionText,
-        openGraph: {
-            title: attraction.title,
-            description: descriptionText,
-            images: [
-                {
-                    url: attraction.imageUrl,
-                    width: 1200,
-                    height: 630,
-                    alt: `Imagen de ${attraction.title}`,
-                },
-                ...previousImages
-            ]
-        }
-      };
-  }
+        images: [
+            {
+                url: attraction.imageUrl,
+                width: 1200,
+                height: 630,
+                alt: `Imagen de ${attraction.title}`,
+            },
+            ...previousImages
+        ]
+    }
+  };
 }
 
 // Generate static paths for all attractions
