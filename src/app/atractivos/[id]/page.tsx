@@ -21,7 +21,7 @@ export async function generateMetadata(
   }
 
   const title = `${attraction.title} | Villa Unión del Talampaya`;
-  const description = attraction.description; 
+  const description = attraction.description.replace(/<[^>]*>?/gm, '').substring(0, 160); 
 
   return {
     title,
@@ -84,9 +84,10 @@ export default async function AttractionDetailPage({ params }: { params: { id: s
             </div>
           </header>
           <div className="container mx-auto max-w-4xl px-4 py-12 md:px-6 md:py-16">
-            <div className="prose prose-lg dark:prose-invert max-w-none">
-                <p>{attraction.description}</p>
-            </div>
+            <div
+              className="prose prose-lg dark:prose-invert max-w-none"
+              dangerouslySetInnerHTML={{ __html: attraction.description }}
+            />
           </div>
         </article>
       </main>

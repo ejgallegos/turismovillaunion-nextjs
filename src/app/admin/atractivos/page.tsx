@@ -43,7 +43,7 @@ export default async function AdminAtractivosPage() {
                 <TableRow key={attraction.id}>
                   <TableCell className="font-medium">{attraction.title}</TableCell>
                   <TableCell className="hidden md:table-cell max-w-sm truncate">
-                    {attraction.description}
+                    {attraction.description.replace(/<[^>]*>?/gm, '')}
                   </TableCell>
                   <TableCell className="text-right">
                     <AtractivoFormSheet attraction={attraction}>

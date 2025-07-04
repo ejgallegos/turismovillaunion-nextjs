@@ -37,7 +37,7 @@ export async function Atractivos() {
                   <div className="flex-1">
                     <h3 className="font-headline text-xl font-bold"><Link href={`/atractivos/${attraction.id}`} className="hover:underline">{attraction.title}</Link></h3>
                     <p className="mt-2 text-base text-muted-foreground line-clamp-3">
-                      {attraction.description}
+                      {attraction.description.replace(/<[^>]*>?/gm, '')}
                     </p>
                   </div>
                 </CardHeader>

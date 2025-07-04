@@ -37,7 +37,7 @@ export async function Brochures() {
                 <CardContent className="flex-grow p-6">
                   <CardTitle className="font-headline text-xl">{brochure.title}</CardTitle>
                   <p className="mt-2 text-muted-foreground line-clamp-3">
-                    {brochure.description}
+                    {brochure.description.replace(/<[^>]*>?/gm, '')}
                   </p>
                 </CardContent>
                 <CardFooter className="p-6 pt-0">

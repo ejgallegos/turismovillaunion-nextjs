@@ -20,7 +20,7 @@ export async function generateMetadata(
   }
 
   const title = `${novedad.title} | Novedades | Villa Unión del Talampaya`;
-  const description = novedad.description.substring(0, 160);
+  const description = novedad.description.replace(/<[^>]*>?/gm, '').substring(0, 160);
 
   return {
     title,
@@ -83,9 +83,10 @@ export default async function NovedadDetailPage({ params }: { params: { id: stri
             </div>
           </header>
           <div className="container mx-auto max-w-4xl px-4 py-12 md:px-6 md:py-16">
-            <div className="prose prose-lg dark:prose-invert max-w-none">
-              <p>{novedad.description}</p>
-            </div>
+            <div
+              className="prose prose-lg dark:prose-invert max-w-none"
+              dangerouslySetInnerHTML={{ __html: novedad.description }}
+            />
           </div>
         </article>
       </main>

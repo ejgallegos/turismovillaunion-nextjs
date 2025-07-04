@@ -55,7 +55,7 @@ export default async function AdminGaleriaPage() {
                   </TableCell>
                   <TableCell className="font-medium">{item.title}</TableCell>
                   <TableCell className="hidden md:table-cell max-w-sm truncate">
-                    {item.description}
+                    {item.description.replace(/<[^>]*>?/gm, '')}
                   </TableCell>
                   <TableCell className="text-right">
                     <GaleriaFormSheet galleryItem={item}>

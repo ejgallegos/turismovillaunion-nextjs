@@ -43,7 +43,7 @@ export default async function AdminMapasPage() {
                 <TableRow key={mapa.id}>
                   <TableCell className="font-medium">{mapa.title}</TableCell>
                   <TableCell className="hidden md:table-cell max-w-sm truncate">
-                    {mapa.description}
+                    {mapa.description.replace(/<[^>]*>?/gm, '')}
                   </TableCell>
                   <TableCell className="text-right">
                     <MapaFormSheet mapa={mapa}>

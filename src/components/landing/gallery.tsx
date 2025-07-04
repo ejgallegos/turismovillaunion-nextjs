@@ -50,7 +50,7 @@ export function Gallery({ items }: GalleryProps) {
                                     <DialogHeader className="pt-4 text-left">
                                         <DialogTitle>{item.title}</DialogTitle>
                                         {item.description && (
-                                            <DialogDescription>{item.description}</DialogDescription>
+                                            <DialogDescription>{item.description.replace(/<[^>]*>?/gm, '')}</DialogDescription>
                                         )}
                                     </DialogHeader>
                                 </DialogContent>

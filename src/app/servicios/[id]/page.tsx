@@ -25,7 +25,7 @@ export async function generateMetadata(
   }
 
   const title = `${servicio.title} | Servicios en Villa Unión`;
-  const description = servicio.description;
+  const description = servicio.description.replace(/<[^>]*>?/gm, '').substring(0, 160);
 
   return {
     title,
@@ -75,9 +75,10 @@ export default async function ServicioDetailPage({ params }: { params: { id: str
         </div>
         <div className="py-12 md:py-16">
           <div className="container mx-auto max-w-3xl px-4 md:px-6">
-            <div className="prose prose-lg dark:prose-invert max-w-none">
-              <p>{servicio.description}</p>
-            </div>
+            <div
+              className="prose prose-lg dark:prose-invert max-w-none"
+              dangerouslySetInnerHTML={{ __html: servicio.description }}
+            />
           </div>
         </div>
       </main>

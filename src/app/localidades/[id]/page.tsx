@@ -19,7 +19,7 @@ export async function generateMetadata(
   }
 
   const title = `${localidad.title} | Villa Unión del Talampaya`;
-  const description = localidad.description;
+  const description = localidad.description.replace(/<[^>]*>?/gm, '').substring(0, 160);
 
   return {
     title,
@@ -81,9 +81,10 @@ export default async function LocalidadDetailPage({ params }: { params: { id: st
             </div>
           </header>
           <div className="container mx-auto max-w-4xl px-4 py-12 md:px-6 md:py-16">
-            <div className="prose prose-lg dark:prose-invert max-w-none">
-                <p>{localidad.description}</p>
-            </div>
+            <div
+              className="prose prose-lg dark:prose-invert max-w-none"
+              dangerouslySetInnerHTML={{ __html: localidad.description }}
+            />
           </div>
         </article>
       </main>

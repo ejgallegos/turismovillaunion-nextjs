@@ -27,7 +27,7 @@ export async function Maps() {
                     <CardContent className="p-6 flex flex-col items-center text-center gap-4">
                         <h3 className="font-headline text-xl font-bold">{map.title}</h3>
                         <p className="text-muted-foreground flex-grow line-clamp-3">
-                            {map.description}
+                            {map.description.replace(/<[^>]*>?/gm, '')}
                         </p>
                         <Button asChild disabled={!map.downloadUrl || map.downloadUrl === '#'}>
                             <Link href={map.downloadUrl || '#'} target="_blank" rel="noopener noreferrer">

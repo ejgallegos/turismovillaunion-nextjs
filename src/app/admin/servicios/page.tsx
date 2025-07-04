@@ -43,7 +43,7 @@ export default async function AdminServiciosPage() {
                 <TableRow key={servicio.id}>
                   <TableCell className="font-medium">{servicio.title}</TableCell>
                   <TableCell className="hidden md:table-cell max-w-sm truncate">
-                    {servicio.description}
+                    {servicio.description.replace(/<[^>]*>?/gm, '')}
                   </TableCell>
                   <TableCell className="text-right">
                     <ServicioFormSheet servicio={servicio}>

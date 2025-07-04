@@ -36,7 +36,7 @@ export async function Services() {
                   </CardHeader>
                   <CardContent className="flex-grow pt-4">
                       <p className="text-base text-muted-foreground line-clamp-4 text-center">
-                        {service.description}
+                        {service.description.replace(/<[^>]*>?/gm, '')}
                       </p>
                   </CardContent>
                   </Card>

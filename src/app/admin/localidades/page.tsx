@@ -43,7 +43,7 @@ export default async function AdminLocalidadesPage() {
                 <TableRow key={localidad.id}>
                   <TableCell className="font-medium">{localidad.title}</TableCell>
                   <TableCell className="hidden md:table-cell max-w-sm truncate">
-                    {localidad.description}
+                    {localidad.description.replace(/<[^>]*>?/gm, '')}
                   </TableCell>
                   <TableCell className="text-right">
                     <LocalidadFormSheet localidad={localidad}>
