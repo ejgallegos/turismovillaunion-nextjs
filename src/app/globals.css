@@ -1,5 +1,3 @@
-@import "react-quill/dist/quill.snow.css";
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -91,13 +89,13 @@
 /* React Quill Snow Theme Customization */
 .ql-toolbar.ql-snow {
   @apply rounded-t-md font-sans;
-  border: none;
-  border-bottom: 1px solid hsl(var(--input));
+  border: 1px solid hsl(var(--input));
+  border-bottom: none;
 }
 
 .ql-container.ql-snow {
   @apply rounded-b-md text-base;
-  border: none;
+  border: 1px solid hsl(var(--input));
 }
 
 .ql-editor {

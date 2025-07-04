@@ -1,16 +1,15 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-import React from 'react';
+import 'react-quill/dist/quill.snow.css';
 
-// The dynamic import with ssr: false is the key. It tells Next.js
-// to only load and render this component on the client-side.
+// Dynamically import ReactQuill to ensure it only runs on the client.
+// This is the recommended workaround for the 'findDOMNode' issue with React 18.
 const ReactQuill = dynamic(() => import('react-quill'), {
   ssr: false,
-  // A loading placeholder is shown while the component is being loaded on the client.
   loading: () => (
-    <div className="w-full rounded-md border border-input bg-transparent">
-      <div className="min-h-[150px] w-full animate-pulse rounded-md bg-muted p-3" />
+    <div className="w-full rounded-md border border-input">
+      <div className="h-[215px] w-full animate-pulse rounded-md bg-muted" />
     </div>
   ),
 });
