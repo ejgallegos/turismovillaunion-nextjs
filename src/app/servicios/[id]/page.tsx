@@ -6,22 +6,7 @@ import { notFound } from 'next/navigation';
 import type { Metadata, ResolvingMetadata } from 'next';
 import * as LucideIcons from 'lucide-react';
 import { plainTextFromSlate } from '@/lib/slate-serializer';
-import dynamic from 'next/dynamic';
-import { Skeleton } from '@/components/ui/skeleton';
-
-const SlateRenderer = dynamic(
-  () => import('@/components/slate-renderer').then((mod) => mod.SlateRenderer),
-  { 
-    ssr: false,
-    loading: () => (
-      <div className="space-y-4">
-        <Skeleton className="h-6 w-full" />
-        <Skeleton className="h-6 w-5/6" />
-        <Skeleton className="h-6 w-full" />
-      </div>
-    )
-  }
-);
+import { ContentRenderer } from '@/components/content-renderer';
 
 const getServiceIcon = (iconName: string, props: any) => {
     const IconComponent = (LucideIcons as any)[iconName] || LucideIcons.HelpCircle;
@@ -96,7 +81,7 @@ export default async function ServicioDetailPage({ params }: { params: { id: str
             <div
                 className="prose prose-lg dark:prose-invert max-w-none"
             >
-              <SlateRenderer content={servicio.description} />
+              <ContentRenderer content={servicio.description} />
             </div>
           </div>
         </div>

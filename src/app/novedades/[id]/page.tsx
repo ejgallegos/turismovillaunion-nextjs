@@ -7,22 +7,7 @@ import type { Metadata, ResolvingMetadata } from 'next';
 import { notFound } from 'next/navigation';
 import { plainTextFromSlate } from '@/lib/slate-serializer';
 import { generateMetaTags } from '@/ai/flows/generate-meta-tags';
-import dynamic from 'next/dynamic';
-import { Skeleton } from '@/components/ui/skeleton';
-
-const SlateRenderer = dynamic(
-  () => import('@/components/slate-renderer').then((mod) => mod.SlateRenderer),
-  { 
-    ssr: false,
-    loading: () => (
-      <div className="space-y-4">
-        <Skeleton className="h-6 w-full" />
-        <Skeleton className="h-6 w-5/6" />
-        <Skeleton className="h-6 w-full" />
-      </div>
-    )
-  }
-);
+import { ContentRenderer } from '@/components/content-renderer';
 
 // Generate metadata for the page
 export async function generateMetadata(
@@ -108,7 +93,7 @@ export default async function NovedadDetailPage({ params }: { params: { id: stri
             <div
                 className="prose prose-lg dark:prose-invert max-w-none"
             >
-              <SlateRenderer content={novedad.description} />
+              <ContentRenderer content={novedad.description} />
             </div>
           </div>
         </article>
