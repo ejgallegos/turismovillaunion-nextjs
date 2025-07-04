@@ -53,16 +53,17 @@ export function Hero() {
       } catch (error) {
         console.error("Failed to fetch hero slides data", error);
         setSlides([
-            {
-                src: "/images/Banner/slider/home-slider-sec-turismo.png",
-                alt: "Paisaje de Talampaya",
-                hint: "canyon sunset",
-                title: "Secretaría de Turismo Felipe Varela",
-                subtitle: "Tierra de tradiciones y paisajes apasionantes que no podes dejar de visitar.",
-                buttonText: "Explora Ahora",
-                buttonLink: "#atractivos",
-            }
-        ]);
+			{
+				src: "/images/Banner/slider/home-slider-sec-turismo.png",
+				alt: "Paisaje de Talampaya",
+				hint: "canyon sunset",
+				title: "Secretaría de Turismo Felipe Varela",
+				subtitle:
+					"Tierra de tradiciones y paisajes apasionantes que no podes dejar de visitar.",
+				buttonText: "Explora Ahora",
+				buttonLink: "#atractivos",
+			},
+		]);
       } finally {
         setLoading(false);
       }
