@@ -5,8 +5,9 @@ import { Atractivos } from '@/components/landing/attractions';
 import { Footer } from '@/components/landing/footer';
 
 export const metadata: Metadata = {
-  title: 'Villa Unión del Talampaya | Tu Aventura te Espera',
-  description: 'Descubre las maravillas naturales de Villa Unión. Explora el Parque Nacional Talampaya, Laguna Brava y más. Conoce uno de los destinos más impresionantes de Argentina.',
+	title: "Secretaría de Turismo del Dpto. Felipe Varela",
+	description:
+		"Descubre las maravillas naturales de nuestro Departamento Felipe Varela. Explora nuestros mejores atractivos. Y conoce uno de los destinos más impresionantes de Argentina.",
 };
 
 export default function Home() {
