@@ -6,7 +6,22 @@ import { notFound } from 'next/navigation';
 import type { Metadata, ResolvingMetadata } from 'next';
 import * as LucideIcons from 'lucide-react';
 import { plainTextFromSlate } from '@/lib/slate-serializer';
-import { SlateRenderer } from '@/components/slate-renderer';
+import dynamic from 'next/dynamic';
+import { Skeleton } from '@/components/ui/skeleton';
+
+const SlateRenderer = dynamic(
+  () => import('@/components/slate-renderer').then((mod) => mod.SlateRenderer),
+  { 
+    ssr: false,
+    loading: () => (
+      <div className="space-y-4">
+        <Skeleton className="h-6 w-full" />
+        <Skeleton className="h-6 w-5/6" />
+        <Skeleton className="h-6 w-full" />
+      </div>
+    )
+  }
+);
 
 const getServiceIcon = (iconName: string, props: any) => {
     const IconComponent = (LucideIcons as any)[iconName] || LucideIcons.HelpCircle;
