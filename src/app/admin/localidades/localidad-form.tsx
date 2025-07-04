@@ -50,7 +50,18 @@ export function LocalidadForm({ localidad }: LocalidadFormProps) {
   const router = useRouter();
   const { toast } = useToast();
   
-  const defaultDescription = localidad?.description ? JSON.parse(localidad.description) : initialValue;
+  const defaultDescription = (() => {
+    if (!localidad?.description) return initialValue;
+    try {
+      const parsed = JSON.parse(localidad.description);
+      if (Array.isArray(parsed) && parsed.length > 0 && parsed[0].type) {
+        return parsed;
+      }
+    } catch (e) {
+      return [{ type: 'paragraph', children: [{ text: localidad.description }] }];
+    }
+    return initialValue;
+  })();
 
   const form = useForm<LocalidadFormValues>({
     resolver: zodResolver(localidadSchema),

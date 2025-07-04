@@ -50,7 +50,18 @@ export function NovedadForm({ novedad }: NovedadFormProps) {
   const router = useRouter();
   const { toast } = useToast();
   
-  const defaultDescription = novedad?.description ? JSON.parse(novedad.description) : initialValue;
+  const defaultDescription = (() => {
+    if (!novedad?.description) return initialValue;
+    try {
+      const parsed = JSON.parse(novedad.description);
+      if (Array.isArray(parsed) && parsed.length > 0 && parsed[0].type) {
+        return parsed;
+      }
+    } catch (e) {
+      return [{ type: 'paragraph', children: [{ text: novedad.description }] }];
+    }
+    return initialValue;
+  })();
 
   const form = useForm<NovedadFormValues>({
     resolver: zodResolver(novedadSchema),

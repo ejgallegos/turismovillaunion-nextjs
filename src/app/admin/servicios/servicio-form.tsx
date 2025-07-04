@@ -40,7 +40,18 @@ export function ServicioForm({ servicio }: ServicioFormProps) {
   const router = useRouter();
   const { toast } = useToast();
   
-  const defaultDescription = servicio?.description ? JSON.parse(servicio.description) : initialValue;
+  const defaultDescription = (() => {
+    if (!servicio?.description) return initialValue;
+    try {
+      const parsed = JSON.parse(servicio.description);
+      if (Array.isArray(parsed) && parsed.length > 0 && parsed[0].type) {
+        return parsed;
+      }
+    } catch (e) {
+      return [{ type: 'paragraph', children: [{ text: servicio.description }] }];
+    }
+    return initialValue;
+  })();
 
   const form = useForm<ServicioFormValues>({
     resolver: zodResolver(servicioSchema),

@@ -51,7 +51,18 @@ export function MapaForm({ mapa }: MapaFormProps) {
   const router = useRouter();
   const { toast } = useToast();
   
-  const defaultDescription = mapa?.description ? JSON.parse(mapa.description) : initialValue;
+  const defaultDescription = (() => {
+    if (!mapa?.description) return initialValue;
+    try {
+      const parsed = JSON.parse(mapa.description);
+      if (Array.isArray(parsed) && parsed.length > 0 && parsed[0].type) {
+        return parsed;
+      }
+    } catch (e) {
+      return [{ type: 'paragraph', children: [{ text: mapa.description }] }];
+    }
+    return initialValue;
+  })();
 
   const form = useForm<MapaFormValues>({
     resolver: zodResolver(mapaSchema),

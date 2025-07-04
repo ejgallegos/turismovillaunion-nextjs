@@ -50,7 +50,18 @@ export function AtractivoForm({ attraction }: AtractivoFormProps) {
   const router = useRouter();
   const { toast } = useToast();
   
-  const defaultDescription = attraction?.description ? JSON.parse(attraction.description) : initialValue;
+  const defaultDescription = (() => {
+    if (!attraction?.description) return initialValue;
+    try {
+      const parsed = JSON.parse(attraction.description);
+      if (Array.isArray(parsed) && parsed.length > 0 && parsed[0].type) {
+        return parsed;
+      }
+    } catch (e) {
+      return [{ type: 'paragraph', children: [{ text: attraction.description }] }];
+    }
+    return initialValue;
+  })();
 
   const form = useForm<AttractionFormValues>({
     resolver: zodResolver(attractionSchema),

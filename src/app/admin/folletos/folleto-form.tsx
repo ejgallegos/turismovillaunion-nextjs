@@ -60,7 +60,18 @@ export function FolletoForm({ folleto }: FolletoFormProps) {
   const router = useRouter();
   const { toast } = useToast();
   
-  const defaultDescription = folleto?.description ? JSON.parse(folleto.description) : initialValue;
+  const defaultDescription = (() => {
+    if (!folleto?.description) return initialValue;
+    try {
+      const parsed = JSON.parse(folleto.description);
+      if (Array.isArray(parsed) && parsed.length > 0 && parsed[0].type) {
+        return parsed;
+      }
+    } catch (e) {
+      return [{ type: 'paragraph', children: [{ text: folleto.description }] }];
+    }
+    return initialValue;
+  })();
 
   const form = useForm<FolletoFormValues>({
     resolver: zodResolver(folletoSchema),
