@@ -5,6 +5,7 @@ import { Footer } from '@/components/landing/footer';
 import { notFound } from 'next/navigation';
 import type { Metadata, ResolvingMetadata } from 'next';
 import * as LucideIcons from 'lucide-react';
+import { serializeSlate, plainTextFromSlate } from '@/lib/slate-serializer';
 
 const getServiceIcon = (iconName: string, props: any) => {
     const IconComponent = (LucideIcons as any)[iconName] || LucideIcons.HelpCircle;
@@ -24,8 +25,9 @@ export async function generateMetadata(
     };
   }
 
+  const descriptionText = plainTextFromSlate(servicio.description);
   const title = `${servicio.title} | Servicios en Villa Unión`;
-  const description = servicio.description.replace(/<[^>]*>?/gm, '').substring(0, 160);
+  const description = descriptionText.substring(0, 160);
 
   return {
     title,
@@ -57,7 +59,7 @@ export default async function ServicioDetailPage({ params }: { params: { id: str
     notFound();
   }
 
-  const isHtml = /<[a-z][\s\S]*>/i.test(servicio.description);
+  const serializedDescription = serializeSlate(servicio.description);
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -77,16 +79,10 @@ export default async function ServicioDetailPage({ params }: { params: { id: str
         </div>
         <div className="py-12 md:py-16">
           <div className="container mx-auto max-w-3xl px-4 md:px-6">
-            {isHtml ? (
-                <div
-                  className="prose prose-lg dark:prose-invert max-w-none"
-                  dangerouslySetInnerHTML={{ __html: servicio.description }}
-                />
-              ) : (
-                <div className="prose prose-lg dark:prose-invert max-w-none whitespace-pre-wrap">
-                  {servicio.description}
-                </div>
-              )}
+            <div
+                className="prose prose-lg dark:prose-invert max-w-none"
+                dangerouslySetInnerHTML={{ __html: serializedDescription }}
+            />
           </div>
         </div>
       </main>

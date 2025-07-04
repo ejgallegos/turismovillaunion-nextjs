@@ -1,9 +1,11 @@
+
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Download } from 'lucide-react';
 import Link from 'next/link';
 import { getMapas } from '@/lib/mapas.service';
 import { EmptyState } from '../empty-state';
+import { plainTextFromSlate } from '@/lib/slate-serializer';
 
 export async function Maps() {
   const maps = await getMapas();
@@ -27,7 +29,7 @@ export async function Maps() {
                     <CardContent className="p-6 flex flex-col items-center text-center gap-4">
                         <h3 className="font-headline text-xl font-bold">{map.title}</h3>
                         <p className="text-muted-foreground flex-grow line-clamp-3">
-                            {map.description.replace(/<[^>]*>?/gm, '')}
+                            {plainTextFromSlate(map.description)}
                         </p>
                         <Button asChild disabled={!map.downloadUrl || map.downloadUrl === '#'}>
                             <Link href={map.downloadUrl || '#'} target="_blank" rel="noopener noreferrer">

@@ -7,6 +7,7 @@ import { z } from 'zod';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { Descendant } from 'slate';
 
 import { upsertFolleto } from './actions';
 import type { Folleto } from '@/lib/folletos.service';
@@ -15,8 +16,8 @@ import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
 import { Form, FormControl, FormField, FormItem, FormMessage, FormLabel } from '@/components/ui/form';
 import { FileText } from 'lucide-react';
-import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { RichTextEditor } from '@/components/ui/rich-text-editor';
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
 const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
@@ -25,7 +26,7 @@ const ACCEPTED_DOWNLOAD_TYPES = ['application/pdf', 'image/jpeg', 'image/png', '
 const folletoSchema = z.object({
   id: z.string().optional(),
   title: z.string().min(3, { message: 'El título debe tener al menos 3 caracteres.' }),
-  description: z.string().min(10, { message: 'La descripción debe tener al menos 10 caracteres.' }),
+  description: z.string().min(1, { message: 'La descripción es requerida.' }),
   image: z.any()
     .optional()
     .refine((files) => !files || files.length === 0 || files?.[0]?.size <= MAX_FILE_SIZE, `El tamaño máximo del archivo es 10MB.`)
@@ -48,16 +49,25 @@ interface FolletoFormProps {
   folleto?: Folleto | null;
 }
 
+const initialValue: Descendant[] = [
+    {
+      type: 'paragraph',
+      children: [{ text: '' }],
+    },
+];
+
 export function FolletoForm({ folleto }: FolletoFormProps) {
   const router = useRouter();
   const { toast } = useToast();
   
+  const defaultDescription = folleto?.description ? JSON.parse(folleto.description) : initialValue;
+
   const form = useForm<FolletoFormValues>({
     resolver: zodResolver(folletoSchema),
     defaultValues: {
       id: folleto?.id,
       title: folleto?.title || '',
-      description: folleto?.description || '',
+      description: folleto?.description || JSON.stringify(initialValue),
       image: undefined,
       downloadFile: undefined,
     },
@@ -132,11 +142,11 @@ export function FolletoForm({ folleto }: FolletoFormProps) {
                 <FormItem>
                   <FormLabel>Descripción</FormLabel>
                   <FormControl>
-                    <Textarea
-                      placeholder="Describe el contenido del folleto..."
-                      {...field}
-                      value={field.value || ''}
-                      rows={5}
+                    <RichTextEditor
+                        initialValue={defaultDescription}
+                        onChange={(value) => {
+                            field.onChange(JSON.stringify(value));
+                        }}
                     />
                   </FormControl>
                   <FormMessage />

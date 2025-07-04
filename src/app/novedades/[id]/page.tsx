@@ -1,9 +1,11 @@
+
 import { getNovedades } from '@/lib/novedades.service';
 import { Header } from '@/components/landing/header';
 import { Footer } from '@/components/landing/footer';
 import Image from 'next/image';
 import type { Metadata, ResolvingMetadata } from 'next';
 import { notFound } from 'next/navigation';
+import { serializeSlate, plainTextFromSlate } from '@/lib/slate-serializer';
 
 // Generate metadata for the page
 export async function generateMetadata(
@@ -19,8 +21,9 @@ export async function generateMetadata(
     };
   }
 
+  const descriptionText = plainTextFromSlate(novedad.description);
   const title = `${novedad.title} | Novedades | Villa Unión del Talampaya`;
-  const description = novedad.description.replace(/<[^>]*>?/gm, '').substring(0, 160);
+  const description = descriptionText.substring(0, 160);
 
   return {
     title,
@@ -62,7 +65,7 @@ export default async function NovedadDetailPage({ params }: { params: { id: stri
     notFound();
   }
   
-  const isHtml = /<[a-z][\s\S]*>/i.test(novedad.description);
+  const serializedDescription = serializeSlate(novedad.description);
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -85,16 +88,10 @@ export default async function NovedadDetailPage({ params }: { params: { id: stri
             </div>
           </header>
           <div className="container mx-auto max-w-4xl px-4 py-12 md:px-6 md:py-16">
-            {isHtml ? (
-                <div
-                  className="prose prose-lg dark:prose-invert max-w-none"
-                  dangerouslySetInnerHTML={{ __html: novedad.description }}
-                />
-              ) : (
-                <div className="prose prose-lg dark:prose-invert max-w-none whitespace-pre-wrap">
-                  {novedad.description}
-                </div>
-              )}
+            <div
+                className="prose prose-lg dark:prose-invert max-w-none"
+                dangerouslySetInnerHTML={{ __html: serializedDescription }}
+            />
           </div>
         </article>
       </main>

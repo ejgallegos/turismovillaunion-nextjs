@@ -6,6 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { Descendant } from 'slate';
 
 import { upsertMapa } from './actions';
 import type { Mapa } from '@/lib/mapas.service';
@@ -14,8 +15,8 @@ import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
 import { Form, FormControl, FormField, FormItem, FormMessage, FormLabel } from '@/components/ui/form';
 import { FileText } from 'lucide-react';
-import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { RichTextEditor } from '@/components/ui/rich-text-editor';
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
 const ACCEPTED_DOWNLOAD_TYPES = ['application/pdf', 'image/jpeg', 'image/png', 'image/webp'];
@@ -23,7 +24,7 @@ const ACCEPTED_DOWNLOAD_TYPES = ['application/pdf', 'image/jpeg', 'image/png', '
 const mapaSchema = z.object({
   id: z.string().optional(),
   title: z.string().min(3, { message: 'El título debe tener al menos 3 caracteres.' }),
-  description: z.string().min(10, { message: 'La descripción debe tener al menos 10 caracteres.' }),
+  description: z.string().min(1, { message: 'La descripción es requerida.' }),
   downloadFile: z.any()
     .optional()
     .refine((files) => !files || files.length === 0 || files?.[0]?.size <= MAX_FILE_SIZE, `El tamaño máximo del archivo es 10MB.`)
@@ -39,16 +40,25 @@ interface MapaFormProps {
   mapa?: Mapa | null;
 }
 
+const initialValue: Descendant[] = [
+    {
+      type: 'paragraph',
+      children: [{ text: '' }],
+    },
+];
+
 export function MapaForm({ mapa }: MapaFormProps) {
   const router = useRouter();
   const { toast } = useToast();
   
+  const defaultDescription = mapa?.description ? JSON.parse(mapa.description) : initialValue;
+
   const form = useForm<MapaFormValues>({
     resolver: zodResolver(mapaSchema),
     defaultValues: {
       id: mapa?.id,
       title: mapa?.title || '',
-      description: mapa?.description || '',
+      description: mapa?.description || JSON.stringify(initialValue),
       downloadFile: undefined,
     },
   });
@@ -115,11 +125,11 @@ export function MapaForm({ mapa }: MapaFormProps) {
                 <FormItem>
                   <FormLabel>Descripción</FormLabel>
                   <FormControl>
-                    <Textarea
-                      placeholder="Describe el contenido o propósito del mapa..."
-                      {...field}
-                      value={field.value || ''}
-                      rows={5}
+                    <RichTextEditor
+                        initialValue={defaultDescription}
+                        onChange={(value) => {
+                            field.onChange(JSON.stringify(value));
+                        }}
                     />
                   </FormControl>
                   <FormMessage />

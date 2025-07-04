@@ -6,6 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
+import { Descendant } from 'slate';
 
 import { upsertAttraction } from './actions';
 import type { Attraction } from '@/lib/atractivos.service';
@@ -13,8 +14,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
 import { Form, FormControl, FormField, FormItem, FormMessage, FormLabel } from '@/components/ui/form';
-import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
+import { RichTextEditor } from '@/components/ui/rich-text-editor';
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
 const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
@@ -22,7 +23,7 @@ const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
 const attractionSchema = z.object({
   id: z.string().optional(),
   title: z.string().min(3, { message: 'El título debe tener al menos 3 caracteres.' }),
-  description: z.string().min(10, { message: 'La descripción debe tener al menos 10 caracteres.' }),
+  description: z.string().min(1, { message: 'La descripción es requerida.' }),
   image: z.any()
     .optional()
     .refine((files) => !files || files.length === 0 || files?.[0]?.size <= MAX_FILE_SIZE, `El tamaño máximo del archivo es 10MB.`)
@@ -38,16 +39,25 @@ interface AtractivoFormProps {
   attraction?: Attraction | null;
 }
 
+const initialValue: Descendant[] = [
+    {
+      type: 'paragraph',
+      children: [{ text: '' }],
+    },
+];
+
 export function AtractivoForm({ attraction }: AtractivoFormProps) {
   const router = useRouter();
   const { toast } = useToast();
   
+  const defaultDescription = attraction?.description ? JSON.parse(attraction.description) : initialValue;
+
   const form = useForm<AttractionFormValues>({
     resolver: zodResolver(attractionSchema),
     defaultValues: {
       id: attraction?.id,
       title: attraction?.title || '',
-      description: attraction?.description || '',
+      description: attraction?.description || JSON.stringify(initialValue),
       image: undefined,
     },
   });
@@ -116,11 +126,11 @@ export function AtractivoForm({ attraction }: AtractivoFormProps) {
                 <FormItem>
                   <FormLabel>Descripción</FormLabel>
                   <FormControl>
-                     <Textarea
-                      placeholder="Describe el atractivo..."
-                      {...field}
-                      value={field.value || ''}
-                      rows={10}
+                     <RichTextEditor
+                        initialValue={defaultDescription}
+                        onChange={(value) => {
+                            field.onChange(JSON.stringify(value));
+                        }}
                     />
                   </FormControl>
                   <FormMessage />

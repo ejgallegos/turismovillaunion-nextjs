@@ -1,9 +1,11 @@
+
 import { getLocalidades } from '@/lib/localidades.service';
 import { Header } from '@/components/landing/header';
 import { Footer } from '@/components/landing/footer';
 import Image from 'next/image';
 import type { Metadata, ResolvingMetadata } from 'next';
 import { notFound } from 'next/navigation';
+import { serializeSlate, plainTextFromSlate } from '@/lib/slate-serializer';
 
 export async function generateMetadata(
   { params }: { params: { id: string } },
@@ -18,8 +20,9 @@ export async function generateMetadata(
     };
   }
 
+  const descriptionText = plainTextFromSlate(localidad.description);
   const title = `${localidad.title} | Villa Unión del Talampaya`;
-  const description = localidad.description.replace(/<[^>]*>?/gm, '').substring(0, 160);
+  const description = descriptionText.substring(0, 160);
 
   return {
     title,
@@ -60,7 +63,7 @@ export default async function LocalidadDetailPage({ params }: { params: { id: st
     notFound();
   }
   
-  const isHtml = /<[a-z][\s\S]*>/i.test(localidad.description);
+  const serializedDescription = serializeSlate(localidad.description);
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -83,16 +86,10 @@ export default async function LocalidadDetailPage({ params }: { params: { id: st
             </div>
           </header>
           <div className="container mx-auto max-w-4xl px-4 py-12 md:px-6 md:py-16">
-            {isHtml ? (
-                <div
-                  className="prose prose-lg dark:prose-invert max-w-none"
-                  dangerouslySetInnerHTML={{ __html: localidad.description }}
-                />
-              ) : (
-                <div className="prose prose-lg dark:prose-invert max-w-none whitespace-pre-wrap">
-                  {localidad.description}
-                </div>
-              )}
+            <div
+                className="prose prose-lg dark:prose-invert max-w-none"
+                dangerouslySetInnerHTML={{ __html: serializedDescription }}
+            />
           </div>
         </article>
       </main>

@@ -18,7 +18,7 @@ const ACCEPTED_DOWNLOAD_TYPES = ['application/pdf', 'image/jpeg', 'image/png', '
 const mapaSchema = z.object({
   id: z.string().optional(),
   title: z.string().min(3, 'El título es requerido.'),
-  description: z.string().min(10, 'La descripción es requerida.'),
+  description: z.string().min(1, 'La descripción es requerida.'),
   downloadFile: z
     .any()
     .refine((file) => !file || file.size <= MAX_FILE_SIZE, `El tamaño máximo es 10MB.`)

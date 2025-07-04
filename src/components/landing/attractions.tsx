@@ -1,3 +1,4 @@
+
 import Image from 'next/image';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { ArrowRight, MapPin } from 'lucide-react';
@@ -5,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { getAttractions } from '@/lib/atractivos.service';
 import { EmptyState } from '../empty-state';
+import { plainTextFromSlate } from '@/lib/slate-serializer';
 
 export async function Atractivos() {
   const attractions = await getAttractions();
@@ -37,7 +39,7 @@ export async function Atractivos() {
                   <div className="flex-1">
                     <h3 className="font-headline text-xl font-bold"><Link href={`/atractivos/${attraction.id}`} className="hover:underline">{attraction.title}</Link></h3>
                     <p className="mt-2 text-base text-muted-foreground line-clamp-3">
-                      {attraction.description.replace(/<[^>]*>?/gm, '')}
+                      {plainTextFromSlate(attraction.description)}
                     </p>
                   </div>
                 </CardHeader>

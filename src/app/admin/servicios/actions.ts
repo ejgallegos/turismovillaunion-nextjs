@@ -10,7 +10,7 @@ import { redirect } from 'next/navigation';
 const servicioSchema = z.object({
   id: z.string().optional(),
   title: z.string().min(3, 'El título es requerido.'),
-  description: z.string().min(10, 'La descripción es requerida.'),
+  description: z.string().min(1, 'La descripción es requerida.'),
   icon: z.string().min(2, 'El ícono es requerido (ej: BedDouble).'),
 });
 

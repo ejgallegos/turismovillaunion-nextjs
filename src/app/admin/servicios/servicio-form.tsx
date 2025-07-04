@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useRouter } from 'next/navigation';
+import { Descendant } from 'slate';
 
 import { upsertServicio } from './actions';
 import type { Servicio } from '@/lib/servicios.service';
@@ -12,13 +13,13 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
 import { Form, FormControl, FormField, FormItem, FormMessage, FormLabel } from '@/components/ui/form';
-import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
+import { RichTextEditor } from '@/components/ui/rich-text-editor';
 
 const servicioSchema = z.object({
   id: z.string().optional(),
   title: z.string().min(3, { message: 'El título debe tener al menos 3 caracteres.' }),
-  description: z.string().min(10, { message: 'La descripción debe tener al menos 10 caracteres.' }),
+  description: z.string().min(1, { message: 'La descripción es requerida.' }),
   icon: z.string().min(2, { message: 'El ícono (nombre de Lucide) es requerido.' }),
 });
 
@@ -28,15 +29,27 @@ interface ServicioFormProps {
   servicio?: Servicio | null;
 }
 
+const initialValue: Descendant[] = [
+    {
+      type: 'paragraph',
+      children: [{ text: '' }],
+    },
+];
+
 export function ServicioForm({ servicio }: ServicioFormProps) {
   const router = useRouter();
   const { toast } = useToast();
   
+  const defaultDescription = servicio?.description ? JSON.parse(servicio.description) : initialValue;
+
   const form = useForm<ServicioFormValues>({
     resolver: zodResolver(servicioSchema),
-    defaultValues: servicio || {
+    defaultValues: {
+        ...servicio,
+        description: servicio?.description || JSON.stringify(initialValue)
+    } || {
       title: '',
-      description: '',
+      description: JSON.stringify(initialValue),
       icon: '',
     },
   });
@@ -91,11 +104,11 @@ export function ServicioForm({ servicio }: ServicioFormProps) {
                     <FormItem>
                         <FormLabel>Descripción</FormLabel>
                         <FormControl>
-                        <Textarea
-                            placeholder="Describe el tipo de servicio ofrecido..."
-                            {...field}
-                            value={field.value || ''}
-                            rows={10}
+                        <RichTextEditor
+                            initialValue={defaultDescription}
+                            onChange={(value) => {
+                                field.onChange(JSON.stringify(value));
+                            }}
                         />
                         </FormControl>
                         <FormMessage />

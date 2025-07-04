@@ -1,5 +1,4 @@
 
-
 'use server';
 
 import { revalidatePath } from 'next/cache';
@@ -19,7 +18,7 @@ const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
 const localidadSchema = z.object({
   id: z.string().optional(),
   title: z.string().min(3, 'El título es requerido.'),
-  description: z.string().min(10, 'La descripción es requerida.'),
+  description: z.string().min(1, 'La descripción es requerida.'),
   image: z
     .any()
     .refine((file) => !file || file.size <= MAX_FILE_SIZE, `El tamaño máximo es 10MB.`)

@@ -5,6 +5,7 @@ import { Footer } from '@/components/landing/footer';
 import Image from 'next/image';
 import type { Metadata, ResolvingMetadata } from 'next';
 import { notFound } from 'next/navigation';
+import { serializeSlate, plainTextFromSlate } from '@/lib/slate-serializer';
 
 // Generate metadata for the page
 export async function generateMetadata(
@@ -19,9 +20,10 @@ export async function generateMetadata(
       title: 'Atractivo no encontrado',
     };
   }
-
+  
+  const descriptionText = plainTextFromSlate(attraction.description);
   const title = `${attraction.title} | Villa Unión del Talampaya`;
-  const description = attraction.description.replace(/<[^>]*>?/gm, '').substring(0, 160); 
+  const description = descriptionText.substring(0, 160);
 
   return {
     title,
@@ -63,7 +65,7 @@ export default async function AttractionDetailPage({ params }: { params: { id: s
     notFound();
   }
 
-  const isHtml = /<[a-z][\s\S]*>/i.test(attraction.description);
+  const serializedDescription = serializeSlate(attraction.description);
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -86,16 +88,10 @@ export default async function AttractionDetailPage({ params }: { params: { id: s
             </div>
           </header>
           <div className="container mx-auto max-w-4xl px-4 py-12 md:px-6 md:py-16">
-            {isHtml ? (
-              <div
+            <div
                 className="prose prose-lg dark:prose-invert max-w-none"
-                dangerouslySetInnerHTML={{ __html: attraction.description }}
-              />
-            ) : (
-              <div className="prose prose-lg dark:prose-invert max-w-none whitespace-pre-wrap">
-                {attraction.description}
-              </div>
-            )}
+                dangerouslySetInnerHTML={{ __html: serializedDescription }}
+            />
           </div>
         </article>
       </main>

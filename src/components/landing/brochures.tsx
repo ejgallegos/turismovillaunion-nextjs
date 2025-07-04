@@ -1,3 +1,4 @@
+
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -5,6 +6,7 @@ import { Download } from 'lucide-react';
 import Link from 'next/link';
 import { getFolletos } from '@/lib/folletos.service';
 import { EmptyState } from '../empty-state';
+import { plainTextFromSlate } from '@/lib/slate-serializer';
 
 export async function Brochures() {
   const brochures = await getFolletos();
@@ -37,7 +39,7 @@ export async function Brochures() {
                 <CardContent className="flex-grow p-6">
                   <CardTitle className="font-headline text-xl">{brochure.title}</CardTitle>
                   <p className="mt-2 text-muted-foreground line-clamp-3">
-                    {brochure.description.replace(/<[^>]*>?/gm, '')}
+                    {plainTextFromSlate(brochure.description)}
                   </p>
                 </CardContent>
                 <CardFooter className="p-6 pt-0">

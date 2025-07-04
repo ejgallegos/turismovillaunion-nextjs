@@ -1,3 +1,4 @@
+
 import type { Metadata } from 'next';
 import { Footer } from '@/components/landing/footer';
 import { Header } from '@/components/landing/header';
@@ -8,6 +9,7 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { EmptyState } from '@/components/empty-state';
+import { plainTextFromSlate } from '@/lib/slate-serializer';
 
 export const metadata: Metadata = {
   title: 'Novedades | Villa Unión del Talampaya',
@@ -50,7 +52,7 @@ export default async function NovedadesPage() {
                                         <Link href={`/novedades/${novedad.id}`} className="hover:underline">{novedad.title}</Link>
                                     </h2>
                                     <p className="mt-2 flex-grow text-base text-muted-foreground line-clamp-3">
-                                        {novedad.description.replace(/<[^>]*>?/gm, '')}
+                                        {plainTextFromSlate(novedad.description)}
                                     </p>
                                 </CardHeader>
                                 <CardContent className="flex justify-end p-6 pt-0">

@@ -1,8 +1,10 @@
+
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { getServicios } from '@/lib/servicios.service';
 import * as LucideIcons from 'lucide-react';
 import Link from 'next/link';
 import { EmptyState } from '../empty-state';
+import { plainTextFromSlate } from '@/lib/slate-serializer';
 
 const getServiceIcon = (iconName: string) => {
     const IconComponent = (LucideIcons as any)[iconName] || LucideIcons.HelpCircle;
@@ -36,7 +38,7 @@ export async function Services() {
                   </CardHeader>
                   <CardContent className="flex-grow pt-4">
                       <p className="text-base text-muted-foreground line-clamp-4 text-center">
-                        {service.description.replace(/<[^>]*>?/gm, '')}
+                        {plainTextFromSlate(service.description)}
                       </p>
                   </CardContent>
                   </Card>
