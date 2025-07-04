@@ -63,6 +63,8 @@ export default async function AttractionDetailPage({ params }: { params: { id: s
     notFound();
   }
 
+  const isHtml = /<[a-z][\s\S]*>/i.test(attraction.description);
+
   return (
     <div className="flex min-h-screen flex-col">
       <Header />
@@ -84,10 +86,16 @@ export default async function AttractionDetailPage({ params }: { params: { id: s
             </div>
           </header>
           <div className="container mx-auto max-w-4xl px-4 py-12 md:px-6 md:py-16">
-            <div
-              className="prose prose-lg dark:prose-invert max-w-none"
-              dangerouslySetInnerHTML={{ __html: attraction.description }}
-            />
+            {isHtml ? (
+              <div
+                className="prose prose-lg dark:prose-invert max-w-none"
+                dangerouslySetInnerHTML={{ __html: attraction.description }}
+              />
+            ) : (
+              <div className="prose prose-lg dark:prose-invert max-w-none whitespace-pre-wrap">
+                {attraction.description}
+              </div>
+            )}
           </div>
         </article>
       </main>

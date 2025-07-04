@@ -13,7 +13,7 @@ import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
 import { Form, FormControl, FormField, FormItem, FormMessage, FormLabel } from '@/components/ui/form';
 import { Sheet, SheetContent, SheetFooter, SheetHeader, SheetTitle, SheetDescription, SheetTrigger } from '@/components/ui/sheet';
-import { RichTextEditor } from '@/components/ui/rich-text-editor';
+import { Textarea } from '@/components/ui/textarea';
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
 const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
@@ -130,10 +130,10 @@ export function NovedadFormSheet({ children, novedad }: NovedadFormSheetProps) {
                     <FormItem>
                       <FormLabel>Descripción</FormLabel>
                       <FormControl>
-                        <RichTextEditor
+                        <Textarea
                           placeholder="Describe la novedad..."
-                          value={field.value}
-                          onChange={field.onChange}
+                          {...field}
+                          rows={10}
                         />
                       </FormControl>
                       <FormMessage />

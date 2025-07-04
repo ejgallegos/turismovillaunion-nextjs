@@ -57,6 +57,8 @@ export default async function ServicioDetailPage({ params }: { params: { id: str
     notFound();
   }
 
+  const isHtml = /<[a-z][\s\S]*>/i.test(servicio.description);
+
   return (
     <div className="flex min-h-screen flex-col">
       <Header />
@@ -75,10 +77,16 @@ export default async function ServicioDetailPage({ params }: { params: { id: str
         </div>
         <div className="py-12 md:py-16">
           <div className="container mx-auto max-w-3xl px-4 md:px-6">
-            <div
-              className="prose prose-lg dark:prose-invert max-w-none"
-              dangerouslySetInnerHTML={{ __html: servicio.description }}
-            />
+            {isHtml ? (
+                <div
+                  className="prose prose-lg dark:prose-invert max-w-none"
+                  dangerouslySetInnerHTML={{ __html: servicio.description }}
+                />
+              ) : (
+                <div className="prose prose-lg dark:prose-invert max-w-none whitespace-pre-wrap">
+                  {servicio.description}
+                </div>
+              )}
           </div>
         </div>
       </main>

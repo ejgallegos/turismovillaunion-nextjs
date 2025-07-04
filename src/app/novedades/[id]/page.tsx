@@ -61,6 +61,8 @@ export default async function NovedadDetailPage({ params }: { params: { id: stri
   if (!novedad) {
     notFound();
   }
+  
+  const isHtml = /<[a-z][\s\S]*>/i.test(novedad.description);
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -83,10 +85,16 @@ export default async function NovedadDetailPage({ params }: { params: { id: stri
             </div>
           </header>
           <div className="container mx-auto max-w-4xl px-4 py-12 md:px-6 md:py-16">
-            <div
-              className="prose prose-lg dark:prose-invert max-w-none"
-              dangerouslySetInnerHTML={{ __html: novedad.description }}
-            />
+            {isHtml ? (
+                <div
+                  className="prose prose-lg dark:prose-invert max-w-none"
+                  dangerouslySetInnerHTML={{ __html: novedad.description }}
+                />
+              ) : (
+                <div className="prose prose-lg dark:prose-invert max-w-none whitespace-pre-wrap">
+                  {novedad.description}
+                </div>
+              )}
           </div>
         </article>
       </main>

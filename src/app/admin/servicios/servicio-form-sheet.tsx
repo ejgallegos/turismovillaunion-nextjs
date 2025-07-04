@@ -12,7 +12,7 @@ import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
 import { Form, FormControl, FormField, FormItem, FormMessage, FormLabel } from '@/components/ui/form';
 import { Sheet, SheetContent, SheetFooter, SheetHeader, SheetTitle, SheetDescription, SheetTrigger } from '@/components/ui/sheet';
-import { RichTextEditor } from '@/components/ui/rich-text-editor';
+import { Textarea } from '@/components/ui/textarea';
 
 const servicioSchema = z.object({
   id: z.string().optional(),
@@ -104,10 +104,10 @@ export function ServicioFormSheet({ children, servicio }: ServicioFormSheetProps
                     <FormItem>
                       <FormLabel>Descripción</FormLabel>
                       <FormControl>
-                        <RichTextEditor
+                        <Textarea
                           placeholder="Describe el tipo de servicio ofrecido..."
-                          value={field.value}
-                          onChange={field.onChange}
+                          {...field}
+                          rows={10}
                         />
                       </FormControl>
                       <FormMessage />

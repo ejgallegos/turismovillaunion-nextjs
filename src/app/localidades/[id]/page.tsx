@@ -59,6 +59,8 @@ export default async function LocalidadDetailPage({ params }: { params: { id: st
   if (!localidad) {
     notFound();
   }
+  
+  const isHtml = /<[a-z][\s\S]*>/i.test(localidad.description);
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -81,10 +83,16 @@ export default async function LocalidadDetailPage({ params }: { params: { id: st
             </div>
           </header>
           <div className="container mx-auto max-w-4xl px-4 py-12 md:px-6 md:py-16">
-            <div
-              className="prose prose-lg dark:prose-invert max-w-none"
-              dangerouslySetInnerHTML={{ __html: localidad.description }}
-            />
+            {isHtml ? (
+                <div
+                  className="prose prose-lg dark:prose-invert max-w-none"
+                  dangerouslySetInnerHTML={{ __html: localidad.description }}
+                />
+              ) : (
+                <div className="prose prose-lg dark:prose-invert max-w-none whitespace-pre-wrap">
+                  {localidad.description}
+                </div>
+              )}
           </div>
         </article>
       </main>
