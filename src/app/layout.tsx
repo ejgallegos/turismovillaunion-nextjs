@@ -5,6 +5,7 @@ import { ThemeProvider } from '@/components/theme-provider';
 import { WhatsAppButton } from '@/components/whatsapp-button';
 import { GoogleAnalytics } from '@/components/google-analytics';
 import { Suspense } from 'react';
+import { RecaptchaProvider } from '@/components/recaptcha-provider';
 
 export const metadata: Metadata = {
   title: 'Villa Unión del Talampaya | Tu Aventura te Espera',
@@ -59,9 +60,11 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          {children}
-          <WhatsAppButton />
-          <Toaster />
+          <RecaptchaProvider>
+            {children}
+            <WhatsAppButton />
+            <Toaster />
+          </RecaptchaProvider>
         </ThemeProvider>
         <Suspense fallback={null}>
           <GoogleAnalytics />

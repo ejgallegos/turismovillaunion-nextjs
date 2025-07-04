@@ -12,6 +12,8 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Clock, MapPin, Phone } from 'lucide-react';
 import { sendContactEmail } from '@/app/contacto/actions';
 import { Separator } from '@/components/ui/separator';
+import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
+import { useCallback } from 'react';
 
 const formSchema = z.object({
   name: z.string().min(2, { message: 'El nombre debe tener al menos 2 caracteres.' }),
@@ -21,6 +23,8 @@ const formSchema = z.object({
 
 export function Contact() {
   const { toast } = useToast();
+  const { executeRecaptcha } = useGoogleReCaptcha();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -30,8 +34,20 @@ export function Contact() {
     },
   });
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
-    const result = await sendContactEmail(values);
+  const onSubmit = useCallback(async (values: z.infer<typeof formSchema>) => {
+    if (!executeRecaptcha) {
+      toast({
+        title: 'Error de Configuración',
+        description: 'reCAPTCHA no está listo. Asegúrate de que la clave del sitio está configurada.',
+        variant: 'destructive',
+      });
+      return;
+    }
+    
+    form.clearErrors();
+    const token = await executeRecaptcha('contact_form');
+    
+    const result = await sendContactEmail({ ...values, gRecaptchaToken: token });
 
     if (result.success) {
       toast({
@@ -47,7 +63,8 @@ export function Contact() {
         variant: 'destructive',
       });
     }
-  }
+  }, [executeRecaptcha, form, toast]);
+
 
   return (
     <section className="w-full bg-secondary py-20 lg:py-28">

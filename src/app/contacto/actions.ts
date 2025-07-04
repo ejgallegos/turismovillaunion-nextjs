@@ -7,6 +7,7 @@ const contactSchema = z.object({
   name: z.string().min(2, { message: 'El nombre es requerido.' }),
   email: z.string().email({ message: 'El correo electrónico no es válido.' }),
   message: z.string().min(10, { message: 'El mensaje debe tener al menos 10 caracteres.' }),
+  gRecaptchaToken: z.string().min(1, { message: 'El token de reCAPTCHA es requerido.'}),
 });
 
 export async function sendContactEmail(data: unknown) {
@@ -19,6 +20,36 @@ export async function sendContactEmail(data: unknown) {
     };
   }
 
+  const { name, email, message, gRecaptchaToken } = validatedFields.data;
+
+  // reCAPTCHA validation
+  const secretKey = process.env.RECAPTCHA_SECRET_KEY;
+  if (!secretKey) {
+    console.error('Missing reCAPTCHA secret key in .env file');
+    return { success: false, error: 'La configuración del servidor está incompleta. Contacte al administrador.' };
+  }
+
+  try {
+    const response = await fetch('https://www.google.com/recaptcha/api/siteverify', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: `secret=${secretKey}&response=${gRecaptchaToken}`,
+    });
+    const recaptchaData = await response.json();
+    
+    // The score is a value between 0.0 and 1.0. 0.5 is a common threshold.
+    if (!recaptchaData.success || recaptchaData.score < 0.5) {
+      console.warn('reCAPTCHA verification failed:', recaptchaData['error-codes']);
+      return { success: false, error: 'Falló la verificación de reCAPTCHA. Pareces ser un bot.' };
+    }
+  } catch (error) {
+    console.error('Error verifying reCAPTCHA:', error);
+    return { success: false, error: 'Hubo un error al verificar el reCAPTCHA. Inténtalo de nuevo.' };
+  }
+  
+  // Email server configuration validation
   if (
     !process.env.EMAIL_SERVER_HOST ||
     !process.env.EMAIL_SERVER_PORT ||
@@ -30,8 +61,6 @@ export async function sendContactEmail(data: unknown) {
     console.error('Missing email server configuration in .env file');
     return { success: false, error: 'La configuración del servidor de correo está incompleta. Contacte al administrador.' };
   }
-
-  const { name, email, message } = validatedFields.data;
 
   const transporter = nodemailer.createTransport({
     host: process.env.EMAIL_SERVER_HOST,
