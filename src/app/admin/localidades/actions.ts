@@ -1,4 +1,5 @@
 
+
 'use server';
 
 import { revalidatePath } from 'next/cache';
@@ -7,6 +8,7 @@ import { getLocalidades, saveLocalidades, Localidad } from '@/lib/localidades.se
 import { randomUUID } from 'crypto';
 import path from 'path';
 import fs from 'fs/promises';
+import { redirect } from 'next/navigation';
 
 // Helper to slugify text
 const slugify = (text: string) => text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
@@ -96,17 +98,17 @@ export async function upsertLocalidad(formData: FormData) {
     }
   
     await saveLocalidades(localidades);
-    revalidatePath('/admin/localidades');
-    revalidatePath('/localidades');
-    if (finalId) {
-      revalidatePath(`/localidades/${finalId}`);
-    }
-  
-    return { success: true };
   } catch (e) {
     console.error(e);
     return { success: false, error: 'Error al guardar los datos.' };
   }
+  
+  revalidatePath('/admin/localidades');
+  revalidatePath('/localidades');
+  if (finalId) {
+    revalidatePath(`/localidades/${finalId}`);
+  }
+  redirect('/admin/localidades');
 }
 
 export async function deleteLocalidad(id: string) {

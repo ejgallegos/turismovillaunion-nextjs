@@ -1,3 +1,4 @@
+
 'use server';
 
 import { revalidatePath } from 'next/cache';
@@ -6,6 +7,7 @@ import { getMapas, saveMapas, Mapa } from '@/lib/mapas.service';
 import { randomUUID } from 'crypto';
 import path from 'path';
 import fs from 'fs/promises';
+import { redirect } from 'next/navigation';
 
 // Helper to slugify text
 const slugify = (text: string) => text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
@@ -98,14 +100,14 @@ export async function upsertMapa(formData: FormData) {
     }
   
     await saveMapas(mapas);
-    revalidatePath('/admin/mapas');
-    revalidatePath('/mapas');
-  
-    return { success: true };
   } catch (e) {
     console.error(e);
     return { success: false, error: 'Error al guardar los datos.' };
   }
+
+  revalidatePath('/admin/mapas');
+  revalidatePath('/mapas');
+  redirect('/admin/mapas');
 }
 
 export async function deleteMapa(id: string) {

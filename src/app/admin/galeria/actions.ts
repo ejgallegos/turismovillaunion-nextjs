@@ -1,4 +1,5 @@
 
+
 'use server';
 
 import { revalidatePath } from 'next/cache';
@@ -7,6 +8,7 @@ import { getGalleryItems, saveGalleryItems, GalleryItem } from '@/lib/galeria.se
 import { randomUUID } from 'crypto';
 import path from 'path';
 import fs from 'fs/promises';
+import { redirect } from 'next/navigation';
 
 // Helper to slugify text
 const slugify = (text: string) => text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
@@ -99,14 +101,14 @@ export async function upsertGalleryItem(formData: FormData) {
     }
   
     await saveGalleryItems(galleryItems);
-    revalidatePath('/admin/galeria');
-    revalidatePath('/galeria');
-  
-    return { success: true };
   } catch (e) {
     console.error(e);
     return { success: false, error: 'Error al guardar los datos.' };
   }
+  
+  revalidatePath('/admin/galeria');
+  revalidatePath('/galeria');
+  redirect('/admin/galeria');
 }
 
 export async function deleteGalleryItem(id: string) {

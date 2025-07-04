@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { PlusCircle, Pencil, Trash2 } from "lucide-react";
-import { GaleriaFormSheet } from './galeria-form-sheet';
+import Link from 'next/link';
 import { DeleteGaleriaAlert } from './delete-galeria-alert';
 import Image from 'next/image';
 
@@ -17,12 +17,12 @@ export default async function AdminGaleriaPage() {
     <div>
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold">Gestionar Galería</h1>
-        <GaleriaFormSheet>
-          <Button>
+        <Button asChild>
+          <Link href="/admin/galeria/new">
             <PlusCircle className="mr-2 h-4 w-4" />
             Añadir Imagen
-          </Button>
-        </GaleriaFormSheet>
+          </Link>
+        </Button>
       </div>
       <Card>
         <CardHeader>
@@ -58,12 +58,12 @@ export default async function AdminGaleriaPage() {
                     {item.description.replace(/<[^>]*>?/gm, '')}
                   </TableCell>
                   <TableCell className="text-right">
-                    <GaleriaFormSheet galleryItem={item}>
-                      <Button variant="ghost" size="icon">
+                    <Button asChild variant="ghost" size="icon">
+                      <Link href={`/admin/galeria/${item.id}/edit`}>
                         <Pencil className="h-4 w-4" />
                         <span className="sr-only">Editar</span>
-                      </Button>
-                    </GaleriaFormSheet>
+                      </Link>
+                    </Button>
                     <DeleteGaleriaAlert galleryItemId={item.id}>
                       <Button variant="ghost" size="icon" className="text-destructive hover:text-destructive">
                         <Trash2 className="h-4 w-4" />

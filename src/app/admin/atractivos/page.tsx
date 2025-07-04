@@ -1,9 +1,10 @@
+
 import { getAttractions } from '@/lib/atractivos.service';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { PlusCircle, Pencil, Trash2 } from "lucide-react";
-import { AtractivoFormSheet } from './atractivo-form-sheet';
+import Link from 'next/link';
 import { DeleteAtractivoAlert } from './delete-atractivo-alert';
 
 export const dynamic = 'force-dynamic';
@@ -15,12 +16,12 @@ export default async function AdminAtractivosPage() {
     <div>
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold">Gestionar Atractivos</h1>
-        <AtractivoFormSheet>
-          <Button>
+        <Button asChild>
+          <Link href="/admin/atractivos/new">
             <PlusCircle className="mr-2 h-4 w-4" />
             Añadir Atractivo
-          </Button>
-        </AtractivoFormSheet>
+          </Link>
+        </Button>
       </div>
       <Card>
         <CardHeader>
@@ -46,12 +47,12 @@ export default async function AdminAtractivosPage() {
                     {attraction.description.replace(/<[^>]*>?/gm, '')}
                   </TableCell>
                   <TableCell className="text-right">
-                    <AtractivoFormSheet attraction={attraction}>
-                      <Button variant="ghost" size="icon">
+                    <Button variant="ghost" size="icon" asChild>
+                      <Link href={`/admin/atractivos/${attraction.id}/edit`}>
                         <Pencil className="h-4 w-4" />
                         <span className="sr-only">Editar</span>
-                      </Button>
-                    </AtractivoFormSheet>
+                      </Link>
+                    </Button>
                     <DeleteAtractivoAlert attractionId={attraction.id}>
                       <Button variant="ghost" size="icon" className="text-destructive hover:text-destructive">
                         <Trash2 className="h-4 w-4" />

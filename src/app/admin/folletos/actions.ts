@@ -1,3 +1,4 @@
+
 'use server';
 
 import { revalidatePath } from 'next/cache';
@@ -6,6 +7,7 @@ import { getFolletos, saveFolletos, Folleto } from '@/lib/folletos.service';
 import { randomUUID } from 'crypto';
 import path from 'path';
 import fs from 'fs/promises';
+import { redirect } from 'next/navigation';
 
 // Helper to slugify text
 const slugify = (text: string) => text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
@@ -124,14 +126,14 @@ export async function upsertFolleto(formData: FormData) {
     }
   
     await saveFolletos(folletos);
-    revalidatePath('/admin/folletos');
-    revalidatePath('/folletos');
-  
-    return { success: true };
   } catch (e) {
     console.error(e);
     return { success: false, error: 'Error al guardar los datos.' };
   }
+
+  revalidatePath('/admin/folletos');
+  revalidatePath('/folletos');
+  redirect('/admin/folletos');
 }
 
 export async function deleteFolleto(id: string) {

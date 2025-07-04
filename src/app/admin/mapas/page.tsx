@@ -1,9 +1,10 @@
+
 import { getMapas } from '@/lib/mapas.service';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { PlusCircle, Pencil, Trash2 } from "lucide-react";
-import { MapaFormSheet } from './mapa-form-sheet';
+import Link from 'next/link';
 import { DeleteMapaAlert } from './delete-mapa-alert';
 
 export const dynamic = 'force-dynamic';
@@ -15,12 +16,12 @@ export default async function AdminMapasPage() {
     <div>
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold">Gestionar Mapas</h1>
-        <MapaFormSheet>
-          <Button>
+        <Button asChild>
+          <Link href="/admin/mapas/new">
             <PlusCircle className="mr-2 h-4 w-4" />
             Añadir Mapa
-          </Button>
-        </MapaFormSheet>
+          </Link>
+        </Button>
       </div>
       <Card>
         <CardHeader>
@@ -46,12 +47,12 @@ export default async function AdminMapasPage() {
                     {mapa.description.replace(/<[^>]*>?/gm, '')}
                   </TableCell>
                   <TableCell className="text-right">
-                    <MapaFormSheet mapa={mapa}>
-                      <Button variant="ghost" size="icon">
+                    <Button asChild variant="ghost" size="icon">
+                      <Link href={`/admin/mapas/${mapa.id}/edit`}>
                         <Pencil className="h-4 w-4" />
                         <span className="sr-only">Editar</span>
-                      </Button>
-                    </MapaFormSheet>
+                      </Link>
+                    </Button>
                     <DeleteMapaAlert mapaId={mapa.id}>
                       <Button variant="ghost" size="icon" className="text-destructive hover:text-destructive">
                         <Trash2 className="h-4 w-4" />

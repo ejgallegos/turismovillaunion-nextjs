@@ -1,9 +1,10 @@
+
 import { getFolletos } from '@/lib/folletos.service';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { PlusCircle, Pencil, Trash2 } from "lucide-react";
-import { FolletoFormSheet } from './folleto-form-sheet';
+import Link from 'next/link';
 import { DeleteFolletoAlert } from './delete-folleto-alert';
 
 export const dynamic = 'force-dynamic';
@@ -15,12 +16,12 @@ export default async function AdminFolletosPage() {
     <div>
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold">Gestionar Folletos</h1>
-        <FolletoFormSheet>
-          <Button>
+        <Button asChild>
+          <Link href="/admin/folletos/new">
             <PlusCircle className="mr-2 h-4 w-4" />
             Añadir Folleto
-          </Button>
-        </FolletoFormSheet>
+          </Link>
+        </Button>
       </div>
       <Card>
         <CardHeader>
@@ -46,12 +47,12 @@ export default async function AdminFolletosPage() {
                      {folleto.description.replace(/<[^>]*>?/gm, '')}
                   </TableCell>
                   <TableCell className="text-right">
-                    <FolletoFormSheet folleto={folleto}>
-                      <Button variant="ghost" size="icon">
+                    <Button asChild variant="ghost" size="icon">
+                      <Link href={`/admin/folletos/${folleto.id}/edit`}>
                         <Pencil className="h-4 w-4" />
                         <span className="sr-only">Editar</span>
-                      </Button>
-                    </FolletoFormSheet>
+                      </Link>
+                    </Button>
                     <DeleteFolletoAlert folletoId={folleto.id}>
                       <Button variant="ghost" size="icon" className="text-destructive hover:text-destructive">
                         <Trash2 className="h-4 w-4" />

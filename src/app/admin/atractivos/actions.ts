@@ -7,6 +7,7 @@ import { getAttractions, saveAttractions, Attraction } from '@/lib/atractivos.se
 import { randomUUID } from 'crypto';
 import path from 'path';
 import fs from 'fs/promises';
+import { redirect } from 'next/navigation';
 
 // Helper to slugify text
 const slugify = (text: string) => text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
@@ -101,18 +102,18 @@ export async function upsertAttraction(formData: FormData) {
     }
   
     await saveAttractions(attractions);
-    revalidatePath('/admin/atractivos');
-    revalidatePath('/atractivos');
-    revalidatePath('/');
-    if (finalId) {
-      revalidatePath(`/atractivos/${finalId}`);
-    }
-  
-    return { success: true };
   } catch (e) {
     console.error(e);
     return { success: false, error: 'Error al guardar los datos.' };
   }
+
+  revalidatePath('/admin/atractivos');
+  revalidatePath('/atractivos');
+  if (finalId) {
+    revalidatePath(`/atractivos/${finalId}`);
+  }
+
+  redirect('/admin/atractivos');
 }
 
 export async function deleteAttraction(id: string) {

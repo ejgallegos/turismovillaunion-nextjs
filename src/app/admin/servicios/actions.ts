@@ -5,6 +5,7 @@ import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
 import { getServicios, saveServicios, Servicio } from '@/lib/servicios.service';
 import { randomUUID } from 'crypto';
+import { redirect } from 'next/navigation';
 
 const servicioSchema = z.object({
   id: z.string().optional(),
@@ -49,16 +50,17 @@ export async function upsertServicio(data: unknown) {
     }
   
     await saveServicios(servicios);
-    revalidatePath('/admin/servicios');
-    revalidatePath('/servicios');
-    if (finalId) {
-      revalidatePath(`/servicios/${finalId}`);
-    }
-  
-    return { success: true };
   } catch (e) {
     return { success: false, error: 'Error al guardar los datos.' };
   }
+
+  revalidatePath('/admin/servicios');
+  revalidatePath('/servicios');
+  if (finalId) {
+    revalidatePath(`/servicios/${finalId}`);
+  }
+  
+  redirect('/admin/servicios');
 }
 
 export async function deleteServicio(id: string) {
