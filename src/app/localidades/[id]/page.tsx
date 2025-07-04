@@ -22,34 +22,57 @@ export async function generateMetadata(
     };
   }
 
-  const content = plainTextFromSlate(localidad.description);
-  const metaTags = await generateMetaTags({ content });
-  const previousImages = (await parent).openGraph?.images || [];
+  try {
+    const content = plainTextFromSlate(localidad.description);
+    const metaTags = await generateMetaTags({ content });
+    const previousImages = (await parent).openGraph?.images || [];
 
-  return {
-    title: metaTags.title,
-    description: metaTags.description,
-    keywords: metaTags.keywords,
-    openGraph: {
+    return {
       title: metaTags.title,
       description: metaTags.description,
-      images: [
-        {
-          url: localidad.imageUrl,
-          width: 1200,
-          height: 630,
-          alt: `Imagen de ${localidad.title}`,
-        },
-        ...previousImages
-      ],
-    },
-    twitter: {
-      card: 'summary_large_image',
-      title: metaTags.title,
-      description: metaTags.description,
-      images: [localidad.imageUrl],
-    },
-  };
+      keywords: metaTags.keywords,
+      openGraph: {
+        title: metaTags.title,
+        description: metaTags.description,
+        images: [
+          {
+            url: localidad.imageUrl,
+            width: 1200,
+            height: 630,
+            alt: `Imagen de ${localidad.title}`,
+          },
+          ...previousImages
+        ],
+      },
+      twitter: {
+        card: 'summary_large_image',
+        title: metaTags.title,
+        description: metaTags.description,
+        images: [localidad.imageUrl],
+      },
+    };
+  } catch (error) {
+    console.error(`[Metadata Error] Failed to generate AI metadata for localidad "${params.id}". Falling back to basic metadata.`, error);
+    const descriptionText = plainTextFromSlate(localidad.description).substring(0, 160);
+    const previousImages = (await parent).openGraph?.images || [];
+    return {
+      title: localidad.title,
+      description: descriptionText,
+      openGraph: {
+          title: localidad.title,
+          description: descriptionText,
+          images: [
+              {
+                  url: localidad.imageUrl,
+                  width: 1200,
+                  height: 630,
+                  alt: `Imagen de ${localidad.title}`,
+              },
+              ...previousImages
+          ]
+      }
+    };
+  }
 }
 
 export async function generateStaticParams() {
