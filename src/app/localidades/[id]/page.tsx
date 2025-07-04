@@ -6,6 +6,7 @@ import Image from 'next/image';
 import type { Metadata, ResolvingMetadata } from 'next';
 import { notFound } from 'next/navigation';
 import { serializeSlate, plainTextFromSlate } from '@/lib/slate-serializer';
+import { generateMetaTags } from '@/ai/flows/generate-meta-tags';
 
 export async function generateMetadata(
   { params }: { params: { id: string } },
@@ -20,16 +21,17 @@ export async function generateMetadata(
     };
   }
 
-  const descriptionText = plainTextFromSlate(localidad.description);
-  const title = `${localidad.title} | Villa Unión del Talampaya`;
-  const description = descriptionText.substring(0, 160);
+  const content = plainTextFromSlate(localidad.description);
+  const metaTags = await generateMetaTags({ content });
+  const previousImages = (await parent).openGraph?.images || [];
 
   return {
-    title,
-    description,
+    title: metaTags.title,
+    description: metaTags.description,
+    keywords: metaTags.keywords,
     openGraph: {
-      title,
-      description,
+      title: metaTags.title,
+      description: metaTags.description,
       images: [
         {
           url: localidad.imageUrl,
@@ -37,12 +39,13 @@ export async function generateMetadata(
           height: 630,
           alt: `Imagen de ${localidad.title}`,
         },
+        ...previousImages
       ],
     },
     twitter: {
       card: 'summary_large_image',
-      title,
-      description,
+      title: metaTags.title,
+      description: metaTags.description,
       images: [localidad.imageUrl],
     },
   };
