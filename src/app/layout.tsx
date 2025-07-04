@@ -10,6 +10,11 @@ import { RecaptchaProvider } from '@/components/recaptcha-provider';
 export const metadata: Metadata = {
   title: 'Villa Unión del Talampaya | Tu Aventura te Espera',
   description: 'Descubre las maravillas naturales de Villa Unión. Explora el Parque Nacional Talampaya, Laguna Brava y más. Conoce uno de los destinos más impresionantes de Argentina.',
+  icons: {
+    icon: '/images/Logos/logo-sec.png',
+    shortcut: '/favicon.ico',
+    apple: '/images/Logos/logo-sec.png',
+  },
   openGraph: {
     title: 'Villa Unión del Talampaya | Tu Aventura te Espera',
     description: 'Descubre las maravillas naturales de Villa Unión. Explora el Parque Nacional Talampaya, Laguna Brava y más. Conoce uno de los destinos más impresionantes de Argentina.',
