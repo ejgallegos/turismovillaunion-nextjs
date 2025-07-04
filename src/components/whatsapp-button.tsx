@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import React from 'react';
+import { usePathname } from 'next/navigation';
 
 const WhatsappIcon = (props: React.SVGProps<SVGSVGElement>) => (
     <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="currentColor" {...props}>
@@ -10,12 +11,16 @@ const WhatsappIcon = (props: React.SVGProps<SVGSVGElement>) => (
 );
 
 export function WhatsAppButton() {
+    const pathname = usePathname();
     const phoneNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER;
-    const message = process.env.NEXT_PUBLIC_WHATSAPP_MESSAGE;
-
-    const whatsappUrl = `https://wa.me/${phoneNumber || ''}?text=${encodeURIComponent(
-        message || ''
-    )}`;
+    const message = process.env.NEXT_PUBLIC_WHATSAPP_MESSAGE || '';
+    
+    // Don't render the button if there's no number, or if we are on an admin page or login page.
+    if (!phoneNumber || pathname.startsWith('/admin') || pathname.startsWith('/login')) {
+        return null;
+    }
+    
+    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
 
     return (
         <Link
