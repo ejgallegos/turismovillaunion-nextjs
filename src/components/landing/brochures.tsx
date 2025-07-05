@@ -1,8 +1,7 @@
 
-import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Download } from 'lucide-react';
+import { Download, FileText } from 'lucide-react';
 import Link from 'next/link';
 import { getFolletos } from '@/lib/folletos.service';
 import { EmptyState } from '../empty-state';
@@ -25,30 +24,23 @@ export async function Brochures() {
         <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {brochures.length > 0 ? (
             brochures.map((brochure) => (
-              <Card key={brochure.id} className="flex flex-col overflow-hidden">
+              <Card key={brochure.id} className="flex flex-col text-center items-center p-6">
+                <FileText className="h-12 w-12 text-primary mb-4" />
                 <CardHeader className="p-0">
-                  <div className="relative aspect-[3/4] w-full">
-                    <Image
-                      src={brochure.imageUrl}
-                      alt={`Portada del folleto ${brochure.title}`}
-                      fill
-                      className="object-cover"
-                    />
-                  </div>
+                    <CardTitle className="font-headline text-xl">{brochure.title}</CardTitle>
                 </CardHeader>
-                <CardContent className="flex-grow p-6">
-                  <CardTitle className="font-headline text-xl">{brochure.title}</CardTitle>
-                  <p className="mt-2 text-muted-foreground line-clamp-3">
-                    {plainTextFromSlate(brochure.description)}
-                  </p>
+                <CardContent className="flex-grow pt-4">
+                    <p className="text-muted-foreground line-clamp-3">
+                        {plainTextFromSlate(brochure.description)}
+                    </p>
                 </CardContent>
-                <CardFooter className="p-6 pt-0">
-                  <Button asChild className="w-full" disabled={!brochure.downloadUrl || brochure.downloadUrl === '#'}>
-                    <Link href={brochure.downloadUrl || '#'} target="_blank" rel="noopener noreferrer">
-                      <Download className="mr-2 h-4 w-4" />
-                      Descargar
-                    </Link>
-                  </Button>
+                <CardFooter className="p-0 pt-4 w-full">
+                    <Button asChild className="w-full" disabled={!brochure.downloadUrl || brochure.downloadUrl === '#'}>
+                        <Link href={brochure.downloadUrl || '#'} target="_blank" rel="noopener noreferrer">
+                        <Download className="mr-2 h-4 w-4" />
+                        Descargar
+                        </Link>
+                    </Button>
                 </CardFooter>
               </Card>
             ))

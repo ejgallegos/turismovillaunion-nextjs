@@ -5,7 +5,6 @@ export interface Folleto {
   id: string;
   title: string;
   description: string;
-  imageUrl: string;
   downloadUrl?: string;
 }
 
