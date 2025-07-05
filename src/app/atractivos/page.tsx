@@ -5,7 +5,7 @@ import { Header } from '@/components/landing/header';
 
 export const metadata: Metadata = {
   title: 'Atractivos Turísticos | Villa Unión del Talampaya',
-  description: 'Explora los principales atractivos de Villa Unión: el Parque Nacional Talampaya, la Laguna Brava y la Cuesta de Miranda. ¡Tu aventura comienza aquí!',
+  description: 'Explora los principales atractivos de Villa Unión: el Parque Nacional Talampaya, la Cuesta de Miranda. ¡Tu aventura comienza aquí!',
 };
 
 export default function AtractivosPage() {
