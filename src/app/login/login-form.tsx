@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import { signInWithEmailAndPassword, type AuthError } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
@@ -24,15 +24,39 @@ export default function LoginForm() {
     setIsLoading(true);
     try {
       if (!auth) {
+        // This case is handled inside the catch block for consistency
         throw new Error("Firebase Auth no está inicializado. Revisa tus variables de entorno.");
       }
       await signInWithEmailAndPassword(auth, email, password);
       router.push('/admin');
     } catch (error) {
       console.error('Error signing in:', error);
+      
+      let description = 'Ocurrió un error inesperado. Por favor, inténtalo de nuevo.';
+
+      if (error instanceof Error) {
+        if ('code' in error) {
+            const authError = error as AuthError;
+            switch (authError.code) {
+                case 'auth/invalid-api-key':
+                    description = 'La clave de API de Firebase no es válida. Verifica las variables de entorno de producción.';
+                    break;
+                case 'auth/invalid-credential':
+                case 'auth/user-not-found':
+                case 'auth/wrong-password':
+                     description = 'Las credenciales son incorrectas. Por favor, comprueba tu correo y contraseña.';
+                     break;
+                default:
+                    description = `No se pudo iniciar sesión. (${authError.code})`;
+            }
+        } else if (error.message.includes('Firebase Auth no está inicializado')) {
+            description = 'Firebase no está configurado. Revisa las variables de entorno.';
+        }
+      }
+
       toast({
         title: 'Error al iniciar sesión',
-        description: 'Las credenciales son incorrectas o el servicio no está disponible.',
+        description,
         variant: 'destructive',
       });
     } finally {
