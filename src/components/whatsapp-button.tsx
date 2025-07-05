@@ -10,10 +10,13 @@ const WhatsappIcon = (props: React.SVGProps<SVGSVGElement>) => (
     </svg>
 );
 
-export function WhatsAppButton() {
+interface WhatsAppButtonProps {
+    phoneNumber?: string;
+    message?: string;
+}
+
+export function WhatsAppButton({ phoneNumber, message = '' }: WhatsAppButtonProps) {
     const pathname = usePathname();
-    const phoneNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER;
-    const message = process.env.NEXT_PUBLIC_WHATSAPP_MESSAGE || '';
     
     // Don't render the button if there's no number, or if we are on an admin page or login page.
     if (!phoneNumber || pathname.startsWith('/admin') || pathname.startsWith('/login')) {

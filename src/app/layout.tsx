@@ -12,9 +12,9 @@ export const metadata: Metadata = {
 	description:
 		"Descubre las maravillas naturales de nuestro Departamento Felipe Varela. Explora nuestros mejores atractivos. Y conoce uno de los destinos más impresionantes de Argentina.",
 	icons: {
-		icon: "/favicon.ico",
-		shortcut: "/favicon.ico",
-		apple: "/favicon.ico",
+		icon: "/images/Logos/logo-sec.png",
+		shortcut: "/images/Logos/logo-sec.png",
+		apple: "/images/Logos/logo-sec.png",
 	},
 	openGraph: {
 		title: "Secretaría de Turismo del Dpto. Felipe Varela",
@@ -55,6 +55,9 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const phoneNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER;
+  const message = process.env.NEXT_PUBLIC_WHATSAPP_MESSAGE || '';
+
   return (
     <html lang="es" className="scroll-smooth" suppressHydrationWarning>
       <head>
@@ -71,7 +74,7 @@ export default function RootLayout({
         >
           <RecaptchaProvider>
             {children}
-            <WhatsAppButton />
+            <WhatsAppButton phoneNumber={phoneNumber} message={message} />
             <Toaster />
           </RecaptchaProvider>
         </ThemeProvider>
