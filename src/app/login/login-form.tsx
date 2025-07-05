@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { signInWithEmailAndPassword, type AuthError } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardFooter } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
@@ -24,8 +24,15 @@ export default function LoginForm() {
     setIsLoading(true);
     try {
       if (!auth) {
-        // This case is handled inside the catch block for consistency
-        throw new Error("Firebase Auth no está inicializado. Revisa tus variables de entorno.");
+        // This is a more explicit error for the user, especially in a Docker context.
+        const prodMessage = "Error de configuración de Firebase. Las variables de entorno (ej: NEXT_PUBLIC_FIREBASE_API_KEY) deben estar disponibles durante el proceso de 'build' de la imagen de Docker para que la aplicación pueda usarlas. Verifique la configuración de su despliegue.";
+        const devMessage = "Firebase Auth no está inicializado. Revisa las variables de entorno en tu archivo .env.";
+        
+        // In a Docker build, NODE_ENV should be 'production'.
+        // Note: process.env.NODE_ENV is available in the browser because Next.js replaces it at build time.
+        const finalMessage = process.env.NODE_ENV === 'production' ? prodMessage : devMessage;
+        
+        throw new Error(finalMessage);
       }
       await signInWithEmailAndPassword(auth, email, password);
       router.push('/admin');
@@ -49,8 +56,8 @@ export default function LoginForm() {
                 default:
                     description = `No se pudo iniciar sesión. (${authError.code})`;
             }
-        } else if (error.message.includes('Firebase Auth no está inicializado')) {
-            description = 'Firebase no está configurado. Revisa las variables de entorno.';
+        } else if (error.message.includes('Firebase')) { // Catches my custom error message
+            description = error.message;
         }
       }
 
