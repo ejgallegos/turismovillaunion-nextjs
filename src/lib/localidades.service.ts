@@ -19,6 +19,10 @@ export async function getLocalidades(): Promise<Localidad[]> {
     return JSON.parse(fileContents);
   } catch (error) {
     if (error instanceof Error && (error as NodeJS.ErrnoException).code === 'ENOENT') {
+      if (process.env.NODE_ENV === 'production') {
+        console.warn(`Localidades data file not found: ${dataFilePath}. This might be a deployment issue if you expect data. Returning empty array.`);
+        return [];
+      }
       await saveLocalidades([]);
       return [];
     }
@@ -29,6 +33,7 @@ export async function getLocalidades(): Promise<Localidad[]> {
 
 export async function saveLocalidades(localidades: Localidad[]): Promise<void> {
   try {
+    await fs.mkdir(path.dirname(dataFilePath), { recursive: true });
     const data = JSON.stringify(localidades, null, 2);
     await fs.writeFile(dataFilePath, data, 'utf8');
   } catch (error) {

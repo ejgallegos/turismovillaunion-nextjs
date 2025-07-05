@@ -19,6 +19,10 @@ export async function getMapas(): Promise<Mapa[]> {
     return JSON.parse(fileContents);
   } catch (error) {
     if (error instanceof Error && (error as NodeJS.ErrnoException).code === 'ENOENT') {
+      if (process.env.NODE_ENV === 'production') {
+        console.warn(`Mapas data file not found: ${dataFilePath}. This might be a deployment issue if you expect data. Returning empty array.`);
+        return [];
+      }
       await saveMapas([]);
       return [];
     }
@@ -29,6 +33,7 @@ export async function getMapas(): Promise<Mapa[]> {
 
 export async function saveMapas(mapas: Mapa[]): Promise<void> {
   try {
+    await fs.mkdir(path.dirname(dataFilePath), { recursive: true });
     const data = JSON.stringify(mapas, null, 2);
     await fs.writeFile(dataFilePath, data, 'utf8');
   } catch (error) {

@@ -19,6 +19,10 @@ export async function getNovedades(): Promise<Novedad[]> {
     return JSON.parse(fileContents);
   } catch (error) {
     if (error instanceof Error && (error as NodeJS.ErrnoException).code === 'ENOENT') {
+      if (process.env.NODE_ENV === 'production') {
+        console.warn(`Novedades data file not found: ${dataFilePath}. This might be a deployment issue if you expect data. Returning empty array.`);
+        return [];
+      }
       await saveNovedades([]);
       return [];
     }
@@ -29,6 +33,7 @@ export async function getNovedades(): Promise<Novedad[]> {
 
 export async function saveNovedades(novedades: Novedad[]): Promise<void> {
   try {
+    await fs.mkdir(path.dirname(dataFilePath), { recursive: true });
     const data = JSON.stringify(novedades, null, 2);
     await fs.writeFile(dataFilePath, data, 'utf8');
   } catch (error) {
