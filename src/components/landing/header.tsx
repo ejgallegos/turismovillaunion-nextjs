@@ -20,7 +20,6 @@ const navLinks = [
   { href: '/localidades', label: 'Localidades' },
   { href: '/atractivos', label: 'Atractivos' },
   { href: '/servicios', label: 'Servicios' },
-  { href: '/galeria', label: 'Galería' },
   { href: '/mapas', label: 'Mapas' },
   { href: '/folletos', label: 'Folletos' },
   { href: '/contacto', label: 'Contacto' },

@@ -70,9 +70,6 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
            <Link href="/admin/folletos" className="text-muted-foreground transition-colors hover:text-foreground">
             Folletos
           </Link>
-           <Link href="/admin/galeria" className="text-muted-foreground transition-colors hover:text-foreground">
-            Galería
-          </Link>
           <Link href="/admin/mapas" className="text-muted-foreground transition-colors hover:text-foreground">
             Mapas
           </Link>
