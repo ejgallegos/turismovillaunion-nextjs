@@ -19,7 +19,7 @@ export async function Atractivos() {
             Descubre Nuestras Maravillas
           </h2>
           <p className="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">
-            Desde cañones ancestrales hasta lagunas de altura, la aventura está en todas partes.
+          Descubre las maravillas naturales de nuestro Departamento Felipe Varela. Explora nuestros mejores atractivos. Y conoce uno de los destinos más impresionantes de Argentina.
           </p>
         </div>
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">

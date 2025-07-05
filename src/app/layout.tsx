@@ -8,36 +8,40 @@ import { Suspense } from 'react';
 import { RecaptchaProvider } from '@/components/recaptcha-provider';
 
 export const metadata: Metadata = {
-  title: 'Villa Unión del Talampaya | Tu Aventura te Espera',
-  description: 'Descubre las maravillas naturales de Villa Unión. Explora el Parque Nacional Talampaya, Laguna Brava y más. Conoce uno de los destinos más impresionantes de Argentina.',
-  icons: {
-    icon: '/images/Logos/logo-sec.png',
-    shortcut: '/favicon.ico',
-    apple: '/images/Logos/logo-sec.png',
-  },
-  openGraph: {
-    title: 'Villa Unión del Talampaya | Tu Aventura te Espera',
-    description: 'Descubre las maravillas naturales de Villa Unión. Explora el Parque Nacional Talampaya, Laguna Brava y más. Conoce uno de los destinos más impresionantes de Argentina.',
-    url: 'https://villaunion.tur.ar',
-    siteName: 'Villa Unión del Talampaya',
-    images: [
-      {
-        url: 'https://placehold.co/1200x630.png',
-        width: 1200,
-        height: 630,
-        alt: 'Una vista impresionante del Cañón de Talampaya.',
-      },
-    ],
-    locale: 'es_AR',
-    type: 'website',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Villa Unión del Talampaya | Tu Aventura te Espera',
-    description: 'Descubre las maravillas naturales de Villa Unión. Explora el Parque Nacional Talampaya, Laguna Brava y más.',
-    images: ['https://placehold.co/1200x630.png'],
-  },
-  keywords: 'Villa Unión, Talampaya, La Rioja, Argentina, turismo, viajes, Laguna Brava, Cuesta de Miranda, aventura',
+	title: "Secretaría de Turismo del Dpto. Felipe Varela",
+	description:
+		"Descubre las maravillas naturales de nuestro Departamento Felipe Varela. Explora nuestros mejores atractivos. Y conoce uno de los destinos más impresionantes de Argentina.",
+	icons: {
+		icon: "/favicon.ico",
+		shortcut: "/favicon.ico",
+		apple: "/favicon.ico",
+	},
+	openGraph: {
+		title: "Secretaría de Turismo del Dpto. Felipe Varela",
+		description:
+			"Descubre las maravillas naturales de nuestro Departamento Felipe Varela. Explora nuestros mejores atractivos. Y conoce uno de los destinos más impresionantes de Argentina.",
+		url: "https://turismovillaunion.gob.ar",
+		siteName: "Secretaría de Turismo del Dpto. Felipe Varela",
+		images: [
+			{
+				url: "/images/Logos/logo-sec.png",
+				width: 1200,
+				height: 630,
+				alt: "Secretaría de Turismo del Dpto. Felipe Varela",
+			},
+		],
+		locale: "es_AR",
+		type: "website",
+	},
+	twitter: {
+		card: "summary_large_image",
+		title: "Secretaría de Turismo del Dpto. Felipe Varela",
+		description:
+			"Descubre las maravillas naturales de nuestro Departamento Felipe Varela. Explora nuestros mejores atractivos. Y conoce uno de los destinos más impresionantes de Argentina.",
+		images: ["/images/Logos/logo-sec.png"],
+	},
+	keywords:
+		"Villa Unión, Talampaya, La Rioja, Argentina, turismo, viajes, Cuesta de Miranda, aventura",
 };
 
 export const viewport: Viewport = {
