@@ -13,11 +13,7 @@ const dataFilePath = path.join(process.cwd(), 'src/data/folletos.json');
 
 export async function getFolletos(): Promise<Folleto[]> {
     // Use the imported data directly to ensure it's included in the build
-    const fileContents = await fs.readFile(dataFilePath, 'utf8');
-    if (!fileContents.trim()) {
-      return [];
-    }
-    return JSON.parse(fileContents);
+    return folletosData as Folleto[];
 }
 
 export async function saveFolletos(folletos: Folleto[]): Promise<void> {
