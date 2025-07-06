@@ -1,8 +1,27 @@
 [
   {
+<<<<<<< HEAD
     "id": "prueba",
     "title": "Bodegas y viñedos",
     "description": "[{\"type\":\"paragraph\",\"children\":[{\"text\":\"Descubre nuestras bodegas y viñedos.\"}]}]",
     "downloadUrl": "/uploads/folletos/prueba/download-1751816414904.pdf"
+=======
+    "id": "guia-completa",
+    "title": "Guía Completa de Villa Unión",
+    "description": "Todo lo que necesitas saber: atractivos, servicios y más.",
+    "downloadUrl": "#"
+  },
+  {
+    "id": "aventura-talampaya",
+    "title": "Aventura en Talampaya",
+    "description": "Un recorrido detallado por el Parque Nacional.",
+    "downloadUrl": "#"
+  },
+  {
+    "id": "explorando-laguna-brava",
+    "title": "Explorando Laguna Brava",
+    "description": "Consejos y rutas para tu visita a la laguna de altura.",
+    "downloadUrl": "#"
+>>>>>>> parent of 6e32407 (Verifica porque no puedo borrar Folletos cargados en producción, en camb)
   }
 ]

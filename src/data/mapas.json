@@ -6,6 +6,7 @@
     "downloadUrl": "/uploads/mapas/provincia-de-la-rioja/mapa-1751838091484.pdf"
   },
   {
+<<<<<<< HEAD
     "id": "villa-uni-n",
     "title": "Villa Unión",
     "description": "[{\"type\":\"paragraph\",\"children\":[{\"text\":\"\"}]}]",
@@ -22,5 +23,17 @@
     "title": "Pagancillo",
     "description": "[{\"type\":\"paragraph\",\"children\":[{\"text\":\"\"}]}]",
     "downloadUrl": "/uploads/mapas/pagancillo/mapa-1751838320208.jpeg"
+=======
+    "id": "mapa-atractivos",
+    "title": "Mapa de Atractivos",
+    "description": "Ubicación de Talampaya, Laguna Brava, Cuesta de Miranda y más.",
+    "downloadUrl": "#"
+  },
+  {
+    "id": "mapa-rutas",
+    "title": "Mapa de Rutas",
+    "description": "Principales rutas y caminos para llegar y moverte por la región.",
+    "downloadUrl": "#"
+>>>>>>> parent of 6e32407 (Verifica porque no puedo borrar Folletos cargados en producción, en camb)
   }
 ]
