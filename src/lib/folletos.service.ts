@@ -1,10 +1,6 @@
 import fs from 'fs/promises';
 import path from 'path';
-<<<<<<< HEAD
 import folletos from '../../data/folletos.json';
-=======
-import folletosData from '@/data/folletos.json';
->>>>>>> parent of 6e32407 (Verifica porque no puedo borrar Folletos cargados en producción, en camb)
 
 export interface Folleto {
   id: string;
@@ -16,11 +12,7 @@ export interface Folleto {
 const dataFilePath = path.join(process.cwd(), 'data/folletos.json');
 
 export async function getFolletos(): Promise<Folleto[]> {
-<<<<<<< HEAD
   return folletos;
-=======
-  return folletosData;
->>>>>>> parent of 6e32407 (Verifica porque no puedo borrar Folletos cargados en producción, en camb)
 }
 
 export async function saveFolletos(folletos: Folleto[]): Promise<void> {
