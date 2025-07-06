@@ -1,5 +1,6 @@
 import fs from 'fs/promises';
 import path from 'path';
+import localidades from '../../data/localidades.json';
 
 export interface Localidad {
   id: string;
@@ -11,17 +12,7 @@ export interface Localidad {
 const dataFilePath = path.join(process.cwd(), 'data/localidades.json');
 
 export async function getLocalidades(): Promise<Localidad[]> {
-    try {
-    const jsonData = await fs.readFile(dataFilePath, 'utf8');
-    return JSON.parse(jsonData);
-  } catch (error) {
-    if ((error as NodeJS.ErrnoException).code === 'ENOENT') {
-      await saveLocalidades([]);
-      return [];
-    }
-    console.error('Error reading localidades data:', error);
-    return [];
-  }
+    return localidades;
 }
 
 export async function saveLocalidades(localidades: Localidad[]): Promise<void> {
@@ -34,5 +25,3 @@ export async function saveLocalidades(localidades: Localidad[]): Promise<void> {
     throw new Error('No se pudieron guardar las localidades.');
   }
 }
-
-    

@@ -1,5 +1,6 @@
 import fs from 'fs/promises';
 import path from 'path';
+import novedades from '../../data/novedades.json';
 
 export interface Novedad {
   id: string;
@@ -11,17 +12,7 @@ export interface Novedad {
 const dataFilePath = path.join(process.cwd(), 'data/novedades.json');
 
 export async function getNovedades(): Promise<Novedad[]> {
-  try {
-    const jsonData = await fs.readFile(dataFilePath, 'utf8');
-    return JSON.parse(jsonData);
-  } catch (error) {
-    if ((error as NodeJS.ErrnoException).code === 'ENOENT') {
-      await saveNovedades([]);
-      return [];
-    }
-    console.error('Error reading novedades data:', error);
-    return [];
-  }
+  return novedades;
 }
 
 export async function saveNovedades(novedades: Novedad[]): Promise<void> {
@@ -34,5 +25,3 @@ export async function saveNovedades(novedades: Novedad[]): Promise<void> {
     throw new Error('No se pudieron guardar las novedades.');
   }
 }
-
-    

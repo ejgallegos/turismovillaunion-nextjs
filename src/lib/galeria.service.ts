@@ -1,5 +1,6 @@
 import fs from 'fs/promises';
 import path from 'path';
+import galleryItems from '../../data/galeria.json';
 
 export interface GalleryItem {
   id: string;
@@ -11,17 +12,7 @@ export interface GalleryItem {
 const dataFilePath = path.join(process.cwd(), 'data/galeria.json');
 
 export async function getGalleryItems(): Promise<GalleryItem[]> {
-  try {
-    const jsonData = await fs.readFile(dataFilePath, 'utf8');
-    return JSON.parse(jsonData);
-  } catch (error) {
-    if ((error as NodeJS.ErrnoException).code === 'ENOENT') {
-      await saveGalleryItems([]);
-      return [];
-    }
-    console.error('Error reading gallery data:', error);
-    return [];
-  }
+  return galleryItems;
 }
 
 export async function saveGalleryItems(items: GalleryItem[]): Promise<void> {
@@ -34,5 +25,3 @@ export async function saveGalleryItems(items: GalleryItem[]): Promise<void> {
     throw new Error('No se pudieron guardar los elementos de la galería.');
   }
 }
-
-    

@@ -1,5 +1,6 @@
 import fs from 'fs/promises';
 import path from 'path';
+import sliderItems from '../../data/slider.json';
 
 export interface SliderItem {
   uuid: string;
@@ -13,17 +14,7 @@ export interface SliderItem {
 const dataFilePath = path.join(process.cwd(), 'data/slider.json');
 
 export async function getSliderItems(): Promise<SliderItem[]> {
-  try {
-    const jsonData = await fs.readFile(dataFilePath, 'utf8');
-    return JSON.parse(jsonData);
-  } catch (error) {
-    if ((error as NodeJS.ErrnoException).code === 'ENOENT') {
-      await saveSliderItems([]);
-      return [];
-    }
-    console.error('Error reading slider data:', error);
-    return [];
-  }
+  return sliderItems;
 }
 
 export async function saveSliderItems(items: SliderItem[]): Promise<void> {
@@ -36,5 +27,3 @@ export async function saveSliderItems(items: SliderItem[]): Promise<void> {
     throw new Error('No se pudieron guardar los items del slider.');
   }
 }
-
-    

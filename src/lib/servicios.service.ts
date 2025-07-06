@@ -1,5 +1,6 @@
 import fs from 'fs/promises';
 import path from 'path';
+import servicios from '../../data/servicios.json';
 
 export interface Servicio {
   id: string;
@@ -11,17 +12,7 @@ export interface Servicio {
 const dataFilePath = path.join(process.cwd(), 'data/servicios.json');
 
 export async function getServicios(): Promise<Servicio[]> {
-    try {
-    const jsonData = await fs.readFile(dataFilePath, 'utf8');
-    return JSON.parse(jsonData);
-  } catch (error) {
-    if ((error as NodeJS.ErrnoException).code === 'ENOENT') {
-      await saveServicios([]);
-      return [];
-    }
-    console.error('Error reading servicios data:', error);
-    return [];
-  }
+    return servicios;
 }
 
 export async function saveServicios(servicios: Servicio[]): Promise<void> {
@@ -34,5 +25,3 @@ export async function saveServicios(servicios: Servicio[]): Promise<void> {
     throw new Error('No se pudieron guardar los servicios.');
   }
 }
-
-    

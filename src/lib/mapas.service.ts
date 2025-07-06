@@ -1,5 +1,6 @@
 import fs from 'fs/promises';
 import path from 'path';
+import mapas from '../../data/mapas.json';
 
 export interface Mapa {
   id: string;
@@ -11,17 +12,7 @@ export interface Mapa {
 const dataFilePath = path.join(process.cwd(), 'data/mapas.json');
 
 export async function getMapas(): Promise<Mapa[]> {
-  try {
-    const jsonData = await fs.readFile(dataFilePath, 'utf8');
-    return JSON.parse(jsonData);
-  } catch (error) {
-    if ((error as NodeJS.ErrnoException).code === 'ENOENT') {
-      await saveMapas([]);
-      return [];
-    }
-    console.error('Error reading mapas data:', error);
-    return [];
-  }
+  return mapas;
 }
 
 export async function saveMapas(mapas: Mapa[]): Promise<void> {
@@ -34,5 +25,3 @@ export async function saveMapas(mapas: Mapa[]): Promise<void> {
     throw new Error('No se pudieron guardar los mapas.');
   }
 }
-
-    

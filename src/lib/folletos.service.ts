@@ -1,5 +1,6 @@
 import fs from 'fs/promises';
 import path from 'path';
+import folletos from '../../data/folletos.json';
 
 export interface Folleto {
   id: string;
@@ -11,17 +12,7 @@ export interface Folleto {
 const dataFilePath = path.join(process.cwd(), 'data/folletos.json');
 
 export async function getFolletos(): Promise<Folleto[]> {
-  try {
-    const jsonData = await fs.readFile(dataFilePath, 'utf8');
-    return JSON.parse(jsonData);
-  } catch (error) {
-    if ((error as NodeJS.ErrnoException).code === 'ENOENT') {
-      await saveFolletos([]);
-      return [];
-    }
-    console.error('Error reading folletos data:', error);
-    return [];
-  }
+  return folletos;
 }
 
 export async function saveFolletos(folletos: Folleto[]): Promise<void> {
@@ -34,5 +25,3 @@ export async function saveFolletos(folletos: Folleto[]): Promise<void> {
     throw new Error('No se pudieron guardar los folletos.');
   }
 }
-
-    

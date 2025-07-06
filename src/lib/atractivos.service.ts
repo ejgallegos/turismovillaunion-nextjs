@@ -1,5 +1,6 @@
 import fs from 'fs/promises';
 import path from 'path';
+import attractions from '../../data/atractivos.json';
 
 export interface Attraction {
   id: string;
@@ -11,17 +12,7 @@ export interface Attraction {
 const dataFilePath = path.join(process.cwd(), 'data/atractivos.json');
 
 export async function getAttractions(): Promise<Attraction[]> {
-  try {
-    const jsonData = await fs.readFile(dataFilePath, 'utf8');
-    return JSON.parse(jsonData);
-  } catch (error) {
-    if ((error as NodeJS.ErrnoException).code === 'ENOENT') {
-      await saveAttractions([]);
-      return [];
-    }
-    console.error('Error reading attractions data:', error);
-    return [];
-  }
+  return attractions;
 }
 
 export async function saveAttractions(attractions: Attraction[]): Promise<void> {
@@ -34,5 +25,3 @@ export async function saveAttractions(attractions: Attraction[]): Promise<void> 
     throw new Error('No se pudieron guardar los atractivos.');
   }
 }
-
-    
