@@ -4,7 +4,6 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Descendant } from 'slate';
@@ -20,20 +19,12 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { RichTextEditor } from '@/components/ui/rich-text-editor';
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
-const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
 const ACCEPTED_DOWNLOAD_TYPES = ['application/pdf', 'image/jpeg', 'image/png', 'image/webp'];
 
 const folletoSchema = z.object({
   id: z.string().optional(),
   title: z.string().min(3, { message: 'El título debe tener al menos 3 caracteres.' }),
   description: z.string().min(1, { message: 'La descripción es requerida.' }),
-  image: z.any()
-    .optional()
-    .refine((files) => !files || files.length === 0 || files?.[0]?.size <= MAX_FILE_SIZE, `El tamaño máximo del archivo es 10MB.`)
-    .refine(
-      (files) => !files || files.length === 0 || ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type),
-      'Solo se aceptan formatos .jpg, .png y .webp.'
-    ),
   downloadFile: z.any()
     .optional()
     .refine((files) => !files || files.length === 0 || files?.[0]?.size <= MAX_FILE_SIZE, `El tamaño máximo del archivo es 10MB.`)
@@ -79,7 +70,6 @@ export function FolletoForm({ folleto }: FolletoFormProps) {
       id: folleto?.id,
       title: folleto?.title || '',
       description: folleto?.description || JSON.stringify(initialValue),
-      image: undefined,
       downloadFile: undefined,
     },
   });
@@ -94,13 +84,6 @@ export function FolletoForm({ folleto }: FolletoFormProps) {
     formData.append('title', values.title);
     formData.append('description', values.description);
     
-    if (values.image && values.image.length > 0) {
-      formData.append('image', values.image[0]);
-    } else if (!folleto?.id) {
-        form.setError('image', { type: 'manual', message: 'La imagen de portada es requerida.' });
-        return;
-    }
-    
     if (values.downloadFile && values.downloadFile.length > 0) {
       formData.append('downloadFile', values.downloadFile[0]);
     }
@@ -108,7 +91,7 @@ export function FolletoForm({ folleto }: FolletoFormProps) {
     const result = await upsertFolleto(formData);
 
     if (result && !result.success) {
-       const errorMessage = result.errors ? (result.errors.image?.[0] || result.errors.title?.[0] || result.errors.description?.[0] || (result.errors as any).downloadFile?.[0]) : result.error;
+       const errorMessage = result.errors ? (result.errors.title?.[0] || result.errors.description?.[0] || (result.errors as any).downloadFile?.[0]) : result.error;
        toast({
         title: 'Error',
         description: errorMessage || 'Hubo un problema al guardar el folleto.',
@@ -165,31 +148,6 @@ export function FolletoForm({ folleto }: FolletoFormProps) {
               )}
             />
             <FormField
-              control={form.control}
-              name="image"
-              render={() => (
-                <FormItem>
-                  <FormLabel>Imagen de Portada</FormLabel>
-                  <FormControl>
-                      <Input type="file" {...register("image")} accept="image/jpeg,image/png,image/webp" />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-              {folleto?.imageUrl && (
-              <div className="mt-2 text-sm">
-                <p className="text-muted-foreground mb-2">Imagen actual:</p>
-                <Image 
-                  src={folleto.imageUrl} 
-                  alt={folleto.title || 'Imagen actual'} 
-                  width={100} 
-                  height={141}
-                  className="rounded-md object-cover border"
-                />
-              </div>
-            )}
-              <FormField
               control={form.control}
               name="downloadFile"
               render={() => (

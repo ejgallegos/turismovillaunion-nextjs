@@ -13,18 +13,12 @@ import { redirect } from 'next/navigation';
 const slugify = (text: string) => text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
-const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
 const ACCEPTED_DOWNLOAD_TYPES = ['application/pdf', 'image/jpeg', 'image/png', 'image/webp'];
 
 const folletoSchema = z.object({
   id: z.string().optional(),
   title: z.string().min(3, 'El título es requerido.'),
   description: z.string().min(1, 'La descripción es requerida.'),
-  image: z
-    .any()
-    .refine((file) => !file || file.size <= MAX_FILE_SIZE, `El tamaño máximo es 10MB.`)
-    .refine((file) => !file || ACCEPTED_IMAGE_TYPES.includes(file.type), 'Solo se aceptan .jpg, .png y .webp.')
-    .optional(),
   downloadFile: z
     .any()
     .refine((file) => !file || file.size <= MAX_FILE_SIZE, `El tamaño máximo es 10MB.`)
@@ -37,14 +31,10 @@ export async function upsertFolleto(formData: FormData) {
     id: formData.get('id')?.toString(),
     title: formData.get('title')?.toString(),
     description: formData.get('description')?.toString(),
-    image: formData.get('image') as File | null,
     downloadFile: formData.get('downloadFile') as File | null,
   };
 
   // Filter out empty files so validation passes if no file is uploaded
-  if (rawData.image && rawData.image.size === 0) {
-    rawData.image = null;
-  }
   if (rawData.downloadFile && rawData.downloadFile.size === 0) {
     rawData.downloadFile = null;
   }
@@ -58,11 +48,10 @@ export async function upsertFolleto(formData: FormData) {
     };
   }
 
-  const { id, title, description, image, downloadFile } = validatedFields.data;
+  const { id, title, description, downloadFile } = validatedFields.data;
   const folletos = await getFolletos();
   const existingFolleto = id ? folletos.find((f) => f.id === id) : undefined;
   
-  let imageUrl: string | undefined = existingFolleto?.imageUrl;
   let downloadUrl: string | undefined = existingFolleto?.downloadUrl;
 
   try {
@@ -70,18 +59,8 @@ export async function upsertFolleto(formData: FormData) {
     const uploadDir = path.join(process.cwd(), 'public/uploads/folletos', slug);
     
     // Create directory if we are uploading any file
-    if (image || downloadFile) {
+    if (downloadFile) {
         await fs.mkdir(uploadDir, { recursive: true });
-    }
-
-    // Handle cover image upload
-    if (image) {
-      const fileExtension = path.extname(image.name);
-      const filename = `cover-${Date.now()}${fileExtension}`;
-      const filePath = path.join(uploadDir, filename);
-      const buffer = Buffer.from(await image.arrayBuffer());
-      await fs.writeFile(filePath, buffer);
-      imageUrl = `/uploads/folletos/${slug}/${filename}`;
     }
     
     // Handle downloadable file upload
@@ -102,7 +81,6 @@ export async function upsertFolleto(formData: FormData) {
           ...folletos[index], 
           title, 
           description,
-          imageUrl, // Updated or existing
           downloadUrl, // Updated or existing
         };
       } else {
@@ -110,16 +88,12 @@ export async function upsertFolleto(formData: FormData) {
       }
     } else {
       // Create
-      if (!imageUrl) {
-        return { success: false, errors: { image: ['La imagen de portada es requerida.'] } };
-      }
       const newId = slugify(title);
       const existing = folletos.find(f => f.id === newId);
       const newFolleto: Folleto = {
         id: existing ? `${newId}-${randomUUID().slice(0, 4)}` : newId,
         title,
         description,
-        imageUrl,
         downloadUrl,
       };
       folletos.push(newFolleto);
@@ -150,13 +124,13 @@ export async function deleteFolleto(id: string) {
 
       const updatedFolletos = folletos.filter((f) => f.id !== id);
       
-      // Delete the image folder associated with the folleto
-      if (folletoToDelete.imageUrl) {
+      // Delete the folder associated with the folleto
+      if (folletoToDelete.downloadUrl) {
         try {
-          const imageDir = path.join(process.cwd(), 'public', path.dirname(folletoToDelete.imageUrl));
-          await fs.rm(imageDir, { recursive: true, force: true });
+          const fileDir = path.join(process.cwd(), 'public', path.dirname(folletoToDelete.downloadUrl));
+          await fs.rm(fileDir, { recursive: true, force: true });
         } catch (error) {
-            console.error(`Failed to delete image directory for folleto ${id}:`, error);
+            console.error(`Failed to delete directory for folleto ${id}:`, error);
             // Non-fatal, continue with deleting the record
         }
       }
