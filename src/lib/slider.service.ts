@@ -1,6 +1,5 @@
 import fs from 'fs/promises';
 import path from 'path';
-import sliderData from '@/data/slider.json';
 
 export interface SliderItem {
   uuid: string;
@@ -14,13 +13,23 @@ export interface SliderItem {
 const dataFilePath = path.join(process.cwd(), 'src/data/slider.json');
 
 export async function getSliderItems(): Promise<SliderItem[]> {
-  // Use the imported data directly to ensure it's included in the build
-  return sliderData as SliderItem[];
+  try {
+    const jsonData = await fs.readFile(dataFilePath, 'utf8');
+    return JSON.parse(jsonData);
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code === 'ENOENT') {
+      await saveSliderItems([]);
+      return [];
+    }
+    console.error('Error reading slider data:', error);
+    return [];
+  }
 }
 
 export async function saveSliderItems(items: SliderItem[]): Promise<void> {
   try {
     const data = JSON.stringify(items, null, 2);
+    await fs.mkdir(path.dirname(dataFilePath), { recursive: true });
     await fs.writeFile(dataFilePath, data, 'utf8');
   } catch (error) {
     console.error('Error saving slider data:', error);
