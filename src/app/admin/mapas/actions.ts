@@ -88,6 +88,9 @@ export async function upsertMapa(formData: FormData) {
       }
     } else {
       // Create
+      if (!downloadUrl) {
+        return { success: false, errors: { downloadFile: ['El archivo es requerido.'] } };
+      }
       const newId = slugify(title);
       const existing = mapas.find(m => m.id === newId);
       const newMapa: Mapa = {

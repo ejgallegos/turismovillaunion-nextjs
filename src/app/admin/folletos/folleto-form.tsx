@@ -86,6 +86,9 @@ export function FolletoForm({ folleto }: FolletoFormProps) {
     
     if (values.downloadFile && values.downloadFile.length > 0) {
       formData.append('downloadFile', values.downloadFile[0]);
+    } else if (!folleto?.id) {
+        form.setError('downloadFile', { type: 'manual', message: 'El archivo es requerido para un nuevo folleto.' });
+        return;
     }
     
     const result = await upsertFolleto(formData);

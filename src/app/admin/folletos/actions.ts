@@ -88,6 +88,9 @@ export async function upsertFolleto(formData: FormData) {
       }
     } else {
       // Create
+      if (!downloadUrl) {
+        return { success: false, errors: { downloadFile: ['El archivo es requerido.'] } };
+      }
       const newId = slugify(title);
       const existing = folletos.find(f => f.id === newId);
       const newFolleto: Folleto = {

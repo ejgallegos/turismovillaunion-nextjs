@@ -86,6 +86,9 @@ export function MapaForm({ mapa }: MapaFormProps) {
     
     if (values.downloadFile && values.downloadFile.length > 0) {
       formData.append('downloadFile', values.downloadFile[0]);
+    } else if (!mapa?.id) {
+        form.setError('downloadFile', { type: 'manual', message: 'El archivo es requerido para un nuevo mapa.' });
+        return;
     }
     
     const result = await upsertMapa(formData);
