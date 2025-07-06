@@ -8,7 +8,7 @@ export interface GalleryItem {
   imageUrl: string;
 }
 
-const dataFilePath = path.join(process.cwd(), 'src/data/galeria.json');
+const dataFilePath = path.join(process.cwd(), 'data/galeria.json');
 
 export async function getGalleryItems(): Promise<GalleryItem[]> {
   try {
@@ -34,3 +34,5 @@ export async function saveGalleryItems(items: GalleryItem[]): Promise<void> {
     throw new Error('No se pudieron guardar los elementos de la galería.');
   }
 }
+
+    

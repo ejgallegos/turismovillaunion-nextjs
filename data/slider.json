@@ -1,0 +1,19 @@
+[
+  {
+    "uuid": "9cd5a910-2677-4cc6-bfd7-a1d5d7c5d2af",
+    "type": "novedad",
+    "id": "secretar-a-de-turismo-felipe-varela",
+    "title": "Secretaría de Turismo Felipe Varela",
+    "subtitle": "Tierra de tradiciones y paisajes apasionantes que no podes dejar de visitar."
+  },
+  {
+    "uuid": "ad1a76d3-ca17-4047-83ea-55d9fda9144e",
+    "type": "novedad",
+    "id": "pasaporte-nacional-sanmartiniano",
+    "title": "Pasaporte Sanmartiniano",
+    "subtitle": "Viví la historia y ganá viajes por Argentina",
+    "buttonText": "Ver más"
+  }
+]
+
+    

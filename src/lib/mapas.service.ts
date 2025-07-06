@@ -8,7 +8,7 @@ export interface Mapa {
   downloadUrl?: string;
 }
 
-const dataFilePath = path.join(process.cwd(), 'src/data/mapas.json');
+const dataFilePath = path.join(process.cwd(), 'data/mapas.json');
 
 export async function getMapas(): Promise<Mapa[]> {
   try {
@@ -34,3 +34,5 @@ export async function saveMapas(mapas: Mapa[]): Promise<void> {
     throw new Error('No se pudieron guardar los mapas.');
   }
 }
+
+    

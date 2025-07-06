@@ -8,7 +8,7 @@ export interface Localidad {
   imageUrl: string;
 }
 
-const dataFilePath = path.join(process.cwd(), 'src/data/localidades.json');
+const dataFilePath = path.join(process.cwd(), 'data/localidades.json');
 
 export async function getLocalidades(): Promise<Localidad[]> {
     try {
@@ -34,3 +34,5 @@ export async function saveLocalidades(localidades: Localidad[]): Promise<void> {
     throw new Error('No se pudieron guardar las localidades.');
   }
 }
+
+    

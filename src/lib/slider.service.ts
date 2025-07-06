@@ -10,7 +10,7 @@ export interface SliderItem {
   buttonText?: string;
 }
 
-const dataFilePath = path.join(process.cwd(), 'src/data/slider.json');
+const dataFilePath = path.join(process.cwd(), 'data/slider.json');
 
 export async function getSliderItems(): Promise<SliderItem[]> {
   try {
@@ -36,3 +36,5 @@ export async function saveSliderItems(items: SliderItem[]): Promise<void> {
     throw new Error('No se pudieron guardar los items del slider.');
   }
 }
+
+    

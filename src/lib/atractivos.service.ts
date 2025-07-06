@@ -8,7 +8,7 @@ export interface Attraction {
   imageUrl: string;
 }
 
-const dataFilePath = path.join(process.cwd(), 'src/data/atractivos.json');
+const dataFilePath = path.join(process.cwd(), 'data/atractivos.json');
 
 export async function getAttractions(): Promise<Attraction[]> {
   try {
@@ -34,3 +34,5 @@ export async function saveAttractions(attractions: Attraction[]): Promise<void> 
     throw new Error('No se pudieron guardar los atractivos.');
   }
 }
+
+    

@@ -1,0 +1,22 @@
+[
+  {
+    "id": "alojamiento",
+    "icon": "BedDouble",
+    "title": "Alojamiento",
+    "description": "Encuentra hoteles, cabañas y posadas acogedoras que se adaptan a todos los gustos y presupuestos para que tu descanso sea perfecto."
+  },
+  {
+    "id": "gastronomia",
+    "icon": "UtensilsCrossed",
+    "title": "Gastronomía",
+    "description": "Deleita tu paladar con la auténtica cocina regional. Descubre restaurantes y comedores que te ofrecen los sabores únicos de La Rioja."
+  },
+  {
+    "id": "excursiones",
+    "icon": "MountainSnow",
+    "title": "Excursiones",
+    "description": "Vive la aventura con nuestras excursiones guiadas. Explora paisajes increíbles como Talampaya y Laguna Brava de la mano de expertos."
+  }
+]
+
+    

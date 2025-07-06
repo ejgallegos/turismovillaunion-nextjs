@@ -8,7 +8,7 @@ export interface Novedad {
   imageUrl: string;
 }
 
-const dataFilePath = path.join(process.cwd(), 'src/data/novedades.json');
+const dataFilePath = path.join(process.cwd(), 'data/novedades.json');
 
 export async function getNovedades(): Promise<Novedad[]> {
   try {
@@ -34,3 +34,5 @@ export async function saveNovedades(novedades: Novedad[]): Promise<void> {
     throw new Error('No se pudieron guardar las novedades.');
   }
 }
+
+    

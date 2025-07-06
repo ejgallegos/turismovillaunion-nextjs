@@ -8,7 +8,7 @@ export interface Folleto {
   downloadUrl?: string;
 }
 
-const dataFilePath = path.join(process.cwd(), 'src/data/folletos.json');
+const dataFilePath = path.join(process.cwd(), 'data/folletos.json');
 
 export async function getFolletos(): Promise<Folleto[]> {
   try {
@@ -34,3 +34,5 @@ export async function saveFolletos(folletos: Folleto[]): Promise<void> {
     throw new Error('No se pudieron guardar los folletos.');
   }
 }
+
+    

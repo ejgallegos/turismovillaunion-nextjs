@@ -1,0 +1,28 @@
+[
+  {
+    "id": "provincia-de-la-rioja",
+    "title": "Provincia de La Rioja",
+    "description": "[{\"type\":\"paragraph\",\"children\":[{\"text\":\"\"}]}]",
+    "downloadUrl": "/uploads/mapas/provincia-de-la-rioja/mapa-1751838091484.pdf"
+  },
+  {
+    "id": "villa-uni-n",
+    "title": "Villa Unión",
+    "description": "[{\"type\":\"paragraph\",\"children\":[{\"text\":\"\"}]}]",
+    "downloadUrl": "/uploads/mapas/villa-uni-n/mapa-1751838209011.jpeg"
+  },
+  {
+    "id": "guandacol",
+    "title": "Guandacol",
+    "description": "[{\"type\":\"paragraph\",\"children\":[{\"text\":\"\"}]}]",
+    "downloadUrl": "/uploads/mapas/guandacol/mapa-1751838274235.jpeg"
+  },
+  {
+    "id": "pagancillo",
+    "title": "Pagancillo",
+    "description": "[{\"type\":\"paragraph\",\"children\":[{\"text\":\"\"}]}]",
+    "downloadUrl": "/uploads/mapas/pagancillo/mapa-1751838320208.jpeg"
+  }
+]
+
+    

@@ -8,7 +8,7 @@ export interface Servicio {
   description: string;
 }
 
-const dataFilePath = path.join(process.cwd(), 'src/data/servicios.json');
+const dataFilePath = path.join(process.cwd(), 'data/servicios.json');
 
 export async function getServicios(): Promise<Servicio[]> {
     try {
@@ -34,3 +34,5 @@ export async function saveServicios(servicios: Servicio[]): Promise<void> {
     throw new Error('No se pudieron guardar los servicios.');
   }
 }
+
+    
