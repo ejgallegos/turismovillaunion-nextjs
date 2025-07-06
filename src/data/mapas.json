@@ -1,14 +1,26 @@
 [
   {
-    "id": "mapa-villa-union",
-    "title": "Mapa de Villa Unión",
-    "description": "Un mapa detallado del centro de la ciudad y sus principales servicios.",
-    "downloadUrl": "#"
+    "id": "provincia-de-la-rioja",
+    "title": "Provincia de La Rioja",
+    "description": "[{\"type\":\"paragraph\",\"children\":[{\"text\":\"\"}]}]",
+    "downloadUrl": "/uploads/mapas/provincia-de-la-rioja/mapa-1751838091484.pdf"
   },
   {
-    "id": "mapa-rutas",
-    "title": "Mapa de Rutas",
-    "description": "Principales rutas y caminos para llegar y moverte por la región.",
-    "downloadUrl": "#"
+    "id": "villa-uni-n",
+    "title": "Villa Unión",
+    "description": "[{\"type\":\"paragraph\",\"children\":[{\"text\":\"\"}]}]",
+    "downloadUrl": "/uploads/mapas/villa-uni-n/mapa-1751838209011.jpeg"
+  },
+  {
+    "id": "guandacol",
+    "title": "Guandacol",
+    "description": "[{\"type\":\"paragraph\",\"children\":[{\"text\":\"\"}]}]",
+    "downloadUrl": "/uploads/mapas/guandacol/mapa-1751838274235.jpeg"
+  },
+  {
+    "id": "pagancillo",
+    "title": "Pagancillo",
+    "description": "[{\"type\":\"paragraph\",\"children\":[{\"text\":\"\"}]}]",
+    "downloadUrl": "/uploads/mapas/pagancillo/mapa-1751838320208.jpeg"
   }
 ]

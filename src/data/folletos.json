@@ -1,20 +1,8 @@
 [
   {
-    "id": "guia-completa",
-    "title": "Guía Completa de Villa Unión",
-    "description": "Todo lo que necesitas saber: atractivos, servicios y más.",
-    "downloadUrl": "#"
-  },
-  {
-    "id": "aventura-talampaya",
-    "title": "Aventura en Talampaya",
-    "description": "Un recorrido detallado por el Parque Nacional.",
-    "downloadUrl": "#"
-  },
-  {
     "id": "prueba",
-    "title": "Prueba",
-    "description": "[{\"type\":\"paragraph\",\"children\":[{\"text\":\"Prueba\"}]}]",
+    "title": "Bodegas y viñedos",
+    "description": "[{\"type\":\"paragraph\",\"children\":[{\"text\":\"Descubre nuestras bodegas y viñedos.\"}]}]",
     "downloadUrl": "/uploads/folletos/prueba/download-1751816414904.pdf"
   }
 ]
