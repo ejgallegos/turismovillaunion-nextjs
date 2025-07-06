@@ -8,6 +8,8 @@ export const metadata: Metadata = {
   description: 'Encuentra mapas detallados de Villa Unión, el Parque Nacional Talampaya y las rutas turísticas de la región.',
 };
 
+export const dynamic = 'force-dynamic';
+
 export default function MapasPage() {
   return (
     <div className="flex min-h-screen flex-col">

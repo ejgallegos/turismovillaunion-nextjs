@@ -8,6 +8,8 @@ export const metadata: Metadata = {
   description: 'Descarga folletos, guías y mapas en PDF de Villa Unión y sus alrededores para planificar tu viaje.',
 };
 
+export const dynamic = 'force-dynamic';
+
 export default function FolletosPage() {
   return (
     <div className="flex min-h-screen flex-col">
