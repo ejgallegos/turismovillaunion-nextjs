@@ -10,5 +10,11 @@
     "title": "Aventura en Talampaya",
     "description": "Un recorrido detallado por el Parque Nacional.",
     "downloadUrl": "#"
+  },
+  {
+    "id": "prueba",
+    "title": "Prueba",
+    "description": "[{\"type\":\"paragraph\",\"children\":[{\"text\":\"Prueba\"}]}]",
+    "downloadUrl": "/uploads/folletos/prueba/download-1751816414904.pdf"
   }
 ]
