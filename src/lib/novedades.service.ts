@@ -1,5 +1,6 @@
 import fs from 'fs/promises';
 import path from 'path';
+import novedadesData from '@/data/novedades.json';
 
 export interface Novedad {
   id: string;
@@ -11,20 +12,8 @@ export interface Novedad {
 const dataFilePath = path.join(process.cwd(), 'src/data/novedades.json');
 
 export async function getNovedades(): Promise<Novedad[]> {
-  try {
-    const fileContents = await fs.readFile(dataFilePath, 'utf8');
-    if (!fileContents.trim()) {
-      return [];
-    }
-    return JSON.parse(fileContents);
-  } catch (error) {
-    if (error instanceof Error && (error as NodeJS.ErrnoException).code === 'ENOENT') {
-      await saveNovedades([]);
-      return [];
-    }
-    console.warn(`Could not read or parse novedades data from ${dataFilePath}. Returning empty array.`, error);
-    return [];
-  }
+  // Use the imported data directly to ensure it's included in the build
+  return novedadesData as Novedad[];
 }
 
 export async function saveNovedades(novedades: Novedad[]): Promise<void> {

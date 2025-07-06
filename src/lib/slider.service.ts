@@ -1,5 +1,6 @@
 import fs from 'fs/promises';
 import path from 'path';
+import sliderData from '@/data/slider.json';
 
 export interface SliderItem {
   uuid: string;
@@ -13,24 +14,8 @@ export interface SliderItem {
 const dataFilePath = path.join(process.cwd(), 'src/data/slider.json');
 
 export async function getSliderItems(): Promise<SliderItem[]> {
-  try {
-    const fileContents = await fs.readFile(dataFilePath, 'utf8');
-    // If file is empty or just whitespace, it's not valid JSON. Return empty array.
-    if (!fileContents.trim()) {
-        return [];
-    }
-    return JSON.parse(fileContents);
-  } catch (error) {
-    if (error instanceof Error && (error as NodeJS.ErrnoException).code === 'ENOENT') {
-      // File doesn't exist, create it with an empty array.
-      await saveSliderItems([]);
-      return [];
-    }
-    // For any other error (including JSON parsing), log a warning and return empty.
-    // This prevents the app from crashing due to a corrupted file.
-    console.warn(`Could not read or parse slider data from ${dataFilePath}. Returning empty array.`, error);
-    return [];
-  }
+  // Use the imported data directly to ensure it's included in the build
+  return sliderData as SliderItem[];
 }
 
 export async function saveSliderItems(items: SliderItem[]): Promise<void> {

@@ -1,5 +1,6 @@
 import fs from 'fs/promises';
 import path from 'path';
+import mapasData from '@/data/mapas.json';
 
 export interface Mapa {
   id: string;
@@ -11,20 +12,8 @@ export interface Mapa {
 const dataFilePath = path.join(process.cwd(), 'src/data/mapas.json');
 
 export async function getMapas(): Promise<Mapa[]> {
-  try {
-    const fileContents = await fs.readFile(dataFilePath, 'utf8');
-    if (!fileContents.trim()) {
-      return [];
-    }
-    return JSON.parse(fileContents);
-  } catch (error) {
-    if (error instanceof Error && (error as NodeJS.ErrnoException).code === 'ENOENT') {
-      await saveMapas([]);
-      return [];
-    }
-    console.warn(`Could not read or parse mapas data from ${dataFilePath}. Returning empty array.`, error);
-    return [];
-  }
+  // Use the imported data directly to ensure it's included in the build
+  return mapasData as Mapa[];
 }
 
 export async function saveMapas(mapas: Mapa[]): Promise<void> {

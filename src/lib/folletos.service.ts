@@ -1,5 +1,6 @@
 import fs from 'fs/promises';
 import path from 'path';
+import folletosData from '@/data/folletos.json';
 
 export interface Folleto {
   id: string;
@@ -11,20 +12,12 @@ export interface Folleto {
 const dataFilePath = path.join(process.cwd(), 'src/data/folletos.json');
 
 export async function getFolletos(): Promise<Folleto[]> {
-  try {
+    // Use the imported data directly to ensure it's included in the build
     const fileContents = await fs.readFile(dataFilePath, 'utf8');
     if (!fileContents.trim()) {
       return [];
     }
     return JSON.parse(fileContents);
-  } catch (error) {
-    if (error instanceof Error && (error as NodeJS.ErrnoException).code === 'ENOENT') {
-      await saveFolletos([]);
-      return [];
-    }
-    console.warn(`Could not read or parse folletos data from ${dataFilePath}. Returning empty array.`, error);
-    return [];
-  }
 }
 
 export async function saveFolletos(folletos: Folleto[]): Promise<void> {

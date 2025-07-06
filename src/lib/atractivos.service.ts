@@ -1,5 +1,6 @@
 import fs from 'fs/promises';
 import path from 'path';
+import attractionsData from '@/data/atractivos.json';
 
 export interface Attraction {
   id: string;
@@ -11,20 +12,8 @@ export interface Attraction {
 const dataFilePath = path.join(process.cwd(), 'src/data/atractivos.json');
 
 export async function getAttractions(): Promise<Attraction[]> {
-  try {
-    const fileContents = await fs.readFile(dataFilePath, 'utf8');
-    if (!fileContents.trim()) {
-      return [];
-    }
-    return JSON.parse(fileContents);
-  } catch (error) {
-    if (error instanceof Error && (error as NodeJS.ErrnoException).code === 'ENOENT') {
-      await saveAttractions([]);
-      return [];
-    }
-    console.warn(`Could not read or parse attractions data from ${dataFilePath}. Returning empty array.`, error);
-    return [];
-  }
+  // Use the imported data directly to ensure it's included in the build
+  return attractionsData as Attraction[];
 }
 
 export async function saveAttractions(attractions: Attraction[]): Promise<void> {

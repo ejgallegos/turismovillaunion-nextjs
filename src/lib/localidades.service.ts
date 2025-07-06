@@ -1,5 +1,6 @@
 import fs from 'fs/promises';
 import path from 'path';
+import localidadesData from '@/data/localidades.json';
 
 export interface Localidad {
   id: string;
@@ -11,20 +12,8 @@ export interface Localidad {
 const dataFilePath = path.join(process.cwd(), 'src/data/localidades.json');
 
 export async function getLocalidades(): Promise<Localidad[]> {
-  try {
-    const fileContents = await fs.readFile(dataFilePath, 'utf8');
-    if (!fileContents.trim()) {
-      return [];
-    }
-    return JSON.parse(fileContents);
-  } catch (error) {
-    if (error instanceof Error && (error as NodeJS.ErrnoException).code === 'ENOENT') {
-      await saveLocalidades([]);
-      return [];
-    }
-    console.warn(`Could not read or parse localidades data from ${dataFilePath}. Returning empty array.`, error);
-    return [];
-  }
+  // Use the imported data directly to ensure it's included in the build
+  return localidadesData as Localidad[];
 }
 
 export async function saveLocalidades(localidades: Localidad[]): Promise<void> {

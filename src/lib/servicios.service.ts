@@ -1,5 +1,6 @@
 import fs from 'fs/promises';
 import path from 'path';
+import serviciosData from '@/data/servicios.json';
 
 export interface Servicio {
   id: string;
@@ -11,20 +12,8 @@ export interface Servicio {
 const dataFilePath = path.join(process.cwd(), 'src/data/servicios.json');
 
 export async function getServicios(): Promise<Servicio[]> {
-  try {
-    const fileContents = await fs.readFile(dataFilePath, 'utf8');
-    if (!fileContents.trim()) {
-      return [];
-    }
-    return JSON.parse(fileContents);
-  } catch (error) {
-    if (error instanceof Error && (error as NodeJS.ErrnoException).code === 'ENOENT') {
-      await saveServicios([]);
-      return [];
-    }
-    console.warn(`Could not read or parse servicios data from ${dataFilePath}. Returning empty array.`, error);
-    return [];
-  }
+  // Use the imported data directly to ensure it's included in the build
+  return serviciosData as Servicio[];
 }
 
 export async function saveServicios(servicios: Servicio[]): Promise<void> {
