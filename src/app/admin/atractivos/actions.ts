@@ -50,7 +50,8 @@ export async function upsertAttraction(formData: FormData) {
   
   const { id, title, description, image } = validatedFields.data;
   const attractions = await getAttractions();
-  let imageUrl: string | undefined = undefined;
+  const existingAttraction = id ? attractions.find((a) => a.id === id) : undefined;
+  let imageUrl: string | undefined = existingAttraction?.imageUrl;
   let finalId = id;
 
   try {
@@ -78,8 +79,7 @@ export async function upsertAttraction(formData: FormData) {
           ...attractions[index], 
           title, 
           description,
-          // Only update imageUrl if a new one was uploaded
-          ...(imageUrl && { imageUrl }),
+          imageUrl: imageUrl!,
         };
       } else {
         return { success: false, error: 'Atractivo no encontrado.' };

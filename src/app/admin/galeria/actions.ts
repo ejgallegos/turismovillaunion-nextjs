@@ -52,7 +52,8 @@ export async function upsertGalleryItem(formData: FormData) {
   const { id, title, description } = validatedFields.data;
   const image = validatedFields.data.image;
   const galleryItems = await getGalleryItems();
-  let imageUrl: string | undefined = undefined;
+  const existingItem = id ? galleryItems.find((i) => i.id === id) : undefined;
+  let imageUrl: string | undefined = existingItem?.imageUrl;
 
   try {
     // Handle file upload if an image is provided
@@ -79,7 +80,7 @@ export async function upsertGalleryItem(formData: FormData) {
           ...galleryItems[index], 
           title, 
           description: description || '',
-          ...(imageUrl && { imageUrl }),
+          imageUrl: imageUrl!,
         };
       } else {
         return { success: false, error: 'Elemento de galería no encontrado.' };

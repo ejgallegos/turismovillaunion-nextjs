@@ -49,7 +49,8 @@ export async function upsertLocalidad(formData: FormData) {
   
   const { id, title, description, image } = validatedFields.data;
   const localidades = await getLocalidades();
-  let imageUrl: string | undefined = undefined;
+  const existingLocalidad = id ? localidades.find((l) => l.id === id) : undefined;
+  let imageUrl: string | undefined = existingLocalidad?.imageUrl;
   let finalId = id;
 
   try {
@@ -75,7 +76,7 @@ export async function upsertLocalidad(formData: FormData) {
           ...localidades[index], 
           title, 
           description,
-          ...(imageUrl && { imageUrl }),
+          imageUrl: imageUrl!,
         };
       } else {
         return { success: false, error: 'Localidad no encontrada.' };
