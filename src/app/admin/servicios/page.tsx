@@ -54,12 +54,16 @@ export default async function AdminServiciosPage() {
                   <TableCell className="font-medium">{servicio.title}</TableCell>
                   <TableCell className="hidden md:table-cell">{getLocalidadName(servicio.localidadId)}</TableCell>
                   <TableCell className="hidden md:table-cell">
-                    <Button variant="link" asChild className="p-0 h-auto">
-                        <Link href={servicio.downloadUrl} target="_blank">
-                            <FileText className="mr-2 h-4 w-4"/>
-                            Ver PDF
-                        </Link>
-                    </Button>
+                    {servicio.downloadUrl ? (
+                        <Button variant="link" asChild className="p-0 h-auto">
+                            <Link href={servicio.downloadUrl} target="_blank">
+                                <FileText className="mr-2 h-4 w-4"/>
+                                Ver PDF
+                            </Link>
+                        </Button>
+                    ) : (
+                        <span className="text-muted-foreground text-sm">No hay archivo</span>
+                    )}
                   </TableCell>
                   <TableCell className="text-right">
                     <Button asChild variant="ghost" size="icon">
