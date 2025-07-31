@@ -2,6 +2,8 @@ import type { Metadata } from 'next';
 import { Services } from '@/components/landing/services';
 import { Footer } from '@/components/landing/footer';
 import { Header } from '@/components/landing/header';
+import { getServicios } from '@/lib/servicios.service';
+import { getLocalidades } from '@/lib/localidades.service';
 
 export const metadata: Metadata = {
   title: 'Servicios Turísticos | Villa Unión del Talampaya',
@@ -10,12 +12,17 @@ export const metadata: Metadata = {
 
 export const dynamic = 'force-dynamic';
 
-export default function ServiciosPage() {
+export default async function ServiciosPage() {
+  const [services, localidades] = await Promise.all([
+    getServicios(),
+    getLocalidades()
+  ]);
+
   return (
     <div className="flex min-h-screen flex-col">
       <Header />
       <main className="flex-1">
-        <Services />
+        <Services services={services} localidades={localidades} />
       </main>
       <Footer />
     </div>
