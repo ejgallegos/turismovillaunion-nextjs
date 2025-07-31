@@ -8,6 +8,8 @@ export const metadata: Metadata = {
   description: 'Encuentra toda la información sobre alojamiento, gastronomía, excursiones y otros servicios turísticos en Villa Unión.',
 };
 
+export const dynamic = 'force-dynamic';
+
 export default function ServiciosPage() {
   return (
     <div className="flex min-h-screen flex-col">

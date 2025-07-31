@@ -4,9 +4,9 @@ import servicios from '../../data/servicios.json';
 
 export interface Servicio {
   id: string;
-  icon: string;
+  localidadId: string;
   title: string;
-  description: string;
+  downloadUrl: string;
 }
 
 const dataFilePath = path.join(process.cwd(), 'data/servicios.json');

@@ -1,10 +1,12 @@
 
+import { getLocalidades } from '@/lib/localidades.service';
 import { ServicioForm } from '../servicio-form';
 
-export default function NewServicioPage() {
+export default async function NewServicioPage() {
+  const localidades = await getLocalidades();
   return (
     <div>
-      <ServicioForm />
+      <ServicioForm localidades={localidades} />
     </div>
   );
 }
