@@ -43,7 +43,7 @@ export function Footer() {
 						<SocialIcon href="https://www.facebook.com/share/1GKhf5pKNx/?mibextid=qi2Omg">
 							<FacebookIcon className="h-5 w-5" />
 						</SocialIcon>
-						<SocialIcon href="#">
+						<SocialIcon href="https://www.facebook.com/share/1GKhf5pKNx/?mibextid=qi2Omg">
 							<InstagramIcon className="h-5 w-5" />
 						</SocialIcon>
 					</div>
