@@ -40,7 +40,7 @@ export function Footer() {
 						/>
 					</div>
 					<div className="flex items-center gap-2">
-						<SocialIcon href="#">
+						<SocialIcon href="https://www.facebook.com/share/1GKhf5pKNx/?mibextid=qi2Omg">
 							<FacebookIcon className="h-5 w-5" />
 						</SocialIcon>
 						<SocialIcon href="#">
