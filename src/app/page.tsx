@@ -3,7 +3,6 @@ import { Header } from '@/components/landing/header';
 import { Hero } from '@/components/landing/hero';
 import { Atractivos } from '@/components/landing/attractions';
 import { Footer } from '@/components/landing/footer';
-import { News } from '@/components/landing/news';
 import { getAttractions } from '@/lib/atractivos.service';
 
 export const metadata: Metadata = {
@@ -21,7 +20,6 @@ export default async function Home() {
       <main className="flex-1">
         <Hero />
         <Atractivos attractions={attractions} />
-        <News />
       </main>
       <Footer />
     </div>
