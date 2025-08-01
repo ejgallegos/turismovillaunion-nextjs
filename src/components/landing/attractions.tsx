@@ -3,7 +3,7 @@
 
 import React from 'react';
 import Image from 'next/image';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card } from '@/components/ui/card';
 import { ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
@@ -71,25 +71,23 @@ export function Atractivos({ attractions }: AtractivosProps) {
         {attractions.map((attraction) => (
             <SwiperSlide key={attraction.id} className="!w-[300px] md:!w-[400px]">
                 <Card className="overflow-hidden rounded-lg shadow-lg">
-                <div className="relative h-64 w-full">
-                    <Image
-                    src={attraction.imageUrl}
-                    alt={`Imagen de ${attraction.title}`}
-                    fill
-                    className="object-cover"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-                    <div className="absolute bottom-0 left-0 p-4">
-                        <h3 className="font-headline text-xl font-bold text-white drop-shadow-md">{attraction.title}</h3>
+                    <div className="relative h-80 w-full">
+                        <Image
+                            src={attraction.imageUrl}
+                            alt={`Imagen de ${attraction.title}`}
+                            fill
+                            className="object-cover"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                        <div className="absolute bottom-0 left-0 w-full p-4 flex justify-between items-end">
+                            <h3 className="font-headline text-xl font-bold text-white drop-shadow-md max-w-[70%]">{attraction.title}</h3>
+                            <Button variant="link" className="text-accent h-auto p-0" asChild>
+                                <Link href={`/atractivos/${attraction.id}`}>
+                                Conocer <ArrowRight className="ml-2 h-4 w-4" />
+                                </Link>
+                            </Button>
+                        </div>
                     </div>
-                </div>
-                <CardContent className="p-4 bg-background flex justify-end">
-                    <Button variant="link" className="text-accent" asChild>
-                        <Link href={`/atractivos/${attraction.id}`}>
-                        Conocer <ArrowRight className="ml-2 h-4 w-4" />
-                        </Link>
-                    </Button>
-                </CardContent>
                 </Card>
             </SwiperSlide>
         ))}
