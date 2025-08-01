@@ -54,7 +54,7 @@ export function Atractivos({ attractions }: AtractivosProps) {
             slidesPerView={'auto'}
             loop={true}
             autoplay={{
-            delay: 3000,
+            delay: 5000,
             disableOnInteraction: false,
             }}
             coverflowEffect={{
