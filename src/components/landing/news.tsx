@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { getNovedades } from '@/lib/novedades.service';
 import { format, parseISO } from 'date-fns';
 import { es } from 'date-fns/locale';
-import { plainTextFromSlate } from '@/lib/slate-serializer';
+import { plainTextFromSlate } from '@/lib/slate-helpers';
 
 export async function News() {
   const allNovedades = await getNovedades();
@@ -41,12 +41,14 @@ export async function News() {
                     </div>
                 </Link>
                 <CardHeader className="flex flex-grow flex-col items-start p-6">
-                    <div className="flex items-center text-sm text-muted-foreground">
-                        <Calendar className="mr-2 h-4 w-4" />
-                        <time dateTime={novedad.date}>
-                        {format(parseISO(novedad.date), "dd 'de' MMMM, yyyy", { locale: es })}
-                        </time>
-                    </div>
+                    {novedad.date && (
+                        <div className="flex items-center text-sm text-muted-foreground">
+                            <Calendar className="mr-2 h-4 w-4" />
+                            <time dateTime={novedad.date}>
+                            {format(parseISO(novedad.date), "dd 'de' MMMM, yyyy", { locale: es })}
+                            </time>
+                        </div>
+                    )}
                     <h3 className="mt-2 font-headline text-xl font-bold">
                         <Link href={`/novedades/${novedad.id}`} className="hover:underline">{novedad.title}</Link>
                     </h3>

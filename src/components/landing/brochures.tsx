@@ -5,7 +5,7 @@ import { Download } from 'lucide-react';
 import Link from 'next/link';
 import { getFolletos } from '@/lib/folletos.service';
 import { EmptyState } from '../empty-state';
-import { plainTextFromSlate } from '@/lib/slate-serializer';
+import { plainTextFromSlate } from '@/lib/slate-helpers';
 
 export async function Brochures() {
   const brochures = await getFolletos();

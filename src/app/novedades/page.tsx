@@ -9,7 +9,7 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { EmptyState } from '@/components/empty-state';
-import { plainTextFromSlate } from '@/lib/slate-serializer';
+import { plainTextFromSlate } from '@/lib/slate-helpers';
 
 export const metadata: Metadata = {
   title: 'Novedades | Villa Unión del Talampaya',

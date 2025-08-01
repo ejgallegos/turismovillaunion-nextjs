@@ -80,6 +80,7 @@ export async function upsertNovedad(formData: FormData) {
           title, 
           description,
           imageUrl: imageUrl!, 
+          date: novedades[index].date || new Date().toISOString(), // Preserve old date or set new one
         };
       } else {
         return { success: false, error: 'Novedad no encontrada.' };
@@ -96,6 +97,7 @@ export async function upsertNovedad(formData: FormData) {
         title,
         description,
         imageUrl,
+        date: new Date().toISOString(),
       };
       novedades.push(newNovedad);
       finalId = newNovedad.id;

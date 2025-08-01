@@ -5,7 +5,7 @@ import { Footer } from '@/components/landing/footer';
 import Image from 'next/image';
 import type { Metadata, ResolvingMetadata } from 'next';
 import { notFound } from 'next/navigation';
-import { plainTextFromSlate } from '@/lib/slate-serializer';
+import { plainTextFromSlate } from '@/lib/slate-helpers';
 import { generateMetaTags } from '@/ai/flows/generate-meta-tags';
 import { ContentRenderer } from '@/components/content-renderer';
 

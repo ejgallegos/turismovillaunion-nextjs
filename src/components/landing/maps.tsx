@@ -5,7 +5,7 @@ import { Download } from 'lucide-react';
 import Link from 'next/link';
 import { getMapas } from '@/lib/mapas.service';
 import { EmptyState } from '../empty-state';
-import { plainTextFromSlate } from '@/lib/slate-serializer';
+import { plainTextFromSlate } from '@/lib/slate-helpers';
 
 export async function Maps() {
   const maps = await getMapas();

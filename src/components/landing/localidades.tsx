@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { getLocalidades } from '@/lib/localidades.service';
 import { EmptyState } from '@/components/empty-state';
-import { plainTextFromSlate } from '@/lib/slate-serializer';
+import { plainTextFromSlate } from '@/lib/slate-helpers';
 
 export async function Localidades() {
   const localidades = await getLocalidades();
