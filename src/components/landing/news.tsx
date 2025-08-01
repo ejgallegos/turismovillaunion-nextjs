@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { getNovedades } from '@/lib/novedades.service';
 import { format, parseISO } from 'date-fns';
 import { es } from 'date-fns/locale';
+import { plainTextFromSlate } from '@/lib/slate-serializer';
 
 export async function News() {
   const allNovedades = await getNovedades();
@@ -50,7 +51,7 @@ export async function News() {
                         <Link href={`/novedades/${novedad.id}`} className="hover:underline">{novedad.title}</Link>
                     </h3>
                     <p className="mt-2 text-base text-muted-foreground line-clamp-3">
-                        {novedad.description}
+                        {plainTextFromSlate(novedad.description)}
                     </p>
                 </CardHeader>
                 <CardContent className="flex justify-end p-6 pt-0">

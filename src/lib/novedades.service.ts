@@ -7,6 +7,7 @@ export interface Novedad {
   title: string;
   description: string;
   imageUrl: string;
+  date: string;
 }
 
 const dataFilePath = path.join(process.cwd(), 'data/novedades.json');

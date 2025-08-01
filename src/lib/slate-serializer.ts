@@ -1,4 +1,6 @@
 
+'use client';
+
 import { escape } from 'html-escaper';
 import { Text } from 'slate';
 
