@@ -79,8 +79,8 @@ export function Atractivos({ attractions }: AtractivosProps) {
                             className="object-cover"
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                        <div className="absolute bottom-0 left-0 w-full p-4 flex justify-between items-end">
-                            <h3 className="font-headline text-xl font-bold text-white drop-shadow-md max-w-[70%]">{attraction.title}</h3>
+                        <div className="absolute bottom-0 left-0 w-full p-6 flex justify-between items-end">
+                            <h3 className="font-headline text-2xl font-semibold text-white drop-shadow-md max-w-[70%]">{attraction.title}</h3>
                             <Button variant="link" className="text-accent h-auto p-0" asChild>
                                 <Link href={`/atractivos/${attraction.id}`}>
                                 Conocer <ArrowRight className="ml-2 h-4 w-4" />
