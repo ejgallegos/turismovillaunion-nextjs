@@ -6,15 +6,26 @@ import { WhatsAppButton } from '@/components/whatsapp-button';
 import { GoogleAnalytics } from '@/components/google-analytics';
 import { Suspense } from 'react';
 import { RecaptchaProvider } from '@/components/recaptcha-provider';
+import { OrganizationSchema } from '@/components/seo/schema';
 
 export const metadata: Metadata = {
 	title: "Secretaría de Turismo del Dpto. Felipe Varela",
 	description:
 		"Descubre las maravillas naturales de nuestro Departamento Felipe Varela. Explora nuestros mejores atractivos. Y conoce uno de los destinos más impresionantes de Argentina.",
+	metadataBase: new URL('https://turismovillaunion.gob.ar'),
+	alternates: {
+		canonical: '/',
+		languages: {
+			'es': '/',
+		},
+	},
 	icons: {
 		icon: "/favicon.ico",
 		shortcut: "/favicon.ico",
 		apple: "/favicon.ico",
+	},
+	other: {
+		"theme-color": "#7c3aed",
 	},
 	openGraph: {
 		title: "Secretaría de Turismo del Dpto. Felipe Varela",
@@ -56,11 +67,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="es" className="scroll-smooth" suppressHydrationWarning>
+    <html lang="es" className="scroll-smooth" suppressHydrationWarning style={{ colorScheme: 'light dark' }}>
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet" />
+        <OrganizationSchema />
       </head>
       <body className="font-body antialiased">
         <ThemeProvider

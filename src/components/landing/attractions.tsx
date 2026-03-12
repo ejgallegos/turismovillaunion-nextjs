@@ -60,6 +60,7 @@ export function Atractivos({ attractions, isPage = false }: AtractivosProps) {
                             alt={`Imagen de ${attraction.title}`}
                             fill
                             className="object-cover"
+                            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                         />
                         </div>
                     </Link>
@@ -106,12 +107,14 @@ export function Atractivos({ attractions, isPage = false }: AtractivosProps) {
             {attractions.map((attraction) => (
                 <SwiperSlide key={attraction.id} className="!w-[300px] md:!w-[400px]">
                     <Card className="overflow-hidden rounded-lg shadow-lg">
+                        <Link href={`/atractivos/${attraction.id}`}>
                         <div className="relative h-80 w-full">
                             <Image
                                 src={attraction.imageUrl}
                                 alt={`Imagen de ${attraction.title}`}
                                 fill
-                                className="object-cover"
+                                className="object-cover transition-transform duration-300 hover:scale-105"
+                                sizes="(max-width: 768px) 100vw, 400px"
                             />
                             <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                             <div className="absolute bottom-4 left-0 w-full p-6 flex justify-between items-end">
@@ -123,6 +126,7 @@ export function Atractivos({ attractions, isPage = false }: AtractivosProps) {
                                 </Button>
                             </div>
                         </div>
+                        </Link>
                     </Card>
                 </SwiperSlide>
             ))}

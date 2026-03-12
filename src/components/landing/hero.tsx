@@ -90,6 +90,7 @@ export function Hero() {
                   data-ai-hint="canyon sunset"
                   fill
                   className="object-cover"
+                  sizes="100vw"
                   priority
                 />
                 <div className="absolute inset-0 bg-black/25" />
@@ -140,6 +141,7 @@ export function Hero() {
                   data-ai-hint={slide.hint}
                   fill
                   className="object-cover"
+                  sizes="100vw"
                   priority={index === 0}
                 />
                 <div className="absolute inset-0 bg-black/25" />

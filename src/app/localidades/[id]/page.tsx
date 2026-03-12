@@ -106,6 +106,7 @@ export default async function LocalidadDetailPage({ params }: { params: { id: st
               alt={`Imagen panorámica de ${localidad.title}`}
               fill
               className="object-cover"
+              sizes="100vw"
               priority
             />
             <div className="absolute inset-0 bg-black/50" />

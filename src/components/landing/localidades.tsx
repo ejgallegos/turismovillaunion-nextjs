@@ -27,12 +27,15 @@ export async function Localidades() {
             localidades.map((localidad) => (
                 <Card key={localidad.id} className="flex transform flex-col overflow-hidden rounded-lg shadow-lg transition-transform duration-300 hover:-translate-y-2">
                 <div className="relative h-56 w-full">
+                    <Link href={`/localidades/${localidad.id}`}>
                     <Image
                     src={localidad.imageUrl}
                     alt={`Imagen de ${localidad.title}`}
                     fill
-                    className="object-cover"
+                    className="object-cover transition-transform duration-300 hover:scale-105"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                     />
+                    </Link>
                 </div>
                 <CardHeader className="flex flex-grow flex-row items-start gap-4 p-6">
                     <MapPin className="hidden md:block mt-1 h-6 w-6 flex-shrink-0 text-primary" />

@@ -108,6 +108,7 @@ export default async function NovedadDetailPage({ params }: { params: { id: stri
               alt={`Imagen panorámica de ${novedad.title}`}
               fill
               className="object-cover"
+              sizes="100vw"
               priority
             />
             <div className="absolute inset-0 bg-black/50" />

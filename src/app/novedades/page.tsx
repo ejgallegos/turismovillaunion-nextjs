@@ -38,14 +38,15 @@ export default async function NovedadesPage() {
                         novedades.map((novedad) => (
                             <Card key={novedad.id} className="flex transform flex-col overflow-hidden rounded-lg shadow-lg transition-transform duration-300 hover:-translate-y-2">
                                 <Link href={`/novedades/${novedad.id}`} className="block">
-                                    <div className="relative h-56 w-full">
+                                <div className="relative h-56 w-full">
                                     <Image
                                         src={novedad.imageUrl}
                                         alt={`Imagen de ${novedad.title}`}
                                         fill
                                         className="object-cover"
+                                        sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                                     />
-                                    </div>
+                                </div>
                                 </Link>
                                 <CardHeader className="flex flex-grow flex-col items-start p-6">
                                     <h2 className="mt-2 font-headline text-xl font-bold">
