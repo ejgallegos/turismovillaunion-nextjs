@@ -4,6 +4,21 @@ import { getSliderItems } from "@/lib/slider.service";
 import { getAttractions } from "@/lib/atractivos.service";
 import { getNovedades } from "@/lib/novedades.service";
 
+function extractTextFromDescription(description: string | undefined): string {
+    if (!description) return '';
+    try {
+        if (typeof description === 'string' && description.startsWith('[')) {
+            const parsed = JSON.parse(description);
+            return parsed.map((block: { children?: { text?: string }[] }) => 
+                block.children?.map((child) => child.text).join('') || ''
+            ).join(' ').slice(0, 150) + '...';
+        }
+        return typeof description === 'string' ? description.slice(0, 150) + '...' : '';
+    } catch {
+        return typeof description === 'string' ? description : '';
+    }
+}
+
 export async function getHeroSlidesData() {
     const [sliderItems, attractions, novedades] = await Promise.all([
         getSliderItems(),
@@ -26,16 +41,16 @@ export async function getHeroSlidesData() {
             };
         }
         if (item.type === 'novedad') {
-            const novedad = novedades.find(n => n.id === item.id);
-            if (!novedad) return null;
+            const newest = novedades.find(n => n.id === item.id);
+            if (!newest) return null;
             return {
-                src: novedad.imageUrl,
-                alt: `Imagen de ${item.title}`,
+                src: newest.imageUrl,
+                alt: `Imagen de ${newest.title}`,
                 hint: "event news",
-                title: item.title,
-                subtitle: item.subtitle,
+                title: newest.title,
+                subtitle: extractTextFromDescription(newest.description) || item.subtitle,
                 buttonText: item.buttonText,
-                buttonLink: `/novedades/${novedad.id}`
+                buttonLink: `/novedades/${newest.id}`
             };
         }
         return null;

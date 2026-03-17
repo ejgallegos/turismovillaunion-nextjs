@@ -1,0 +1,126 @@
+{
+  "lugares": [],
+  "tips": [
+    {
+      "id": "1",
+      "texto": "Reservá tickets de entrada a Talampaya con anticipación",
+      "activo": true
+    },
+    {
+      "id": "2",
+      "texto": "Cargá combustible antes de salir a los parques",
+      "activo": true
+    },
+    {
+      "id": "3",
+      "texto": "Llevá agua, protector solar y ropa liviana",
+      "activo": true
+    },
+    {
+      "id": "4",
+      "texto": "El mejor horario para visitar es por la mañana",
+      "activo": true
+    },
+    {
+      "id": "5",
+      "texto": "No olvides tu cámara para los paisajes",
+      "activo": true
+    },
+    {
+      "id": "28c9ae6f",
+      "texto": "Nuevo tips",
+      "activo": true
+    },
+    {
+      "id": "e4f1ad21",
+      "texto": "Nuevo tips",
+      "activo": true
+    }
+  ],
+  "colectivos": [
+    {
+      "id": "1",
+      "origen": "La Rioja Capital",
+      "horaSalida": "07:00",
+      "horaLlegada": "10:30",
+      "frecuencia": "Diario",
+      "activo": true
+    },
+    {
+      "id": "2",
+      "origen": "La Rioja Capital",
+      "horaSalida": "14:00",
+      "horaLlegada": "17:30",
+      "frecuencia": "Diario",
+      "activo": true
+    },
+    {
+      "id": "3",
+      "origen": "Chilecito",
+      "horaSalida": "08:30",
+      "horaLlegada": "11:00",
+      "frecuencia": "Diario",
+      "activo": true
+    },
+    {
+      "id": "4",
+      "origen": "Chilecito",
+      "horaSalida": "16:00",
+      "horaLlegada": "18:30",
+      "frecuencia": "Diario",
+      "activo": true
+    },
+    {
+      "id": "5",
+      "origen": "San Juan",
+      "horaSalida": "06:00",
+      "horaLlegada": "12:00",
+      "frecuencia": "Lunes, Miércoles, Viernes",
+      "activo": true
+    }
+  ],
+  "categorias": [
+    {
+      "id": "cajero",
+      "nombre": "Cajeros",
+      "color": "#ef4444",
+      "icono": "landmark",
+      "activo": true
+    },
+    {
+      "id": "hotel",
+      "nombre": "Hoteles",
+      "color": "#3b82f6",
+      "icono": "bed",
+      "activo": true
+    },
+    {
+      "id": "restaurante",
+      "nombre": "Restaurantes",
+      "color": "#f97316",
+      "icono": "utensils",
+      "activo": true
+    },
+    {
+      "id": "estacion",
+      "nombre": "Estaciones",
+      "color": "#eab308",
+      "icono": "fuel-pump",
+      "activo": true
+    },
+    {
+      "id": "comercio",
+      "nombre": "Comercios",
+      "color": "#8b5cf6",
+      "icono": "store",
+      "activo": true
+    },
+    {
+      "id": "servicio",
+      "nombre": "Servicios",
+      "color": "#06b6d4",
+      "icono": "wrench",
+      "activo": true
+    }
+  ]
+}

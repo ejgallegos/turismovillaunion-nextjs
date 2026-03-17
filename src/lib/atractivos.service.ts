@@ -1,5 +1,3 @@
-import fs from 'fs/promises';
-import path from 'path';
 import attractions from '../../data/atractivos.json';
 
 export interface Attraction {
@@ -9,13 +7,15 @@ export interface Attraction {
   imageUrl: string;
 }
 
-const dataFilePath = path.join(process.cwd(), 'data/atractivos.json');
-
 export async function getAttractions(): Promise<Attraction[]> {
   return attractions;
 }
 
 export async function saveAttractions(attractions: Attraction[]): Promise<void> {
+  const fs = await import('fs/promises');
+  const path = await import('path');
+  const dataFilePath = path.join(process.cwd(), 'data/atractivos.json');
+  
   try {
     const data = JSON.stringify(attractions, null, 2);
     await fs.mkdir(path.dirname(dataFilePath), { recursive: true });

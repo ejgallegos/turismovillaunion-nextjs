@@ -142,3 +142,21 @@
 .ql-editor.ql-blank::before {
   @apply text-muted-foreground/80 not-italic;
 }
+
+/* Leaflet map z-index fix */
+.leaflet-pane,
+.leaflet-tile-pane,
+.leaflet-marker-pane,
+.leaflet-shadow-pane,
+.leaflet-overlay-pane,
+.leaflet-controls-pane {
+  z-index: 1 !important;
+}
+
+.leaflet-control-zoom {
+  z-index: 10 !important;
+}
+
+.leaflet-popup-pane {
+  z-index: 20 !important;
+}

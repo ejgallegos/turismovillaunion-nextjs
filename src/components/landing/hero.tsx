@@ -5,20 +5,16 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 
-// Import Swiper React components
 import { Swiper, SwiperSlide } from 'swiper/react';
-
-// Import Swiper styles
 import 'swiper/css';
 import 'swiper/css/effect-fade';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
-
-// import required modules
 import { Autoplay, Pagination, Navigation, EffectFade } from 'swiper/modules';
 
 import { getHeroSlidesData } from './actions';
 import { Skeleton } from '../ui/skeleton';
+import { ChevronDown } from 'lucide-react';
 
 interface HeroSlide {
   src: string;
@@ -31,19 +27,21 @@ interface HeroSlide {
 }
 
 const HeroSkeleton = () => (
-    <div className="relative flex h-full w-full items-center justify-center">
-        <Skeleton className="absolute inset-0 z-0" />
-        <div className="relative z-10 flex flex-col items-center p-4 text-center">
-            <Skeleton className="h-16 w-3/4 mb-4" />
-            <Skeleton className="h-6 w-1/2" />
-            <Skeleton className="h-11 w-32 mt-8" />
-        </div>
+  <div className="relative flex h-screen w-full items-center justify-center">
+    <Skeleton className="absolute inset-0 z-0" />
+    <div className="relative z-10 flex flex-col items-center p-4 text-center">
+      <Skeleton className="h-20 w-3/4 mb-4" />
+      <Skeleton className="h-8 w-1/2 mb-2" />
+      <Skeleton className="h-6 w-1/3 mb-8" />
+      <Skeleton className="h-14 w-48" />
     </div>
+  </div>
 );
 
 export function Hero() {
   const [slides, setSlides] = useState<HeroSlide[]>([]);
   const [loading, setLoading] = useState(true);
+  const [activeIndex, setActiveIndex] = useState(0);
 
   useEffect(() => {
     async function fetchData() {
@@ -53,17 +51,16 @@ export function Hero() {
       } catch (error) {
         console.error("Failed to fetch hero slides data", error);
         setSlides([
-			{
-				src: "/images/Banner/slider/home-slider-sec-turismo.png",
-				alt: "Paisaje de Talampaya",
-				hint: "canyon sunset",
-				title: "Secretaría de Turismo Felipe Varela",
-				subtitle:
-					"Tierra de tradiciones y paisajes apasionantes que no podes dejar de visitar.",
-				buttonText: "Explora Ahora",
-				buttonLink: "#atractivos",
-			},
-		]);
+          {
+            src: "/images/Banner/slider/home-slider-sec-turismo.png",
+            alt: "Paisaje de Talampaya",
+            hint: "canyon sunset",
+            title: "Villa Unión",
+            subtitle: "Tu puerta de entrada a la inmensidad de Talampaya y los secretos del Triásico.",
+            buttonText: "Explorar Destinos",
+            buttonLink: "/atractivos",
+          },
+        ]);
       } finally {
         setLoading(false);
       }
@@ -72,99 +69,94 @@ export function Hero() {
   }, []);
 
   if (loading) {
-      return (
-          <section className="relative h-[calc(100vh-theme(spacing.20))] w-full">
-              <HeroSkeleton />
-          </section>
-      );
+    return (
+      <section className="relative h-screen w-full">
+        <HeroSkeleton />
+      </section>
+    );
   }
 
-  if (slides.length === 0) {
-      return (
-        <section className="relative h-[calc(100vh-theme(spacing.20))] w-full">
-            <div className="relative flex h-full w-full items-center justify-center">
-              <div className="absolute inset-0 z-0">
-                <Image
-                  src="/images/Banner/slider/home-slider-sec-turismo.png"
-                  alt="Paisaje de Talampaya"
-                  data-ai-hint="canyon sunset"
-                  fill
-                  className="object-cover"
-                  sizes="100vw"
-                  priority
-                />
-                <div className="absolute inset-0 bg-black/25" />
-              </div>
-              <div className="relative z-10 flex flex-col items-center p-4 text-center text-white">
-                <h1 className="font-headline text-4xl font-bold tracking-tight sm:text-6xl md:text-7xl">
-                    Bienvenido a Villa Unión
-                </h1>
-                <p className="mt-4 max-w-2xl text-lg text-white/90 md:text-xl">
-                    Añada elementos al slider desde el panel de administración para comenzar.
-                </p>
-                <div className="mt-8 flex gap-4">
-                  <Button size="lg" asChild>
-                    <Link href="#atractivos">Explorar</Link>
-                  </Button>
-                </div>
-              </div>
-            </div>
-        </section>
-      );
-  }
+  const defaultSlide = {
+    src: "/images/Banner/slider/home-slider-sec-turismo.png",
+    alt: "Parque Nacional Talampaya",
+    hint: "canyon red walls",
+    title: "Villa Unión",
+    subtitle: "Tu puerta de entrada a la inmensidad de Talampaya y los secretos del Triásico.",
+    buttonText: "Explorar Destinos",
+    buttonLink: "/atractivos",
+  };
+
+  const displaySlides = slides.length > 0 ? slides : [defaultSlide];
+  const activeSlide = displaySlides[activeIndex] || defaultSlide;
 
   return (
-    <section className="relative h-[calc(100vh-theme(spacing.20))] w-full">
-      <Swiper
-        spaceBetween={30}
-        effect={'fade'}
-        fadeEffect={{ crossFade: true }}
-        centeredSlides={true}
-        autoplay={{
-          delay: 5000,
-          disableOnInteraction: false,
-        }}
-        pagination={{
-          clickable: true,
-        }}
-        loop={slides.length > 1}
-        modules={[Autoplay, Pagination, Navigation, EffectFade]}
-        className="h-full w-full"
-      >
-        {slides.map((slide, index) => (
-          <SwiperSlide key={index}>
-            <div className="relative flex h-full w-full items-center justify-center">
-              <div className="absolute inset-0 z-0">
-                <Image
-                  src={slide.src}
-                  alt={slide.alt}
-                  data-ai-hint={slide.hint}
-                  fill
-                  className="object-cover"
-                  sizes="100vw"
-                  priority={index === 0}
-                />
-                <div className="absolute inset-0 bg-black/25" />
-              </div>
-              <div className="relative z-10 flex flex-col items-center p-4 text-center text-white">
-                <h1 className="font-headline text-4xl font-bold tracking-tight sm:text-6xl md:text-7xl">
-                  {slide.title}
-                </h1>
-                <p className="mt-4 max-w-2xl text-lg text-white/90 md:text-xl line-clamp-3">
-                  {slide.subtitle}
-                </p>
-                {slide.buttonText && (
-                  <div className="mt-8 flex gap-4">
-                    <Button size="lg" asChild>
-                      <Link href={slide.buttonLink}>{slide.buttonText}</Link>
-                    </Button>
-                  </div>
-                )}
-              </div>
-            </div>
-          </SwiperSlide>
-        ))}
-      </Swiper>
+    <section className="relative h-screen w-full flex items-center justify-center overflow-hidden">
+      <div className="absolute inset-0 z-0">
+        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/20 to-secondary-foreground z-10" />
+        <Swiper
+          effect={'fade'}
+          fadeEffect={{ crossFade: true }}
+          centeredSlides={true}
+          autoplay={{
+            delay: 5000,
+            disableOnInteraction: false,
+          }}
+          pagination={{
+            clickable: true,
+          }}
+          loop={displaySlides.length > 1}
+          modules={[Autoplay, Pagination, EffectFade]}
+          className="h-full w-full"
+          onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
+        >
+          {displaySlides.map((slide, index) => (
+            <SwiperSlide key={index}>
+              <Image
+                src={slide.src}
+                alt={slide.alt}
+                data-ai-hint={slide.hint}
+                fill
+                className="object-cover"
+                sizes="100vw"
+                priority={index === 0}
+              />
+            </SwiperSlide>
+          ))}
+        </Swiper>
+      </div>
+      
+      <div className="relative z-20 text-center px-4 max-w-4xl">
+        {activeSlide.title && activeSlide.title !== "Villa Unión" ? (
+          <>
+            <h1 className="text-white text-4xl md:text-6xl lg:text-7xl font-black mb-6 leading-tight tracking-tighter">
+              {activeSlide.title}
+            </h1>
+            <p className="text-white/90 text-lg md:text-xl font-light mb-10 max-w-2xl mx-auto">
+              {activeSlide.subtitle}
+            </p>
+          </>
+        ) : (
+          <>
+            <h1 className="text-white text-5xl md:text-7xl lg:text-8xl font-black mb-6 leading-tight tracking-tighter">
+              Descubrí <br /><span className="text-accent">Villa Unión</span>
+            </h1>
+            <p className="text-white/90 text-lg md:text-2xl font-light mb-10 max-w-2xl mx-auto">
+              {activeSlide.subtitle || defaultSlide.subtitle}
+            </p>
+          </>
+        )}
+        <div className="flex flex-col md:flex-row items-center justify-center gap-4">
+          <Button asChild className="w-full md:w-auto bg-primary hover:bg-primary/90 text-white px-10 py-5 rounded-xl text-lg font-bold transition-all transform hover:scale-105">
+            <Link href={activeSlide.buttonLink || defaultSlide.buttonLink}>
+              {activeSlide.buttonText || defaultSlide.buttonText}
+            </Link>
+          </Button>
+        </div>
+      </div>
+      
+      <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-20 animate-bounce">
+        <ChevronDown className="text-white text-4xl" />
+      </div>
     </section>
   );
 }
