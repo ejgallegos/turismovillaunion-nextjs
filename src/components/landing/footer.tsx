@@ -23,9 +23,9 @@ const SocialIcon = ({ href, children }: { href: string, children: React.ReactNod
 
 export function Footer() {
   return (
-    <footer className="bg-[#1d131f] text-white py-20 mt-32 border-t border-white/5">
-      <div className="max-w-7xl mx-auto px-10">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-20">
+    <footer className="bg-[#1d131f] text-white py-12 md:py-20 mt-16 md:mt-32 border-t border-white/5">
+      <div className="max-w-7xl mx-auto px-6 md:px-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12 mb-12 md:mb-20">
           {/* Logo Column */}
           <div className="col-span-1 lg:col-span-1">
             <div className="flex items-center gap-3 mb-6">
@@ -62,27 +62,27 @@ export function Footer() {
           
           {/* Destinos Column */}
           <div>
-            <h5 className="font-bold mb-6 text-primary">Destinos</h5>
-            <ul className="space-y-3 text-sm text-slate-400">
-              <li><Link href="/localidades/villa-union" className="hover:text-white transition-colors">Villa Unión</Link></li>
-              <li><Link href="/localidades/banda-florida" className="hover:text-white transition-colors">Banda Florida</Link></li>
-              <li><Link href="/localidades/los-palacios" className="hover:text-white transition-colors">Los Palacios</Link></li>
-              <li><Link href="/localidades/guandacol" className="hover:text-white transition-colors">Guandacol</Link></li>
-              <li><Link href="/localidades/aicu-a" className="hover:text-white transition-colors">Aicuña</Link></li>
-              <li><Link href="/localidades/pagancillo" className="hover:text-white transition-colors">Pagancillo</Link></li>
+            <h5 className="font-bold mb-4 md:mb-6 text-primary">Destinos</h5>
+            <ul className="space-y-2 md:space-y-3 text-sm text-slate-400">
+              <li><Link href="/localidades/villa-union" className="hover:text-white transition-colors inline-block min-h-[44px] py-2">Villa Unión</Link></li>
+              <li><Link href="/localidades/banda-florida" className="hover:text-white transition-colors inline-block min-h-[44px] py-2">Banda Florida</Link></li>
+              <li><Link href="/localidades/los-palacios" className="hover:text-white transition-colors inline-block min-h-[44px] py-2">Los Palacios</Link></li>
+              <li><Link href="/localidades/guandacol" className="hover:text-white transition-colors inline-block min-h-[44px] py-2">Guandacol</Link></li>
+              <li><Link href="/localidades/aicu-a" className="hover:text-white transition-colors inline-block min-h-[44px] py-2">Aicuña</Link></li>
+              <li><Link href="/localidades/pagancillo" className="hover:text-white transition-colors inline-block min-h-[44px] py-2">Pagancillo</Link></li>
             </ul>
           </div>
           
           {/* Experiencias Column */}
           <div>
-            <h5 className="font-bold mb-6 text-primary">Experiencias</h5>
-            <ul className="space-y-3 text-sm text-slate-400">
-              <li><Link href="/atractivos/talampaya" className="hover:text-white transition-colors">Parque Nacional Talampaya</Link></li>
-              <li><Link href="/atractivos/anchumbil" className="hover:text-white transition-colors">Cañón de Anchumbil</Link></li>
-              <li><Link href="/atractivos/ca-n-del-tri-sico" className="hover:text-white transition-colors">Cañón del Triásico</Link></li>
-              <li><Link href="/atractivos/mirador-la-loma" className="hover:text-white transition-colors">Mirador La Loma</Link></li>
-              <li><Link href="/localidades/guandacol" className="hover:text-white transition-colors">Vallecito Encantado</Link></li>
-              <li><Link href="/mapa-interactivo" className="hover:text-white transition-colors">Mapa Interactivo</Link></li>
+            <h5 className="font-bold mb-4 md:mb-6 text-primary">Experiencias</h5>
+            <ul className="space-y-2 md:space-y-3 text-sm text-slate-400">
+              <li><Link href="/atractivos/talampaya" className="hover:text-white transition-colors inline-block min-h-[44px] py-2">Parque Nacional Talampaya</Link></li>
+              <li><Link href="/atractivos/anchumbil" className="hover:text-white transition-colors inline-block min-h-[44px] py-2">Cañón de Anchumbil</Link></li>
+              <li><Link href="/atractivos/ca-n-del-tri-sico" className="hover:text-white transition-colors inline-block min-h-[44px] py-2">Cañón del Triásico</Link></li>
+              <li><Link href="/atractivos/mirador-la-loma" className="hover:text-white transition-colors inline-block min-h-[44px] py-2">Mirador La Loma</Link></li>
+              <li><Link href="/localidades/guandacol" className="hover:text-white transition-colors inline-block min-h-[44px] py-2">Vallecito Encantado</Link></li>
+              <li><Link href="/mapa-interactivo" className="hover:text-white transition-colors inline-block min-h-[44px] py-2">Mapa Interactivo</Link></li>
             </ul>
           </div>
           
@@ -104,9 +104,9 @@ export function Footer() {
               </SocialIcon>
             </div>
             <div className="space-y-2 text-sm text-slate-400">
-              <Link href="/contacto" className="block hover:text-white transition-colors">Contacto</Link>
-              <Link href="/mapas" className="block hover:text-white transition-colors">Mapas y Folletos</Link>
-              <Link href="/novedades" className="block hover:text-white transition-colors">Novedades</Link>
+              <Link href="/contacto" className="block hover:text-white transition-colors min-h-[44px] py-2">Contacto</Link>
+              <Link href="/mapas" className="block hover:text-white transition-colors min-h-[44px] py-2">Mapas y Folletos</Link>
+              <Link href="/novedades" className="block hover:text-white transition-colors min-h-[44px] py-2">Novedades</Link>
             </div>
           </div>
         </div>

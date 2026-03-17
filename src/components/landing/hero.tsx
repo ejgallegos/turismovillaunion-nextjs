@@ -128,25 +128,25 @@ export function Hero() {
       <div className="relative z-20 text-center px-4 max-w-4xl">
         {activeSlide.title && activeSlide.title !== "Villa Unión" ? (
           <>
-            <h1 className="text-white text-4xl md:text-6xl lg:text-7xl font-black mb-6 leading-tight tracking-tighter">
+            <h1 className="text-white text-3xl md:text-6xl lg:text-7xl font-black mb-4 md:mb-6 leading-tight tracking-tighter">
               {activeSlide.title}
             </h1>
-            <p className="text-white/90 text-lg md:text-xl font-light mb-10 max-w-2xl mx-auto">
+            <p className="text-white/90 text-base md:text-xl font-light mb-8 md:mb-10 max-w-2xl mx-auto">
               {activeSlide.subtitle}
             </p>
           </>
         ) : (
           <>
-            <h1 className="text-white text-5xl md:text-7xl lg:text-8xl font-black mb-6 leading-tight tracking-tighter">
+            <h1 className="text-white text-4xl md:text-7xl lg:text-8xl font-black mb-4 md:mb-6 leading-tight tracking-tighter">
               Descubrí <br /><span className="text-accent">Villa Unión</span>
             </h1>
-            <p className="text-white/90 text-lg md:text-2xl font-light mb-10 max-w-2xl mx-auto">
+            <p className="text-white/90 text-base md:text-2xl font-light mb-8 md:mb-10 max-w-2xl mx-auto">
               {activeSlide.subtitle || defaultSlide.subtitle}
             </p>
           </>
         )}
         <div className="flex flex-col md:flex-row items-center justify-center gap-4">
-          <Button asChild className="w-full md:w-auto bg-primary hover:bg-primary/90 text-white px-10 py-5 rounded-xl text-lg font-bold transition-all transform hover:scale-105">
+          <Button asChild className="w-full md:w-auto bg-primary hover:bg-primary/90 text-white px-8 md:px-10 py-4 md:py-5 rounded-xl text-base md:text-lg font-bold transition-all transform hover:scale-105 min-h-[48px]">
             <Link href={activeSlide.buttonLink || defaultSlide.buttonLink}>
               {activeSlide.buttonText || defaultSlide.buttonText}
             </Link>
@@ -154,8 +154,8 @@ export function Hero() {
         </div>
       </div>
       
-      <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-20 animate-bounce">
-        <ChevronDown className="text-white text-4xl" />
+      <div className="absolute bottom-6 md:bottom-10 left-1/2 -translate-x-1/2 z-20 animate-bounce">
+        <ChevronDown className="text-white text-3xl md:text-4xl" />
       </div>
     </section>
   );

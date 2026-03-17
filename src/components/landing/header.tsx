@@ -28,7 +28,7 @@ const navLinks = [
 
 export function Header() {
   return (
-		<header className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 md:px-10 py-4 backdrop-blur-md bg-black/30 border-b border-white/20">
+		<header className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 md:px-10 py-3 md:py-4 backdrop-blur-md bg-black/30 border-b border-white/20">
 			<Link
 				href="/"
 				className="flex items-center gap-3"
@@ -58,10 +58,10 @@ export function Header() {
 			<div className="flex items-center gap-4">
 				<Button
 					asChild
-					className="bg-accent hover:bg-orange-600 text-white px-5 py-2.5 rounded-xl text-sm font-bold tracking-wide transition-all shadow-lg shadow-accent/20 hidden sm:flex"
+					className="bg-accent hover:bg-orange-600 text-white px-4 py-2.5 rounded-xl text-sm font-bold tracking-wide transition-all shadow-lg shadow-accent/20 hidden sm:flex min-h-[44px]"
 				>
 					<Link href="/mapa-interactivo">
-						<MapPin className="h-5 w-5" /> Mapa Interactivo
+						<MapPin className="h-5 w-5" /> <span className="hidden md:inline">Mapa Interactivo</span>
 					</Link>
 				</Button>
 
@@ -70,7 +70,7 @@ export function Header() {
 						<Button
 							variant="ghost"
 							size="icon"
-							className="text-white hover:bg-white/10"
+							className="text-white hover:bg-white/10 min-w-[44px] min-h-[44px]"
 						>
 							<Menu className="h-6 w-6" />
 							<span className="sr-only">Abrir menú</span>
