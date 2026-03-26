@@ -39,12 +39,12 @@ interface NovedadFormProps {
   novedad?: Novedad | null;
 }
 
-const initialValue: Descendant[] = [
+const initialValue = [
     {
       type: 'paragraph',
       children: [{ text: '' }],
     },
-];
+  ] as unknown as Descendant[];
 
 export function NovedadForm({ novedad }: NovedadFormProps) {
   const router = useRouter();

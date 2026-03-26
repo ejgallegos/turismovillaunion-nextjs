@@ -10,11 +10,12 @@ import { generateMetaTags } from '@/ai/flows/generate-meta-tags';
 import { ContentRenderer } from '@/components/content-renderer';
 
 export async function generateMetadata(
-  { params }: { params: { id: string } },
+  { params }: { params: Promise<{ id: string }> },
   parent: ResolvingMetadata
 ): Promise<Metadata> {
+  const { id } = await params;
   const localidades = await getLocalidades();
-  const localidad = localidades.find((a) => a.id === params.id);
+  const localidad = localidades.find((a) => a.id === id);
 
   if (!localidad) {
     return {
@@ -54,7 +55,7 @@ export async function generateMetadata(
         },
       };
     } catch (error) {
-      console.warn(`[AI Metadata Warning] Failed to generate AI metadata for localidad "${params.id}". This can happen due to API errors or content restrictions. Falling back to basic metadata.`, error);
+      console.warn(`[AI Metadata Warning] Failed to generate AI metadata for localidad "${id}". This can happen due to API errors or content restrictions. Falling back to basic metadata.`, error);
     }
   }
   
@@ -87,9 +88,10 @@ export async function generateStaticParams() {
   }));
 }
 
-export default async function LocalidadDetailPage({ params }: { params: { id: string } }) {
+export default async function LocalidadDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
   const localidades = await getLocalidades();
-  const localidad = localidades.find((a) => a.id === params.id);
+  const localidad = localidades.find((a) => a.id === id);
 
   if (!localidad) {
     notFound();

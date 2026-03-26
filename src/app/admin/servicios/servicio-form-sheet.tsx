@@ -7,18 +7,28 @@ import { z } from 'zod';
 
 import { upsertServicio } from './actions';
 import type { Servicio } from '@/lib/servicios.service';
+import type { Localidad } from '@/lib/localidades.service';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
 import { Form, FormControl, FormField, FormItem, FormMessage, FormLabel } from '@/components/ui/form';
 import { Sheet, SheetContent, SheetFooter, SheetHeader, SheetTitle, SheetDescription, SheetTrigger } from '@/components/ui/sheet';
-import { Textarea } from '@/components/ui/textarea';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+
+const MAX_FILE_SIZE = 10 * 1024 * 1024;
+const ACCEPTED_DOWNLOAD_TYPES = ['application/pdf'];
 
 const servicioSchema = z.object({
   id: z.string().optional(),
-  title: z.string().min(3, { message: 'El título debe tener al menos 3 caracteres.' }),
-  description: z.string().min(10, { message: 'La descripción debe tener al menos 10 caracteres.' }),
-  icon: z.string().min(2, { message: 'El ícono (nombre de Lucide) es requerido.' }),
+  title: z.string().min(3, { message: 'El título es requerido.' }),
+  localidadId: z.string().min(1, { message: 'La localidad es requerida.' }),
+  downloadFile: z.any()
+    .optional()
+    .refine((files) => !files || files.length === 0 || files?.[0]?.size <= MAX_FILE_SIZE, `El tamaño máximo es 10MB.`)
+    .refine(
+      (files) => !files || files.length === 0 || ACCEPTED_DOWNLOAD_TYPES.includes(files?.[0]?.type),
+      'Solo se aceptan archivos PDF.'
+    ),
 });
 
 type ServicioFormValues = z.infer<typeof servicioSchema>;
@@ -26,9 +36,10 @@ type ServicioFormValues = z.infer<typeof servicioSchema>;
 interface ServicioFormSheetProps {
   children: React.ReactNode;
   servicio?: Servicio | null;
+  localidades: Localidad[];
 }
 
-export function ServicioFormSheet({ children, servicio }: ServicioFormSheetProps) {
+export function ServicioFormSheet({ children, servicio, localidades }: ServicioFormSheetProps) {
   const [open, setOpen] = useState(false);
   const { toast } = useToast();
   
@@ -36,8 +47,8 @@ export function ServicioFormSheet({ children, servicio }: ServicioFormSheetProps
     resolver: zodResolver(servicioSchema),
     defaultValues: servicio || {
       title: '',
-      description: '',
-      icon: '',
+      localidadId: '',
+      downloadFile: undefined,
     },
   });
 
@@ -45,29 +56,43 @@ export function ServicioFormSheet({ children, servicio }: ServicioFormSheetProps
     if (open) {
       form.reset(servicio || {
         title: '',
-        description: '',
-        icon: '',
+        localidadId: '',
+        downloadFile: undefined,
       });
     }
   }, [open, servicio, form]);
 
   const onSubmit = async (values: ServicioFormValues) => {
-    const result = await upsertServicio(values);
+    const formData = new FormData();
+    if (values.id) {
+      formData.append('id', values.id);
+    }
+    formData.append('title', values.title);
+    formData.append('localidadId', values.localidadId);
+    
+    if (values.downloadFile && values.downloadFile.length > 0) {
+      formData.append('downloadFile', values.downloadFile[0]);
+    } else if (!servicio?.id) {
+      form.setError('downloadFile', { type: 'manual', message: 'El archivo PDF es requerido.' });
+      return;
+    }
+    
+    const result = await upsertServicio(formData);
 
-    if (result.success) {
+    if (result && !result.success) {
+      const firstError = result.errors ? Object.values(result.errors).flat()[0] : result.error;
+      const errorMessage = firstError || 'Hubo un problema al guardar el servicio.';
+      toast({
+        title: 'Error',
+        description: errorMessage as string,
+        variant: 'destructive',
+      });
+    } else {
       toast({
         title: `Servicio ${servicio ? 'actualizado' : 'creado'}`,
         description: 'El servicio ha sido guardado correctamente.',
       });
       setOpen(false);
-    } else {
-       const firstError = result.errors ? Object.values(result.errors).flat()[0] : result.error;
-       const errorMessage = firstError || 'Hubo un problema al guardar el servicio.';
-       toast({
-        title: 'Error',
-        description: errorMessage,
-        variant: 'destructive',
-      });
     }
   };
 
@@ -86,6 +111,26 @@ export function ServicioFormSheet({ children, servicio }: ServicioFormSheetProps
               <div className="space-y-4 px-6 flex-1 overflow-y-auto">
                 <FormField
                   control={form.control}
+                  name="localidadId"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Localidad</FormLabel>
+                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Selecciona una localidad" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {localidades.map(l => <SelectItem key={l.id} value={l.id}>{l.title}</SelectItem>)}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
                   name="title"
                   render={({ field }) => (
                     <FormItem>
@@ -99,29 +144,16 @@ export function ServicioFormSheet({ children, servicio }: ServicioFormSheetProps
                 />
                 <FormField
                   control={form.control}
-                  name="description"
+                  name="downloadFile"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Descripción</FormLabel>
+                      <FormLabel>Archivo PDF</FormLabel>
                       <FormControl>
-                        <Textarea
-                          placeholder="Describe el tipo de servicio ofrecido..."
-                          {...field}
-                          rows={10}
+                        <Input 
+                          type="file" 
+                          accept="application/pdf"
+                          onChange={(e) => field.onChange(e.target.files)}
                         />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="icon"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Ícono (Nombre de Lucide)</FormLabel>
-                      <FormControl>
-                        <Input {...field} placeholder="Ej: BedDouble, UtensilsCrossed" />
                       </FormControl>
                       <FormMessage />
                     </FormItem>

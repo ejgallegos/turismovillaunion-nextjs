@@ -5,7 +5,7 @@ import sliderItems from '../../data/slider.json';
 export interface SliderItem {
   uuid: string;
   type: 'atractivo' | 'novedad';
-  id: string; // id of the attraction or novelty
+  id: string;
   title: string;
   subtitle: string;
   buttonText?: string;
@@ -14,7 +14,7 @@ export interface SliderItem {
 const dataFilePath = path.join(process.cwd(), 'data/slider.json');
 
 export async function getSliderItems(): Promise<SliderItem[]> {
-  return sliderItems;
+  return sliderItems as SliderItem[];
 }
 
 export async function saveSliderItems(items: SliderItem[]): Promise<void> {

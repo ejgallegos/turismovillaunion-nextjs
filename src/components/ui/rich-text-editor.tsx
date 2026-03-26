@@ -2,7 +2,7 @@
 'use client';
 
 import React, { useCallback, useMemo, useState } from 'react';
-import { createEditor, Descendant, Transforms, Editor, Text } from 'slate';
+import { createEditor, Descendant, Transforms, Editor } from 'slate';
 import { Slate, Editable, withReact, ReactEditor, useSlate } from 'slate-react';
 import { withHistory } from 'slate-history';
 import { Bold, Italic, Code, List, Heading1, Heading2 } from 'lucide-react';
@@ -15,12 +15,12 @@ interface RichTextEditorProps {
   onChange: (value: Descendant[]) => void;
 }
 
-const initialValue: Descendant[] = [
+const initialValue = [
   {
     type: 'paragraph',
     children: [{ text: '' }],
   },
-];
+] as unknown as Descendant[];
 
 const LIST_TYPES = ['numbered-list', 'bulleted-list'];
 
@@ -29,16 +29,17 @@ const toggleBlock = (editor: Editor, format: string) => {
   const isList = LIST_TYPES.includes(format);
 
   Transforms.unwrapNodes(editor, {
-    match: n => LIST_TYPES.includes(n.type as string),
+    match: (n) => LIST_TYPES.includes((n as { type?: string }).type as string),
     split: true,
   });
 
   Transforms.setNodes(editor, {
     type: isActive ? 'paragraph' : isList ? 'list-item' : format,
-  });
+  } as Partial<Descendant>);
 
   if (!isActive && isList) {
-    const block = { type: format, children: [] };
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const block: any = { type: format, children: [] };
     Transforms.wrapNodes(editor, block);
   }
 };
@@ -55,7 +56,7 @@ const toggleMark = (editor: Editor, format: string) => {
 
 const isBlockActive = (editor: Editor, format: string) => {
   const [match] = Editor.nodes(editor, {
-    match: n => n.type === format,
+    match: (n) => (n as { type?: string }).type === format,
   });
 
   return !!match;
@@ -132,7 +133,7 @@ const MarkButton = ({ format, icon: Icon }: { format: string; icon: React.Elemen
   };
 
 export function RichTextEditor({ initialValue: passedInitialValue, onChange }: RichTextEditorProps) {
-  const editor = useMemo(() => withHistory(withReact(createEditor() as ReactEditor)), []);
+  const editor = useMemo(() => withHistory(withReact(createEditor() as unknown as ReactEditor)), []);
   const [value, setValue] = useState<Descendant[]>(passedInitialValue || initialValue);
 
   const renderElement = useCallback((props: any) => <Element {...props} />, []);
@@ -144,7 +145,7 @@ export function RichTextEditor({ initialValue: passedInitialValue, onChange }: R
   };
 
   return (
-    <Slate editor={editor} initialValue={value} onChange={handleChange}>
+    <Slate editor={editor as unknown as ReactEditor} initialValue={value} onChange={handleChange}>
       <div className="rounded-md border border-input">
         <div className="flex border-b border-input p-1">
           <MarkButton format="bold" icon={Bold} />

@@ -3,9 +3,10 @@ import { getFolletos } from '@/lib/folletos.service';
 import { notFound } from 'next/navigation';
 import { FolletoForm } from '../../folleto-form';
 
-export default async function EditFolletoPage({ params }: { params: { id: string } }) {
+export default async function EditFolletoPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
   const folletos = await getFolletos();
-  const folleto = folletos.find(f => f.id === params.id);
+  const folleto = folletos.find(f => f.id === id);
 
   if (!folleto) {
     notFound();

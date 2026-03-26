@@ -11,11 +11,12 @@ import { ContentRenderer } from '@/components/content-renderer';
 
 // Generate metadata for the page
 export async function generateMetadata(
-  { params }: { params: { id: string } },
+  { params }: { params: Promise<{ id: string }> },
   parent: ResolvingMetadata
 ): Promise<Metadata> {
+  const { id } = await params;
   const novedades = await getNovedades();
-  const novedad = novedades.find((n) => n.id === params.id);
+  const novedad = novedades.find((n) => n.id === id);
 
   if (!novedad) {
     return {
@@ -55,7 +56,7 @@ export async function generateMetadata(
         },
       };
     } catch (error) {
-      console.warn(`[AI Metadata Warning] Failed to generate AI metadata for novedad "${params.id}". This can happen due to API errors or content restrictions. Falling back to basic metadata.`, error);
+      console.warn(`[AI Metadata Warning] Failed to generate AI metadata for novedad "${id}". This can happen due to API errors or content restrictions. Falling back to basic metadata.`, error);
     }
   }
 
@@ -89,9 +90,10 @@ export async function generateStaticParams() {
   }));
 }
 
-export default async function NovedadDetailPage({ params }: { params: { id: string } }) {
+export default async function NovedadDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
   const novedades = await getNovedades();
-  const novedad = novedades.find((n) => n.id === params.id);
+  const novedad = novedades.find((n) => n.id === id);
 
   if (!novedad) {
     notFound();

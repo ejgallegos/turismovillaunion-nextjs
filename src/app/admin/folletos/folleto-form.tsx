@@ -40,12 +40,12 @@ interface FolletoFormProps {
   folleto?: Folleto | null;
 }
 
-const initialValue: Descendant[] = [
+const initialValue = [
     {
       type: 'paragraph',
       children: [{ text: '' }],
     },
-];
+  ] as unknown as Descendant[];
 
 export function FolletoForm({ folleto }: FolletoFormProps) {
   const router = useRouter();

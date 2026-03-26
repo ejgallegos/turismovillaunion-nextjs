@@ -3,33 +3,40 @@
 import { escape } from 'html-escaper';
 import { Text } from 'slate';
 
-interface Node {
-  text?: string;
+interface CustomText {
+  text: string;
   bold?: boolean;
   italic?: boolean;
   code?: boolean;
-  type?: string;
-  children?: Node[];
 }
 
-function serializeNode(node: Node): string {
+interface CustomElement {
+  type?: string;
+  children?: CustomText[];
+}
+
+type CustomNode = CustomText | CustomElement;
+
+function serializeNode(node: CustomNode): string {
   if (Text.isText(node)) {
-    let string = escape(node.text || '');
-    if (node.bold) {
-      string = `<strong>${string}</strong>`;
+    const textNode = node as CustomText;
+    let str = escape(textNode.text || '');
+    if (textNode.bold) {
+      str = `<strong>${str}</strong>`;
     }
-    if (node.italic) {
-      string = `<em>${string}</em>`;
+    if (textNode.italic) {
+      str = `<em>${str}</em>`;
     }
-    if (node.code) {
-        string = `<code>${string}</code>`;
+    if (textNode.code) {
+        str = `<code>${str}</code>`;
     }
-    return string;
+    return str;
   }
 
-  const children = node.children?.map(n => serializeNode(n)).join('') ?? '';
+  const element = node as CustomElement;
+  const children = element.children?.map(n => serializeNode(n)).join('') ?? '';
 
-  switch (node.type) {
+  switch (element.type) {
     case 'heading-one':
       return `<h1>${children}</h1>`;
     case 'heading-two':
@@ -45,8 +52,8 @@ function serializeNode(node: Node): string {
   }
 }
 
-export function serializeSlate(nodes: string | Node[]): string {
-  let parsedNodes: Node[];
+export function serializeSlate(nodes: string | unknown[]): string {
+  let parsedNodes: unknown[];
 
   try {
     if (typeof nodes === 'string') {
@@ -58,9 +65,8 @@ export function serializeSlate(nodes: string | Node[]): string {
       return '<p></p>';
     }
   } catch (e) {
-    // If it's not valid JSON, treat it as plain text and wrap in a paragraph
     return `<p>${escape(String(nodes)).replace(/\n/g, '<br>')}</p>`;
   }
 
-  return parsedNodes.map(serializeNode).join('');
+  return parsedNodes.map((n) => serializeNode(n as CustomNode)).join('');
 }

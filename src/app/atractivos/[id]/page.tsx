@@ -11,11 +11,12 @@ import { ContentRenderer } from '@/components/content-renderer';
 
 // Generate metadata for the page
 export async function generateMetadata(
-  { params }: { params: { id: string } },
+  { params }: { params: Promise<{ id: string }> },
   parent: ResolvingMetadata
 ): Promise<Metadata> {
+  const { id } = await params;
   const attractions = await getAttractions();
-  const attraction = attractions.find((a) => a.id === params.id);
+  const attraction = attractions.find((a) => a.id === id);
 
   if (!attraction) {
     return {
@@ -56,7 +57,7 @@ export async function generateMetadata(
         },
       };
     } catch (error) {
-        console.warn(`[AI Metadata Warning] Failed to generate AI metadata for attraction "${params.id}". This can happen due to API errors or content restrictions. Falling back to basic metadata.`, error);
+        console.warn(`[AI Metadata Warning] Failed to generate AI metadata for attraction "${id}". This can happen due to API errors or content restrictions. Falling back to basic metadata.`, error);
     }
   }
 
@@ -90,9 +91,10 @@ export async function generateStaticParams() {
   }));
 }
 
-export default async function AttractionDetailPage({ params }: { params: { id: string } }) {
+export default async function AttractionDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
   const attractions = await getAttractions();
-  const attraction = attractions.find((a) => a.id === params.id);
+  const attraction = attractions.find((a) => a.id === id);
 
   if (!attraction) {
     notFound();

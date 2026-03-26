@@ -13,7 +13,7 @@ export interface Novedad {
 const dataFilePath = path.join(process.cwd(), 'data/novedades.json');
 
 export async function getNovedades(): Promise<Novedad[]> {
-  return novedades;
+  return novedades as Novedad[];
 }
 
 export async function saveNovedades(novedades: Novedad[]): Promise<void> {

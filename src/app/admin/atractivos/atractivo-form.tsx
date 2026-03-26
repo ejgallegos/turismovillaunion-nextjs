@@ -39,12 +39,12 @@ interface AtractivoFormProps {
   attraction?: Attraction | null;
 }
 
-const initialValue: Descendant[] = [
+const initialValue = [
     {
       type: 'paragraph',
       children: [{ text: '' }],
     },
-];
+  ] as unknown as Descendant[];
 
 export function AtractivoForm({ attraction }: AtractivoFormProps) {
   const router = useRouter();

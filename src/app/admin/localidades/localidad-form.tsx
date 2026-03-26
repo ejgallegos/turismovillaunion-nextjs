@@ -39,12 +39,12 @@ interface LocalidadFormProps {
   localidad?: Localidad | null;
 }
 
-const initialValue: Descendant[] = [
+const initialValue = [
     {
       type: 'paragraph',
       children: [{ text: '' }],
     },
-];
+  ] as unknown as Descendant[];
 
 export function LocalidadForm({ localidad }: LocalidadFormProps) {
   const router = useRouter();

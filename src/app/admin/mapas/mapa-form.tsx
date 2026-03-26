@@ -40,12 +40,12 @@ interface MapaFormProps {
   mapa?: Mapa | null;
 }
 
-const initialValue: Descendant[] = [
+const initialValue = [
     {
       type: 'paragraph',
       children: [{ text: '' }],
     },
-];
+  ] as unknown as Descendant[];
 
 export function MapaForm({ mapa }: MapaFormProps) {
   const router = useRouter();

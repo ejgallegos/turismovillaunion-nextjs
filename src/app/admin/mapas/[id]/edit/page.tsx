@@ -3,9 +3,10 @@ import { getMapas } from '@/lib/mapas.service';
 import { notFound } from 'next/navigation';
 import { MapaForm } from '../../mapa-form';
 
-export default async function EditMapaPage({ params }: { params: { id: string } }) {
+export default async function EditMapaPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
   const mapas = await getMapas();
-  const mapa = mapas.find(m => m.id === params.id);
+  const mapa = mapas.find(m => m.id === id);
 
   if (!mapa) {
     notFound();
