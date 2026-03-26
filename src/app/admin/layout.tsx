@@ -85,7 +85,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 							href="/admin/localidades"
 							className="text-muted-foreground transition-colors hover:text-foreground whitespace-nowrap px-1 lg:px-2 py-1 text-xs lg:text-sm"
 						>
-							Local
+							Localidades
 						</Link>
 						<Link
 							href="/admin/novedades"
@@ -104,12 +104,6 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 							className="text-muted-foreground transition-colors hover:text-foreground whitespace-nowrap px-1 lg:px-2 py-1 text-xs lg:text-sm"
 						>
 							Folletos
-						</Link>
-						<Link
-							href="/admin/mapas"
-							className="text-muted-foreground transition-colors hover:text-foreground whitespace-nowrap px-1 lg:px-2 py-1 text-xs lg:text-sm"
-						>
-							Mapas
 						</Link>
 						<Link
 							href="/admin/mapa-interactivo"
@@ -193,13 +187,6 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 								className="text-muted-foreground transition-colors hover:text-foreground p-2 rounded-md hover:bg-accent"
 							>
 								Folletos
-							</Link>
-							<Link
-								href="/admin/mapas"
-								onClick={closeMobileMenu}
-								className="text-muted-foreground transition-colors hover:text-foreground p-2 rounded-md hover:bg-accent"
-							>
-								Mapas
 							</Link>
 							<Link
 								href="/admin/mapa-interactivo"

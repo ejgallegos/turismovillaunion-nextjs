@@ -6,12 +6,62 @@ import { getSliderItems, saveSliderItems, SliderItem } from '@/lib/slider.servic
 import { randomUUID } from 'crypto';
 
 const sliderItemSchema = z.object({
+  uuid: z.string().optional(),
   type: z.enum(['atractivo', 'novedad']),
   id: z.string().min(1, 'Debe seleccionar un elemento.'),
   title: z.string().min(3, 'El título es requerido.'),
   subtitle: z.string().min(10, 'El subtítulo es requerido.'),
   buttonText: z.string().optional(),
 });
+
+export async function updateSliderItem(formData: FormData) {
+  const rawData = {
+    uuid: formData.get('uuid')?.toString(),
+    type: formData.get('type'),
+    id: formData.get('id'),
+    title: formData.get('title'),
+    subtitle: formData.get('subtitle'),
+    buttonText: formData.get('buttonText')?.toString() || undefined,
+  };
+
+  const validatedFields = sliderItemSchema.safeParse(rawData);
+
+  if (!validatedFields.success) {
+    return {
+      success: false,
+      errors: validatedFields.error.flatten().fieldErrors,
+    };
+  }
+
+  try {
+    const sliderItems = await getSliderItems();
+    const { uuid, ...data } = validatedFields.data;
+    
+    if (!uuid) {
+      return { success: false, error: 'UUID es requerido para actualizar.' };
+    }
+
+    const index = sliderItems.findIndex((item) => item.uuid === uuid);
+    if (index === -1) {
+      return { success: false, error: 'Elemento no encontrado.' };
+    }
+
+    sliderItems[index] = {
+      ...sliderItems[index],
+      ...data,
+    };
+
+    await saveSliderItems(sliderItems);
+    
+    revalidatePath('/admin/slider');
+    revalidatePath('/');
+    
+    return { success: true };
+  } catch (e) {
+    console.error(e);
+    return { success: false, error: 'Error al actualizar el elemento del slider.' };
+  }
+}
 
 export async function addSliderItem(formData: FormData) {
   const rawData = {

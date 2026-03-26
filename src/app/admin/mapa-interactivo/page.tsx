@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { getMapaInteractivoData } from '@/lib/admin-mapa.service';
+import { getMapas } from '@/lib/mapas.service';
 import { AdminMapaContent } from './admin-mapa-content';
 
 export const metadata: Metadata = {
@@ -8,6 +9,9 @@ export const metadata: Metadata = {
 };
 
 export default async function AdminMapaInteractivoPage() {
-  const data = await getMapaInteractivoData();
-  return <AdminMapaContent initialData={data} />;
+  const [mapaData, mapas] = await Promise.all([
+    getMapaInteractivoData(),
+    getMapas(),
+  ]);
+  return <AdminMapaContent initialData={{ ...mapaData, mapas }} />;
 }

@@ -1,13 +1,14 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useMemo, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useToast } from '@/hooks/use-toast';
-import { addSliderItem } from './actions';
+import { addSliderItem, updateSliderItem } from './actions';
 import type { Attraction } from '@/lib/atractivos.service';
 import type { Novedad } from '@/lib/novedades.service';
+import type { SliderItem } from '@/lib/slider.service';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -17,6 +18,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 
 const sliderItemSchema = z.object({
+  uuid: z.string().optional(),
   type: z.enum(['atractivo', 'novedad'], { required_error: 'Debe seleccionar un tipo.' }),
   id: z.string().min(1, 'Debe seleccionar un elemento.'),
   title: z.string().min(3, { message: 'El título debe tener al menos 3 caracteres.' }),
@@ -29,19 +31,40 @@ type SliderItemFormValues = z.infer<typeof sliderItemSchema>;
 interface AddSliderItemFormProps {
   attractions: Attraction[];
   novedades: Novedad[];
+  editingItem?: SliderItem;
+  onSuccess?: () => void;
+  onCancel?: () => void;
+  onSuccessUrl?: string;
+  onCancelUrl?: string;
 }
 
-export function AddSliderItemForm({ attractions, novedades }: AddSliderItemFormProps) {
+export function AddSliderItemForm({ attractions, novedades, editingItem, onSuccess, onCancel, onSuccessUrl, onCancelUrl }: AddSliderItemFormProps) {
   const { toast } = useToast();
   const form = useForm<SliderItemFormValues>({
     resolver: zodResolver(sliderItemSchema),
     defaultValues: {
+      uuid: '',
+      type: 'atractivo',
       id: '',
       title: '',
       subtitle: '',
       buttonText: '',
     },
   });
+
+  // Populate form when editing
+  useEffect(() => {
+    if (editingItem) {
+      form.reset({
+        uuid: editingItem.uuid,
+        type: editingItem.type,
+        id: editingItem.id,
+        title: editingItem.title,
+        subtitle: editingItem.subtitle,
+        buttonText: editingItem.buttonText || '',
+      });
+    }
+  }, [editingItem, form]);
 
   const selectedType = form.watch('type');
 
@@ -57,6 +80,9 @@ export function AddSliderItemForm({ attractions, novedades }: AddSliderItemFormP
   
   const onSubmit = async (values: SliderItemFormValues) => {
     const formData = new FormData();
+    if (values.uuid) {
+      formData.append('uuid', values.uuid);
+    }
     formData.append('type', values.type);
     formData.append('id', values.id);
     formData.append('title', values.title);
@@ -65,28 +91,51 @@ export function AddSliderItemForm({ attractions, novedades }: AddSliderItemFormP
       formData.append('buttonText', values.buttonText);
     }
 
-    const result = await addSliderItem(formData);
-    if (result.success) {
-      toast({
-        title: 'Elemento añadido',
-        description: 'El elemento se ha añadido al slider principal.',
-      });
-      form.reset();
+    let result;
+    if (editingItem) {
+      result = await updateSliderItem(formData);
+      if (result.success) {
+        toast({
+          title: 'Elemento actualizado',
+          description: 'El elemento se ha actualizado correctamente.',
+        });
+        if (onSuccess) {
+          onSuccess();
+        } else if (onSuccessUrl) {
+          window.location.href = onSuccessUrl;
+        }
+      } else {
+        const errorMessage = result.errors ? (Object.values(result.errors).flat()[0] as string) : result.error;
+        toast({
+          title: 'Error',
+          description: errorMessage || 'No se pudo actualizar el elemento.',
+          variant: 'destructive',
+        });
+      }
     } else {
-       const errorMessage = result.errors ? (Object.values(result.errors).flat()[0] as string) : result.error;
-       toast({
-        title: 'Error',
-        description: errorMessage || 'No se pudo añadir el elemento.',
-        variant: 'destructive',
-      });
+      result = await addSliderItem(formData);
+      if (result.success) {
+        toast({
+          title: 'Elemento añadido',
+          description: 'El elemento se ha añadido al slider principal.',
+        });
+        form.reset();
+      } else {
+        const errorMessage = result.errors ? (Object.values(result.errors).flat()[0] as string) : result.error;
+        toast({
+          title: 'Error',
+          description: errorMessage || 'No se pudo añadir el elemento.',
+          variant: 'destructive',
+        });
+      }
     }
   };
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Añadir Elemento al Slider</CardTitle>
-        <CardDescription>Selecciona un tipo y luego un elemento para añadir al slider de la página principal.</CardDescription>
+        <CardTitle>{editingItem ? 'Editar Elemento' : 'Añadir Elemento al Slider'}</CardTitle>
+        <CardDescription>{editingItem ? 'Modifica los datos del elemento seleccionado.' : 'Selecciona un tipo y luego un elemento para añadir al slider de la página principal.'}</CardDescription>
       </CardHeader>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -179,10 +228,21 @@ export function AddSliderItemForm({ attractions, novedades }: AddSliderItemFormP
               )}
             />
           </CardContent>
-          <CardFooter>
+          <CardFooter className="flex gap-2">
             <Button type="submit" disabled={form.formState.isSubmitting}>
-              {form.formState.isSubmitting ? 'Añadiendo...' : 'Añadir al Slider'}
+              {form.formState.isSubmitting ? 'Guardando...' : editingItem ? 'Actualizar' : 'Añadir al Slider'}
             </Button>
+            {editingItem && (onCancel || onCancelUrl) && (
+              <Button type="button" variant="outline" onClick={() => {
+                if (onCancel) {
+                  onCancel();
+                } else if (onCancelUrl) {
+                  window.location.href = onCancelUrl;
+                }
+              }}>
+                Cancelar
+              </Button>
+            )}
           </CardFooter>
         </form>
       </Form>

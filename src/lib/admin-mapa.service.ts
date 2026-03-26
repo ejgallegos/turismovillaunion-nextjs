@@ -1,4 +1,7 @@
 import data from '../../data/mapa-interactivo.json';
+import type { Mapa } from './mapas.service';
+
+export { Mapa };
 
 export interface LugarMapa {
   id: string;

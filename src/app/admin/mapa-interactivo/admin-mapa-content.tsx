@@ -1,30 +1,30 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Switch } from '@/components/ui/switch';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { 
-  MapPin, Plus, Trash2, Edit, Bus, Compass, 
-  Save, X, Check, ChevronDown, ChevronUp, FolderOpen
+  MapPin, Trash2, Edit, Bus, Compass, 
+  Save, X, Download, FolderOpen
 } from 'lucide-react';
 import { 
-  type LugarMapa, type TipMapa, type ColectivoMapa, type CategoriaMapa
+  type TipMapa, type ColectivoMapa, type Mapa
 } from '@/lib/admin-mapa.service';
 import { 
-  upsertLugar, deleteLugar, 
   upsertTip, deleteTip, 
   upsertColectivo, deleteColectivo
 } from './actions';
+import { upsertMapa, deleteMapa } from '@/app/admin/mapas/actions';
 
 interface MapaInteractivoData {
-  lugares: LugarMapa[];
+  lugares: any[];
   tips: TipMapa[];
   colectivos: ColectivoMapa[];
-  categorias: CategoriaMapa[];
+  mapas: Mapa[];
+  categorias: any[];
 }
 
 interface Props {
@@ -33,17 +33,14 @@ interface Props {
 
 export function AdminMapaContent({ initialData }: Props) {
   const [data, setData] = useState<MapaInteractivoData>(initialData);
-  const [activeTab, setActiveTab] = useState('lugares');
+  const [activeTab, setActiveTab] = useState('mapas');
   const [editingId, setEditingId] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
 
-  // Form states
-  const [lugarForm, setLugarForm] = useState<LugarMapa>({
-    id: '', nombre: '', categoria: 'atractivo', descripcion: '',
-    direccion: '', telefono: '', imagen: '', latitud: -28.93, longitud: -68.22, activo: true
-  });
-  const [lugarImageFile, setLugarImageFile] = useState<File | null>(null);
-  const [lugarImagePreview, setLugarImagePreview] = useState<string | null>(null);
+  // Forms
+  const [mapaForm, setMapaForm] = useState<Mapa>({ id: '', title: '', description: '', downloadUrl: '' });
+  const [mapaFile, setMapaFile] = useState<File | null>(null);
+  const [mapaFilePreview, setMapaFilePreview] = useState<string | null>(null);
 
   const [tipForm, setTipForm] = useState<TipMapa>({ id: '', texto: '', activo: true });
 
@@ -51,13 +48,11 @@ export function AdminMapaContent({ initialData }: Props) {
     id: '', origen: '', horaSalida: '', horaLlegada: '', frecuencia: 'Diario', activo: true
   });
 
-  const resetLugarForm = () => {
-    setLugarForm({
-      id: '', nombre: '', categoria: 'atractivo', descripcion: '',
-      direccion: '', telefono: '', imagen: '', latitud: -28.93, longitud: -68.22, activo: true
-    });
-    setLugarImageFile(null);
-    setLugarImagePreview(null);
+  // Reset forms
+  const resetMapaForm = () => {
+    setMapaForm({ id: '', title: '', description: '', downloadUrl: '' });
+    setMapaFile(null);
+    setMapaFilePreview(null);
   };
 
   const resetTipForm = () => setTipForm({ id: '', texto: '', activo: true });
@@ -65,60 +60,50 @@ export function AdminMapaContent({ initialData }: Props) {
     id: '', origen: '', horaSalida: '', horaLlegada: '', frecuencia: 'Diario', activo: true
   });
 
-  const handleSaveLugar = async () => {
+  // MAPAS handlers
+  const handleSaveMapa = async () => {
     setIsSaving(true);
     try {
       const formData = new FormData();
-      formData.append('id', lugarForm.id || '');
-      formData.append('nombre', lugarForm.nombre);
-      formData.append('categoria', lugarForm.categoria);
-      formData.append('descripcion', lugarForm.descripcion);
-      if (lugarForm.direccion) formData.append('direccion', lugarForm.direccion);
-      if (lugarForm.telefono) formData.append('telefono', lugarForm.telefono);
-      formData.append('imagen', lugarForm.imagen);
-      if (lugarImageFile) formData.append('imagenFile', lugarImageFile);
-      formData.append('latitud', lugarForm.latitud.toString());
-      formData.append('longitud', lugarForm.longitud.toString());
-      formData.append('activo', lugarForm.activo.toString());
+      formData.append('id', mapaForm.id || '');
+      formData.append('title', mapaForm.title);
+      formData.append('description', mapaForm.description);
+      if (mapaFile) formData.append('downloadFile', mapaFile);
       
-      const result = await upsertLugar(formData) as { success: boolean; data?: LugarMapa; error?: string };
+      const result = await upsertMapa(formData) as { success: boolean; error?: string };
       
-      if (result.success && result.data) {
-        setData(prev => {
-          const exists = prev.lugares.find(l => l.id === result.data?.id);
-          if (exists) {
-            return { ...prev, lugares: prev.lugares.map(l => l.id === result.data?.id ? result.data! : l) };
-          }
-          return { ...prev, lugares: [...prev.lugares, result.data!] };
-        });
-        resetLugarForm();
-        setEditingId(null);
+      if (result.success) {
+        // Refresh mapas from server
+        window.location.reload();
+      } else {
+        alert(result.error || 'Error al guardar');
       }
     } catch (error) {
-      console.error('Error saving lugar:', error);
+      console.error('Error saving mapa:', error);
     }
     setIsSaving(false);
   };
 
-  const handleDeleteLugar = async (id: string) => {
-    if (!confirm('¿Eliminar este lugar?')) return;
+  const handleDeleteMapa = async (id: string) => {
+    if (!confirm('¿Eliminar este mapa?')) return;
     setIsSaving(true);
     try {
-      await deleteLugar(id);
-      setData(prev => ({ ...prev, lugares: prev.lugares.filter(l => l.id !== id) }));
+      await deleteMapa(id);
+      setData(prev => ({ ...prev, mapas: prev.mapas.filter(m => m.id !== id) }));
     } catch (error) {
-      console.error('Error deleting lugar:', error);
+      console.error('Error deleting mapa:', error);
     }
     setIsSaving(false);
   };
 
-  const handleEditLugar = (lugar: LugarMapa) => {
-    setLugarForm(lugar);
-    setLugarImageFile(null);
-    setLugarImagePreview(lugar.imagen || null);
-    setEditingId(lugar.id);
+  const handleEditMapa = (mapa: Mapa) => {
+    setMapaForm(mapa);
+    setMapaFile(null);
+    setMapaFilePreview(mapa.downloadUrl || null);
+    setEditingId(mapa.id);
   };
 
+  // TIPS handlers
   const handleSaveTip = async () => {
     setIsSaving(true);
     try {
@@ -161,6 +146,7 @@ export function AdminMapaContent({ initialData }: Props) {
     setEditingId(tip.id);
   };
 
+  // COLECTIVOS handlers
   const handleSaveColectivo = async () => {
     setIsSaving(true);
     try {
@@ -215,76 +201,57 @@ export function AdminMapaContent({ initialData }: Props) {
 
       <Tabs value={activeTab} onValueChange={setActiveTab}>
         <TabsList className="mb-6">
-          <TabsTrigger value="lugares">Lugares ({data.lugares.length})</TabsTrigger>
+          <TabsTrigger value="mapas">Mapas ({data.mapas.length})</TabsTrigger>
           <TabsTrigger value="tips">Tips ({data.tips.length})</TabsTrigger>
           <TabsTrigger value="colectivos">Colectivos ({data.colectivos.length})</TabsTrigger>
         </TabsList>
 
-        {/* LUGARES */}
-        <TabsContent value="lugares">
+        {/* MAPAS */}
+        <TabsContent value="mapas">
           <Card>
             <CardHeader>
-              <CardTitle>Gestionar Lugares del Mapa</CardTitle>
-              <CardDescription>Agrega, edita o elimina lugares turísticos</CardDescription>
+              <CardTitle>Gestionar Mapas para Descargar</CardTitle>
+              <CardDescription>Agrega o elimina mapas descargables (PDF, JPG, PNG)</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="grid gap-4 mb-6 p-4 bg-slate-50 rounded-lg">
-                <h4 className="font-semibold">{editingId ? 'Editar Lugar' : 'Agregar Nuevo Lugar'}</h4>
+                <h4 className="font-semibold">{editingId ? 'Editar Mapa' : 'Agregar Nuevo Mapa'}</h4>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <Label>Nombre</Label>
-                    <Input value={lugarForm.nombre} onChange={e => setLugarForm({...lugarForm, nombre: e.target.value})} placeholder="Nombre del lugar" />
-                  </div>
-                  <div>
-                    <Label>Categoría</Label>
-                    <select 
-                      className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-                      value={lugarForm.categoria}
-                      onChange={e => setLugarForm({...lugarForm, categoria: e.target.value})}
-                    >
-                      {data.categorias.map(cat => (
-                        <option key={cat.id} value={cat.id}>{cat.nombre}</option>
-                      ))}
-                    </select>
+                    <Label>Título</Label>
+                    <Input 
+                      value={mapaForm.title} 
+                      onChange={e => setMapaForm({...mapaForm, title: e.target.value})} 
+                      placeholder="Ej: Mapa de Villa Unión" 
+                    />
                   </div>
                   <div className="md:col-span-2">
                     <Label>Descripción</Label>
-                    <Input value={lugarForm.descripcion} onChange={e => setLugarForm({...lugarForm, descripcion: e.target.value})} placeholder="Descripción del lugar" />
+                    <Input 
+                      value={mapaForm.description} 
+                      onChange={e => setMapaForm({...mapaForm, description: e.target.value})} 
+                      placeholder="Descripción del mapa" 
+                    />
                   </div>
                   <div>
-                    <Label>Dirección</Label>
-                    <Input value={lugarForm.direccion} onChange={e => setLugarForm({...lugarForm, direccion: e.target.value})} placeholder="Dirección" />
-                  </div>
-                  <div>
-                    <Label>Teléfono</Label>
-                    <Input value={lugarForm.telefono} onChange={e => setLugarForm({...lugarForm, telefono: e.target.value})} placeholder="Teléfono" />
-                  </div>
-                  <div>
-                    <Label>URL Imagen</Label>
+                    <Label>Archivo (PDF, JPG, PNG)</Label>
                     <div className="flex gap-2">
                       <Input 
-                        value={lugarForm.imagen} 
-                        onChange={e => setLugarForm({...lugarForm, imagen: e.target.value})} 
-                        placeholder="/images/..." 
+                        value={mapaForm.downloadUrl} 
+                        onChange={e => setMapaForm({...mapaForm, downloadUrl: e.target.value})} 
+                        placeholder="/uploads/mapas/..." 
                         className="flex-1"
                       />
                       <input
                         type="file"
-                        id="lugar-image-upload"
-                        accept="image/*"
+                        id="mapa-file-upload"
+                        accept=".pdf,.jpg,.jpeg,.png,.webp"
                         className="hidden"
                         onChange={(e) => {
                           const file = e.target.files?.[0];
                           if (file) {
-                            setLugarImageFile(file);
-                            const reader = new FileReader();
-                            reader.onload = (event) => {
-                              const result = event.target?.result;
-                              if (typeof result === 'string') {
-                                setLugarImagePreview(result);
-                              }
-                            };
-                            reader.readAsDataURL(file);
+                            setMapaFile(file);
+                            setMapaFilePreview(URL.createObjectURL(file));
                           }
                         }}
                       />
@@ -292,47 +259,25 @@ export function AdminMapaContent({ initialData }: Props) {
                         type="button"
                         variant="outline"
                         size="icon"
-                        onClick={() => document.getElementById('lugar-image-upload')?.click()}
+                        onClick={() => document.getElementById('mapa-file-upload')?.click()}
                       >
                         <FolderOpen className="w-4 h-4" />
                       </Button>
                     </div>
-                    {(lugarImagePreview || lugarForm.imagen) && (
-                      <div className="mt-2 relative w-24 h-24 rounded-lg overflow-hidden border">
-                        <img 
-                          src={lugarImagePreview || lugarForm.imagen} 
-                          alt="Preview" 
-                          className="w-full h-full object-cover"
-                        />
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setLugarImageFile(null);
-                            setLugarImagePreview(null);
-                            setLugarForm({ ...lugarForm, imagen: '' });
-                          }}
-                          className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 w-5 h-5 flex items-center justify-center"
-                        >
-                          <X className="w-3 h-3" />
-                        </button>
+                    {(mapaFilePreview || mapaForm.downloadUrl) && (
+                      <div className="mt-2 flex items-center gap-2">
+                        <Download className="w-4 h-4 text-green-500" />
+                        <span className="text-sm text-green-500">Archivo cargado</span>
                       </div>
                     )}
                   </div>
-                  <div>
-                    <Label>Latitud</Label>
-                    <Input type="number" step="0.0001" value={lugarForm.latitud} onChange={e => setLugarForm({...lugarForm, latitud: parseFloat(e.target.value)})} />
-                  </div>
-                  <div>
-                    <Label>Longitud</Label>
-                    <Input type="number" step="0.0001" value={lugarForm.longitud} onChange={e => setLugarForm({...lugarForm, longitud: parseFloat(e.target.value)})} />
-                  </div>
                 </div>
                 <div className="flex gap-2">
-                  <Button onClick={handleSaveLugar} disabled={isSaving}>
+                  <Button onClick={handleSaveMapa} disabled={isSaving}>
                     <Save className="w-4 h-4 mr-2" />{isSaving ? 'Guardando...' : 'Guardar'}
                   </Button>
                   {editingId && (
-                    <Button variant="outline" onClick={() => { resetLugarForm(); setEditingId(null); }}>
+                    <Button variant="outline" onClick={() => { resetMapaForm(); setEditingId(null); }}>
                       <X className="w-4 h-4 mr-2" />Cancelar
                     </Button>
                   )}
@@ -340,20 +285,20 @@ export function AdminMapaContent({ initialData }: Props) {
               </div>
 
               <div className="space-y-2">
-                {data.lugares.map(lugar => (
-                  <div key={lugar.id} className="flex items-center justify-between p-3 border rounded-lg">
+                {data.mapas.map(mapa => (
+                  <div key={mapa.id} className="flex items-center justify-between p-3 border rounded-lg">
                     <div className="flex items-center gap-3">
-                      <MapPin className="w-5 h-5 text-primary" />
+                      <Download className="w-5 h-5 text-primary" />
                       <div>
-                        <p className="font-medium">{lugar.nombre}</p>
-                        <p className="text-sm text-muted-foreground">{lugar.categoria} • {lugar.direccion}</p>
+                        <p className="font-medium">{mapa.title}</p>
+                        <p className="text-sm text-muted-foreground">{mapa.description}</p>
                       </div>
                     </div>
                     <div className="flex gap-2">
-                      <Button variant="outline" size="sm" onClick={() => handleEditLugar(lugar)}>
+                      <Button variant="outline" size="sm" onClick={() => handleEditMapa(mapa)}>
                         <Edit className="w-4 h-4" />
                       </Button>
-                      <Button variant="destructive" size="sm" onClick={() => handleDeleteLugar(lugar.id)}>
+                      <Button variant="destructive" size="sm" onClick={() => handleDeleteMapa(mapa.id)}>
                         <Trash2 className="w-4 h-4" />
                       </Button>
                     </div>
@@ -369,7 +314,7 @@ export function AdminMapaContent({ initialData }: Props) {
           <Card>
             <CardHeader>
               <CardTitle>Gestionar Tips de Viaje</CardTitle>
-              <CardDescription>Agrega o elimina tips informativos</CardDescription>
+              <CardDescription>Agrega o elimina tips informativos que se muestran en el mapa</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="grid gap-4 mb-6 p-4 bg-slate-50 rounded-lg">
@@ -417,7 +362,7 @@ export function AdminMapaContent({ initialData }: Props) {
           <Card>
             <CardHeader>
               <CardTitle>Gestionar Colectivos</CardTitle>
-              <CardDescription>Agrega o elimina horarios de colectivos</CardDescription>
+              <CardDescription>Agrega o elimina horarios de colectivos que se muestran en el mapa</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="grid gap-4 mb-6 p-4 bg-slate-50 rounded-lg">

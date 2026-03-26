@@ -2,12 +2,12 @@ import fs from 'fs/promises';
 import path from 'path';
 import mapas from '../../data/mapas.json';
 
-export interface Mapa {
+export type Mapa = {
   id: string;
   title: string;
   description: string;
   downloadUrl?: string;
-}
+};
 
 const dataFilePath = path.join(process.cwd(), 'data/mapas.json');
 
