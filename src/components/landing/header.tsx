@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Logo } from '@/components/icons';
@@ -34,13 +35,14 @@ export function Header() {
 				className="flex items-center gap-3"
 				aria-label="Volver a la página principal"
 			>
-				<Logo
-					src="/images/Logos/logo-sec.png"
-					alt="Secretaría de Turismo"
-					width={100}
-					height={100}
-				/>
-				{/* <h1 className="text-white text-lg md:text-xl font-black tracking-tight hidden sm:block">VILLA UNIÓN</h1> */}
+				<div className="relative w-36 h-11 md:w-50 md:h-14 drop-shadow-[0_0_15px_rgba(255,255,255,0.4)]">
+					<Image
+						src="/images/Logos/logo-municipal.png"
+						alt="Municipio de Villa Unión"
+						fill
+						className="object-contain"
+					/>
+				</div>
 			</Link>
 
 			<nav className="hidden md:flex items-center gap-6 lg:gap-8">
@@ -84,13 +86,7 @@ export function Header() {
 										href="/"
 										className="flex items-center gap-2"
 									>
-										<Logo
-											src="/images/Logos/logo-sec.png"
-											alt="Secretaría de Turismo"
-											width={100}
-											height={100}
-										/>
-										{/* <span className="font-bold">VILLA UNIÓN</span> */}
+										<span className="text-xl font-bold">Villa Unión</span>
 									</Link>
 								</SheetClose>
 							</SheetTitle>

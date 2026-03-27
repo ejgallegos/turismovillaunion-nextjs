@@ -9,6 +9,8 @@ export interface SliderItem {
   title: string;
   subtitle: string;
   buttonText?: string;
+  buttonUrl?: string;
+  showButton?: boolean;
 }
 
 const dataFilePath = path.join(process.cwd(), 'data/slider.json');

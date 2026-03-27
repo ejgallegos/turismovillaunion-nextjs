@@ -16,6 +16,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
+import { Switch } from '@/components/ui/switch';
 
 const sliderItemSchema = z.object({
   uuid: z.string().optional(),
@@ -24,6 +25,8 @@ const sliderItemSchema = z.object({
   title: z.string().min(3, { message: 'El título debe tener al menos 3 caracteres.' }),
   subtitle: z.string().min(10, { message: 'El subtítulo debe tener al menos 10 caracteres.' }),
   buttonText: z.string().optional(),
+  buttonUrl: z.string().url({ message: 'URL inválida' }).optional().or(z.literal('')),
+  showButton: z.boolean().optional(),
 });
 
 type SliderItemFormValues = z.infer<typeof sliderItemSchema>;
@@ -49,6 +52,8 @@ export function AddSliderItemForm({ attractions, novedades, editingItem, onSucce
       title: '',
       subtitle: '',
       buttonText: '',
+      buttonUrl: '',
+      showButton: false,
     },
   });
 
@@ -62,6 +67,8 @@ export function AddSliderItemForm({ attractions, novedades, editingItem, onSucce
         title: editingItem.title,
         subtitle: editingItem.subtitle,
         buttonText: editingItem.buttonText || '',
+        buttonUrl: editingItem.buttonUrl || '',
+        showButton: editingItem.showButton || false,
       });
     }
   }, [editingItem, form]);
@@ -90,6 +97,10 @@ export function AddSliderItemForm({ attractions, novedades, editingItem, onSucce
     if (values.buttonText) {
       formData.append('buttonText', values.buttonText);
     }
+    if (values.buttonUrl) {
+      formData.append('buttonUrl', values.buttonUrl);
+    }
+    formData.append('showButton', values.showButton ? 'on' : 'off');
 
     let result;
     if (editingItem) {
@@ -216,17 +227,54 @@ export function AddSliderItemForm({ attractions, novedades, editingItem, onSucce
             />
             <FormField
               control={form.control}
-              name="buttonText"
+              name="showButton"
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Texto del Botón (Opcional)</FormLabel>
+                <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4 shadow-sm">
+                  <div className="space-y-0.5">
+                    <FormLabel>Mostrar Botón</FormLabel>
+                    <CardDescription>
+                      Habilita para mostrar el botón en el slider
+                    </CardDescription>
+                  </div>
                   <FormControl>
-                    <Input placeholder="Ej: Ver más, Explorar..." {...field} />
+                    <Switch
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
                   </FormControl>
-                  <FormMessage />
                 </FormItem>
               )}
             />
+            {form.watch('showButton') && (
+              <>
+                <FormField
+                  control={form.control}
+                  name="buttonText"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Texto del Botón</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Ej: Ver más, Explorar..." {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="buttonUrl"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>URL del Botón</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Ej: https://ejemplo.com" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </>
+            )}
           </CardContent>
           <CardFooter className="flex gap-2">
             <Button type="submit" disabled={form.formState.isSubmitting}>

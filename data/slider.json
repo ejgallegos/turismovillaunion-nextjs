@@ -4,6 +4,7 @@
     "type": "novedad",
     "id": "secretar-a-de-turismo-felipe-varela",
     "title": "Secretaría de Turismo Felipe Varela",
-    "subtitle": "Tierra de tradiciones y paisajes apasionantes que no podes dejar de visitar."
+    "subtitle": "Tierra de tradiciones y paisajes apasionantes que no podes dejar de visitar.",
+    "showButton": false
   }
 ]

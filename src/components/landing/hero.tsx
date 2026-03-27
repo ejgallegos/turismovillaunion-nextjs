@@ -23,7 +23,8 @@ interface HeroSlide {
   title: string;
   subtitle: string;
   buttonText?: string;
-  buttonLink: string;
+  buttonUrl?: string;
+  showButton?: boolean;
 }
 
 const HeroSkeleton = () => (
@@ -58,7 +59,8 @@ export function Hero() {
             title: "Villa Unión",
             subtitle: "Tu puerta de entrada a la inmensidad de Talampaya y los secretos del Triásico.",
             buttonText: "Explorar Destinos",
-            buttonLink: "/atractivos",
+            buttonUrl: "/atractivos",
+            showButton: true,
           },
         ]);
       } finally {
@@ -83,7 +85,8 @@ export function Hero() {
     title: "Villa Unión",
     subtitle: "Tu puerta de entrada a la inmensidad de Talampaya y los secretos del Triásico.",
     buttonText: "Explorar Destinos",
-    buttonLink: "/atractivos",
+    buttonUrl: "/atractivos",
+    showButton: true,
   };
 
   const displaySlides = slides.length > 0 ? slides : [defaultSlide];
@@ -146,11 +149,13 @@ export function Hero() {
           </>
         )}
         <div className="flex flex-col md:flex-row items-center justify-center gap-4">
-          <Button asChild className="w-full md:w-auto bg-primary hover:bg-primary/90 text-white px-8 md:px-10 py-4 md:py-5 rounded-xl text-base md:text-lg font-bold transition-all transform hover:scale-105 min-h-[48px]">
-            <Link href={activeSlide.buttonLink || defaultSlide.buttonLink}>
-              {activeSlide.buttonText || defaultSlide.buttonText}
-            </Link>
-          </Button>
+          {((activeSlide.showButton !== undefined && activeSlide.showButton) || (activeSlide.showButton === undefined && defaultSlide.showButton)) && (
+            <Button asChild className="w-full md:w-auto bg-primary hover:bg-primary/90 text-white px-8 md:px-10 py-4 md:py-5 rounded-xl text-base md:text-lg font-bold transition-all transform hover:scale-105 min-h-[48px]">
+              <Link href={activeSlide.buttonUrl || defaultSlide.buttonUrl}>
+                {activeSlide.buttonText || defaultSlide.buttonText}
+              </Link>
+            </Button>
+          )}
         </div>
       </div>
       

@@ -37,7 +37,8 @@ export async function getHeroSlidesData() {
                 title: item.title,
                 subtitle: item.subtitle,
                 buttonText: item.buttonText,
-                buttonLink: `/atractivos/${attraction.id}`
+                buttonUrl: item.buttonUrl || `/atractivos/${attraction.id}`,
+                showButton: item.showButton ?? true,
             };
         }
         if (item.type === 'novedad') {
@@ -50,7 +51,8 @@ export async function getHeroSlidesData() {
                 title: newest.title,
                 subtitle: extractTextFromDescription(newest.description) || item.subtitle,
                 buttonText: item.buttonText,
-                buttonLink: `/novedades/${newest.id}`
+                buttonUrl: item.buttonUrl || `/novedades/${newest.id}`,
+                showButton: item.showButton ?? true,
             };
         }
         return null;

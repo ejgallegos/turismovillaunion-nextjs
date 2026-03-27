@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import * as React from 'react';
 import { Logo } from '@/components/icons';
 import { MapPin, Phone, Mail, Clock } from 'lucide-react';
@@ -23,19 +24,44 @@ const SocialIcon = ({ href, children }: { href: string, children: React.ReactNod
 
 export function Footer() {
   return (
-    <footer className="bg-[#1d131f] text-white py-12 md:py-20 mt-16 md:mt-32 border-t border-white/5">
-      <div className="max-w-7xl mx-auto px-6 md:px-10">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12 mb-12 md:mb-20">
-          {/* Logo Column */}
-          <div className="col-span-1 lg:col-span-1">
-            <div className="flex items-center gap-3 mb-6">
-              <Logo
-                src="/images/Logos/logo-sec.png"
-                alt="Secretaría de Turismo"
-                width={80}
-                height={80}
+    <>
+      {/* Logos Section */}
+      <div style={{ backgroundColor: 'hsl(var(--primary) / 0.05)' }} className="py-8 md:py-12 border-t border-white/10">
+        <div className="max-w-7xl mx-auto px-6 md:px-10">
+          <div className="flex flex-wrap items-center justify-center gap-8 md:gap-16">
+            <div className="relative w-28 h-28 md:w-36 md:h-36">
+              <Image
+                src="/images/Logos/logo.png"
+                alt="Villa Unión"
+                fill
+                className="object-contain"
               />
             </div>
+            <div className="relative w-36 h-28 md:w-48 md:h-36">
+              <Image
+                src="/images/Logos/logo-sec.png"
+                alt="Secretaría de Turismo"
+                fill
+                className="object-contain"
+              />
+            </div>
+            <div className="relative w-48 h-20 md:w-64 md:h-28">
+              <Image
+                src="/images/Logos/Logo-municipio.png"
+                alt="Municipio"
+                fill
+                className="object-contain"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer className="bg-[#1d131f] text-white py-12 md:py-20 mt-0 border-t border-white/5">
+      <div className="max-w-7xl mx-auto px-6 md:px-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12 mb-12 md:mb-20">
+          {/* Info Column */}
+          <div className="col-span-1 lg:col-span-1">
             <p className="text-slate-400 text-sm leading-relaxed mb-6">
               Portal Oficial de Turismo del Departamento General Felipe Varela. 
               Descubrí la magia de Villa Unión, puerta de entrada al Parque Nacional Talampaya y las Siete Maravillas de Argentina.
@@ -43,11 +69,11 @@ export function Footer() {
             <div className="space-y-3 text-sm text-slate-400">
               <div className="flex items-center gap-2">
                 <MapPin className="w-4 h-4 shrink-0" />
-                <span>Av. San Martín s/n, Villa Unión, La Rioja</span>
+                <span>Nicolás Dávila Sur, Villa Unión, La Rioja</span>
               </div>
               <div className="flex items-center gap-2">
                 <Phone className="w-4 h-4 shrink-0" />
-                <span>+54 0380 442-1234</span>
+                <span>3804 617137</span>
               </div>
               <div className="flex items-center gap-2">
                 <Mail className="w-4 h-4 shrink-0" />
@@ -55,7 +81,7 @@ export function Footer() {
               </div>
               <div className="flex items-center gap-2">
                 <Clock className="w-4 h-4 shrink-0" />
-                <span>Lun - Vie: 8:00 a 20:00</span>
+                <span>Todos los días: 8:30 a 21:30</span>
               </div>
             </div>
           </div>
@@ -99,7 +125,7 @@ export function Footer() {
               <SocialIcon href="https://www.instagram.com">
                 <InstagramIcon className="h-5 w-5" />
               </SocialIcon>
-              <SocialIcon href="https://wa.me/5493804421234">
+              <SocialIcon href="https://wa.me/5493804617137">
                 <WhatsAppIcon className="h-5 w-5" />
               </SocialIcon>
             </div>
@@ -120,5 +146,6 @@ export function Footer() {
         </div>
       </div>
     </footer>
+    </>
   );
 }

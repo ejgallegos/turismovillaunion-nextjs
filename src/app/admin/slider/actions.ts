@@ -12,6 +12,8 @@ const sliderItemSchema = z.object({
   title: z.string().min(3, 'El título es requerido.'),
   subtitle: z.string().min(10, 'El subtítulo es requerido.'),
   buttonText: z.string().optional(),
+  buttonUrl: z.string().optional(),
+  showButton: z.boolean().optional(),
 });
 
 export async function updateSliderItem(formData: FormData) {
@@ -22,6 +24,8 @@ export async function updateSliderItem(formData: FormData) {
     title: formData.get('title'),
     subtitle: formData.get('subtitle'),
     buttonText: formData.get('buttonText')?.toString() || undefined,
+    buttonUrl: formData.get('buttonUrl')?.toString() || undefined,
+    showButton: formData.get('showButton') === 'on' ? true : false,
   };
 
   const validatedFields = sliderItemSchema.safeParse(rawData);
@@ -70,6 +74,8 @@ export async function addSliderItem(formData: FormData) {
     title: formData.get('title'),
     subtitle: formData.get('subtitle'),
     buttonText: formData.get('buttonText')?.toString() || undefined,
+    buttonUrl: formData.get('buttonUrl')?.toString() || undefined,
+    showButton: formData.get('showButton') === 'on' ? true : false,
   };
 
   const validatedFields = sliderItemSchema.safeParse(rawData);
@@ -91,6 +97,8 @@ export async function addSliderItem(formData: FormData) {
       title: validatedFields.data.title,
       subtitle: validatedFields.data.subtitle,
       buttonText: validatedFields.data.buttonText,
+      buttonUrl: validatedFields.data.buttonUrl,
+      showButton: validatedFields.data.showButton,
     };
 
     sliderItems.push(newItem);
