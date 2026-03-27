@@ -76,10 +76,6 @@ export function Footer() {
                 <span>3804 617137</span>
               </div>
               <div className="flex items-center gap-2">
-                <Mail className="w-4 h-4 shrink-0" />
-                <span>turismo@villaunion.gob.ar</span>
-              </div>
-              <div className="flex items-center gap-2">
                 <Clock className="w-4 h-4 shrink-0" />
                 <span>Todos los días: 8:30 a 21:30</span>
               </div>
@@ -138,7 +134,7 @@ export function Footer() {
         </div>
         
         <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4 text-slate-500 text-xs">
-          <p>© {new Date().getFullYear()} Villa Unión Turismo. Todos los derechos reservados.</p>
+          <p>© {new Date().getFullYear()} Secretaría de Turismo Gral. Felipe Varela. Todos los derechos reservados.</p>
           <div className="flex gap-8">
             <Link href="#" className="hover:text-white transition-colors">Política de Privacidad</Link>
             <Link href="#" className="hover:text-white transition-colors">Términos de Servicio</Link>

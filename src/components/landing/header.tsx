@@ -21,8 +21,6 @@ const navLinks = [
   { href: '/localidades', label: 'Destinos' },
   { href: '/atractivos', label: 'Experiencias' },
   { href: '/servicios', label: 'Servicios' },
-  //{ href: '/mapa-interactivo', label: 'Mapa' },
-  //{ href: '/novedades', label: 'Novedades' },
   { href: '/folletos', label: 'Folletos' },
   { href: '/contacto', label: 'Contacto' },
 ];
@@ -86,7 +84,7 @@ export function Header() {
 										href="/"
 										className="flex items-center gap-2"
 									>
-										<span className="text-xl font-bold">Villa Unión</span>
+										<span className="text-xl font-bold">Sec. de Turismo</span>
 									</Link>
 								</SheetClose>
 							</SheetTitle>
