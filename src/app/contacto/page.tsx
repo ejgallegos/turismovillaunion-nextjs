@@ -5,7 +5,7 @@ import { Header } from '@/components/landing/header';
 
 export const metadata: Metadata = {
   title: 'Contacto | Villa Unión del Talampaya',
-  description: 'Ponte en contacto con la Secretaría de Turismo de Villa Unión. Resuelve tus dudas y planifica tu viaje a este increíble destino en La Rioja, Argentina.',
+  description: 'Ponte en contacto con la Secretaría de Turismo Gral. Felipe Varela. Resuelve tus dudas y planifica tu viaje a este increíble destino en La Rioja, Argentina.',
 };
 
 export default function ContactoPage() {

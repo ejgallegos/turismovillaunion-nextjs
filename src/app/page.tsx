@@ -11,7 +11,7 @@ import { ArrowRight, Star, Wine, Footprints, Car, MapPin } from 'lucide-react';
 import { Logo } from '@/components/icons';
 
 export const metadata: Metadata = {
-  title: "Secretaría de Turismo Villa Unión - Puerta de Entrada a Talampaya",
+  title: "Secretaría de Turismo Gral. Felipe Varela - Puerta de Entrada a Talampaya",
   description: "Tu puerta de entrada a la inmensidad de Talampaya y los secretos del Triásico. Descubrí los mejores destinos, experiencias y planes en Villa Unión, La Rioja, Argentina.",
 };
 
