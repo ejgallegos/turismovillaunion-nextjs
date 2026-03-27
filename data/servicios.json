@@ -1,32 +1,32 @@
 [
   {
-    "id": "cat-logo-de-servicios",
-    "title": "Catálogo de Servicios",
-    "localidadId": "villa-union",
-    "downloadUrl": "/uploads/servicios/cat-logo-de-servicios/1753978238960.pdf"
-  },
-  {
-    "id": "catalogo-de-servicios",
-    "title": "Catalogo de Servicios",
-    "localidadId": "guandacol",
-    "downloadUrl": "/uploads/servicios/catalogo-de-servicios/1753982209813.pdf"
-  },
-  {
-    "id": "catalogo-de-servicios-16a2",
-    "title": "Catalogo de Servicios",
-    "localidadId": "banda-florida",
-    "downloadUrl": "/uploads/servicios/catalogo-de-servicios/1753982441544.pdf"
-  },
-  {
-    "id": "catalogo-de-servicios-4587",
-    "title": "Catalogo de Servicios",
-    "localidadId": "pagancillo",
-    "downloadUrl": "/uploads/servicios/catalogo-de-servicios/1753982496604.pdf"
-  },
-  {
-    "id": "catalogo-de-servicios-2bf2",
-    "title": "Catalogo de Servicios",
+    "id": "servicios-tur-sticos",
+    "title": "Servicios Turísticos",
     "localidadId": "aicu-a",
-    "downloadUrl": "/uploads/servicios/catalogo-de-servicios/1753982555286.pdf"
+    "downloadUrl": "/uploads/servicios/servicios-tur-sticos/1774622923104.pdf"
+  },
+  {
+    "id": "servicios-tur-sticos-d64a",
+    "title": "Servicios Turísticos",
+    "localidadId": "pagancillo",
+    "downloadUrl": "/uploads/servicios/servicios-tur-sticos/1774622947465.pdf"
+  },
+  {
+    "id": "servicios-tur-sticos-1e86",
+    "title": "Servicios Turísticos",
+    "localidadId": "banda-florida",
+    "downloadUrl": "/uploads/servicios/servicios-tur-sticos/1774622983234.pdf"
+  },
+  {
+    "id": "servicios-tur-sticos-c3d4",
+    "title": "Servicios Turísticos",
+    "localidadId": "guandacol",
+    "downloadUrl": "/uploads/servicios/servicios-tur-sticos/1774622996836.pdf"
+  },
+  {
+    "id": "servicios-tur-sticos-6e54",
+    "title": "Servicios Turísticos",
+    "localidadId": "villa-union",
+    "downloadUrl": "/uploads/servicios/servicios-tur-sticos/1774623142678.pdf"
   }
 ]

@@ -63,8 +63,8 @@ export function Footer() {
           {/* Info Column */}
           <div className="col-span-1 lg:col-span-1">
             <p className="text-slate-400 text-sm leading-relaxed mb-6">
-              Portal Oficial de Turismo del Departamento General Felipe Varela. 
-              Descubrí la magia de Villa Unión, puerta de entrada al Parque Nacional Talampaya y las Siete Maravillas de Argentina.
+              Portal Oficial de la Secretaría Turismo del Departamento General Felipe Varela. 
+              Descubrí la magia de nuestros atractivos, puerta de entrada al Parque Nacional Talampaya.
             </p>
             <div className="space-y-3 text-sm text-slate-400">
               <div className="flex items-center gap-2">
