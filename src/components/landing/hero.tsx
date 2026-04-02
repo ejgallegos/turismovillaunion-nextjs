@@ -28,13 +28,14 @@ interface HeroSlide {
 }
 
 const HeroSkeleton = () => (
-  <div className="relative flex h-screen w-full items-center justify-center">
-    <Skeleton className="absolute inset-0 z-0" />
-    <div className="relative z-10 flex flex-col items-center p-4 text-center">
-      <Skeleton className="h-20 w-3/4 mb-4" />
-      <Skeleton className="h-8 w-1/2 mb-2" />
-      <Skeleton className="h-6 w-1/3 mb-8" />
-      <Skeleton className="h-14 w-48" />
+  <div className="w-full pt-16 md:pt-20">
+    <div className="w-full h-[calc(100vh-64px)] md:h-[calc(100vh-80px)] flex items-center justify-center bg-muted">
+      <div className="flex flex-col items-center p-4 text-center">
+        <Skeleton className="h-12 md:h-20 w-3/4 mb-4" />
+        <Skeleton className="h-6 md:h-8 w-1/2 mb-2" />
+        <Skeleton className="h-5 md:h-6 w-1/3 mb-6 md:mb-8" />
+        <Skeleton className="h-10 md:h-14 w-32 md:w-48" />
+      </div>
     </div>
   </div>
 );
@@ -71,11 +72,7 @@ export function Hero() {
   }, []);
 
   if (loading) {
-    return (
-      <section className="relative h-screen w-full">
-        <HeroSkeleton />
-      </section>
-    );
+    return <HeroSkeleton />;
   }
 
   const defaultSlide = {
@@ -93,75 +90,79 @@ export function Hero() {
   const activeSlide = displaySlides[activeIndex] || defaultSlide;
 
   return (
-    <section className="relative h-screen w-full flex items-center justify-center overflow-hidden">
-      <div className="absolute inset-0 z-0">
-        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/20 to-secondary-foreground z-10" />
-        <Swiper
-          effect={'fade'}
-          fadeEffect={{ crossFade: true }}
-          centeredSlides={true}
-          autoplay={{
-            delay: 5000,
-            disableOnInteraction: false,
-          }}
-          pagination={{
-            clickable: true,
-          }}
-          loop={displaySlides.length > 1}
-          modules={[Autoplay, Pagination, EffectFade]}
-          className="h-full w-full"
-          onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
-        >
-          {displaySlides.map((slide, index) => (
-            <SwiperSlide key={index}>
-              <Image
-                src={slide.src}
-                alt={slide.alt}
-                data-ai-hint={slide.hint}
-                fill
-                className="object-cover"
-                sizes="100vw"
-                priority={index === 0}
-              />
-            </SwiperSlide>
-          ))}
-        </Swiper>
-      </div>
-      
-      <div className="relative z-20 text-center px-4 max-w-4xl">
-        {activeSlide.title && activeSlide.title !== "Villa Unión" ? (
-          <>
-            <h1 className="text-white text-3xl md:text-6xl lg:text-7xl font-black mb-4 md:mb-6 leading-tight tracking-tighter">
-              {activeSlide.title}
-            </h1>
-            <p className="text-white/90 text-base md:text-xl font-light mb-8 md:mb-10 max-w-2xl mx-auto">
-              {activeSlide.subtitle}
-            </p>
-          </>
-        ) : (
-          <>
-            <h1 className="text-white text-4xl md:text-7xl lg:text-8xl font-black mb-4 md:mb-6 leading-tight tracking-tighter">
-              Descubrí <br /><span className="text-accent">Villa Unión</span>
-            </h1>
-            <p className="text-white/90 text-base md:text-2xl font-light mb-8 md:mb-10 max-w-2xl mx-auto">
-              {activeSlide.subtitle || defaultSlide.subtitle}
-            </p>
-          </>
-        )}
-        <div className="flex flex-col md:flex-row items-center justify-center gap-4">
-          {((activeSlide.showButton !== undefined && activeSlide.showButton) || (activeSlide.showButton === undefined && defaultSlide.showButton)) && (
-            <Button asChild className="w-full md:w-auto bg-primary hover:bg-primary/90 text-white px-8 md:px-10 py-4 md:py-5 rounded-xl text-base md:text-lg font-bold transition-all transform hover:scale-105 min-h-[48px]">
-              <Link href={activeSlide.buttonUrl || defaultSlide.buttonUrl}>
-                {activeSlide.buttonText || defaultSlide.buttonText}
-              </Link>
-            </Button>
+    <div className="w-full pt-16 md:pt-20">
+      <div className="relative w-full h-[calc(100vh-64px)] md:h-[calc(100vh-80px)]">
+        {/* Background Slider */}
+        <div className="absolute inset-0 z-0">
+          <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/20 to-secondary-foreground z-10" />
+          <Swiper
+            effect={'fade'}
+            fadeEffect={{ crossFade: true }}
+            centeredSlides={true}
+            autoplay={{
+              delay: 5000,
+              disableOnInteraction: false,
+            }}
+            pagination={{
+              clickable: true,
+            }}
+            loop={displaySlides.length > 1}
+            modules={[Autoplay, Pagination, EffectFade]}
+            className="h-full w-full"
+            onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
+          >
+            {displaySlides.map((slide, index) => (
+              <SwiperSlide key={index} className="h-full">
+                <Image
+                  src={slide.src}
+                  alt={slide.alt}
+                  data-ai-hint={slide.hint}
+                  fill
+                  className="object-cover"
+                  sizes="100vw"
+                  priority={index === 0}
+                />
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        </div>
+        
+        {/* Content */}
+        <div className="absolute inset-0 z-10 flex flex-col items-center justify-center text-center px-4 max-w-4xl mx-auto">
+          {activeSlide.title && activeSlide.title !== "Villa Unión" ? (
+            <>
+              <h1 className="text-white text-3xl md:text-6xl lg:text-7xl font-black mb-4 md:mb-6 leading-tight tracking-tighter">
+                {activeSlide.title}
+              </h1>
+              <p className="text-white/90 text-base md:text-xl font-light mb-8 md:mb-10 max-w-2xl mx-auto">
+                {activeSlide.subtitle}
+              </p>
+            </>
+          ) : (
+            <>
+              <h1 className="text-white text-4xl md:text-7xl lg:text-8xl font-black mb-4 md:mb-6 leading-tight tracking-tighter">
+                Descubrí <br /><span className="text-accent">Villa Unión</span>
+              </h1>
+              <p className="text-white/90 text-base md:text-2xl font-light mb-8 md:mb-10 max-w-2xl mx-auto">
+                {activeSlide.subtitle || defaultSlide.subtitle}
+              </p>
+            </>
           )}
+          <div className="flex flex-col md:flex-row items-center justify-center gap-4">
+            {((activeSlide.showButton !== undefined && activeSlide.showButton) || (activeSlide.showButton === undefined && defaultSlide.showButton)) && (
+              <Button asChild className="w-full md:w-auto bg-primary hover:bg-primary/90 text-white px-8 md:px-10 py-4 md:py-5 rounded-xl text-base md:text-lg font-bold transition-all transform hover:scale-105 min-h-[48px]">
+                <Link href={activeSlide.buttonUrl || defaultSlide.buttonUrl}>
+                  {activeSlide.buttonText || defaultSlide.buttonText}
+                </Link>
+              </Button>
+            )}
+          </div>
+        </div>
+        
+        <div className="absolute bottom-6 md:bottom-10 left-1/2 -translate-x-1/2 z-10 animate-bounce">
+          <ChevronDown className="text-white text-3xl md:text-4xl" />
         </div>
       </div>
-      
-      <div className="absolute bottom-6 md:bottom-10 left-1/2 -translate-x-1/2 z-20 animate-bounce">
-        <ChevronDown className="text-white text-3xl md:text-4xl" />
-      </div>
-    </section>
+    </div>
   );
 }

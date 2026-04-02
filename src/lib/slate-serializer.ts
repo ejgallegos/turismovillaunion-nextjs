@@ -12,6 +12,7 @@ interface CustomText {
 
 interface CustomElement {
   type?: string;
+  url?: string;
   children?: CustomText[];
 }
 
@@ -47,6 +48,8 @@ function serializeNode(node: CustomNode): string {
         return `<ul>${children}</ul>`;
     case 'list-item':
         return `<li>${children}</li>`;
+    case 'link':
+        return `<a href="${escape(element.url || '')}" target="_blank" rel="noopener noreferrer">${children}</a>`;
     default:
       return children;
   }
