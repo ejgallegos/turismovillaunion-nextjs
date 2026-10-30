@@ -32,13 +32,32 @@ S8. `npm audit` findings are reduced without breaking the build.
 
 | ID | Specs | Route | Status | Commit |
 | --- | --- | --- | --- | --- |
-| T1 | S1, S2 | inline | pending | |
-| T2 | S3 | inline | pending | |
-| T3 | S4 | inline | pending | |
-| T4 | S5 | inline | pending | |
-| T5 | S6 | inline | pending | |
-| T6 | S7 | inline | pending | |
-| T7 | S8 | inline | pending | |
+| T1 | S1, S2 | inline | done | 0c2a857 |
+| T2 | S3 | inline | done | eb6ea9a |
+| T3 | S4 | inline | done | e00c1a6 |
+| T4 | S5 | inline | done | 37be00d |
+| T5 | S6 | inline | done | eb6ea9a |
+| T6 | S7 | inline | done | 0a8e5b7 |
+| T7 | S8 | inline | done | 9c7e64e |
+
+Verification (no test runner in the repo):
+
+- T1: 20/20 assertions on `src/lib/admin-access.ts` via `tsx`, including the
+  reported bypass (`x-localhost.com`, `localhost.attacker.io`) and the port rule.
+  End to end on a production build: without `ENABLE_ADMIN` every host gets 404;
+  with `ENABLE_ADMIN=true` and `Host: localhost:9002` the panel returns 200 while
+  a forged host still returns 404.
+- T2: 15/15 assertions on `src/lib/upload.ts`; `path.extname` no longer appears in
+  any admin action, and `mapa-interactivo` gained the missing size/MIME checks.
+- T3: 14/14 assertions on `src/lib/rate-limit.ts` (6th attempt blocked, other IP
+  unaffected, window reset, forged `x-forwarded-for` prefix ignored).
+- T4 + T5: 23/23 assertions on `safeHref` and `resolveWithinUploads`
+  (`javascript:`, `data:`, `vbscript:`, protocol-relative, `../` escapes).
+- T6: production build inspected — HSTS present, CSP without `unsafe-eval` and
+  `unpkg.com`, `object-src`/`base-uri`/`form-action`/`frame-ancestors` added, no
+  `X-Powered-By`.
+- T7: `npm audit` 52 -> 50 affected packages; `next` and `nodemailer` advisories
+  cleared. `npm run typecheck` clean; `next build` exit 0; 10 public routes 200.
 
 ## Log
 
@@ -64,3 +83,31 @@ L4 (decision): C2 is fixed by failing closed instead of adding a login. The admi
 local authoring tool and its data is baked at build time, so production should never
 reach it. `ENABLE_ADMIN` is a server-side env var, not a header, so a forged `Host`
 cannot re-enable it.
+
+L5 (decision): the HTTPS redirect uses `SITE_URL` and does nothing when it is unset,
+so local production runs and platforms that terminate TLS themselves are not looped
+into an external origin.
+
+L6 (decision): T1 and T6 both touch `src/middleware.ts`, so the header block was
+temporarily reverted to commit the fail-closed admin gate alone (0c2a857) before
+committing the headers (0a8e5b7). The auth-adjacent change stays reviewable by itself.
+
+L7 (decision): T2 and T5 share `src/lib/upload.ts` and the same eight admin actions,
+and deleting without validating the path is only safe once the extension is
+MIME-derived; they ship as one commit (eb6ea9a).
+
+L8 (decision): T7 keeps `next` pinned to an exact version (`15.5.28`) instead of the
+caret npm writes by default, matching the repository's previous policy for the
+framework. `nodemailer` keeps its caret range like every other runtime dependency.
+
+L9 (observation): `next build` emits a pre-existing, harmless warning about
+`@opentelemetry/exporter-jaeger` missing under `@opentelemetry/sdk-node`. It comes
+from genkit and was already present before this work.
+
+L10 (observation, out of scope, reported to the user): the three entity routes
+(`atractivos/[id]`, `localidades/[id]`, `novedades/[id]`) are statically generated
+(`●` in the build output, `generateStaticParams` present), so `generateMetaTags`
+runs Gemini once per entity **at build time**, not per request. Unknown ids return
+before the AI call, and a failure falls back to basic metadata. The real costs are
+build time, non-deterministic metadata between builds, and every entity's content
+being sent to Google. Not a vulnerability; listed for the user to decide.
