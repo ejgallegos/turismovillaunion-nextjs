@@ -1,5 +1,26 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import {
+  isAdminAccessAllowed,
+  isInsecureRequest,
+  parseAdminHosts,
+} from '@/lib/admin-access';
+
+function isAdminAllowed(request: NextRequest): boolean {
+  return isAdminAccessAllowed({
+    isProduction: process.env.NODE_ENV === 'production',
+    adminFlag: process.env.ENABLE_ADMIN,
+    host: request.headers.get('host'),
+    allowlist: parseAdminHosts(process.env.ADMIN_ALLOWED_HOSTS),
+  });
+}
+
+function arrivedOverHttp(request: NextRequest): boolean {
+  return isInsecureRequest({
+    forwardedProto: request.headers.get('x-forwarded-proto'),
+    urlProtocol: request.nextUrl.protocol,
+  });
+}
 
 export function middleware(request: NextRequest) {
   const response = NextResponse.next();
@@ -22,25 +43,29 @@ export function middleware(request: NextRequest) {
 
   response.headers.set('Content-Security-Policy', csp);
 
-  const host = request.headers.get('host') || '';
-  const isLocalhost = host.includes('localhost') || host.includes('127.0.0.1');
-
-  // The admin panel is a local-only authoring tool. It writes to data/*.json on
-  // disk, which is baked into the image at build time, so it must never be
-  // reachable on a deployed host.
   const isAdminPath =
     request.nextUrl.pathname.startsWith('/admin') ||
     request.nextUrl.pathname.startsWith('/login');
 
-  if (process.env.NODE_ENV === 'production' && !isLocalhost && isAdminPath) {
+  // The admin panel is a local-only authoring tool: it writes to data/*.json and
+  // public/uploads, which are baked into the image at build time. Production must
+  // never reach it.
+  //
+  // Fail closed: in production the panel requires the explicit server-side flag
+  // ENABLE_ADMIN=true *and* an allowlisted host. The flag cannot be influenced by
+  // the request, so a forged Host header alone never re-enables the panel.
+  if (isAdminPath && !isAdminAllowed(request)) {
     return new NextResponse('Not Found', { status: 404 });
   }
 
-  if (process.env.NODE_ENV === 'production' && !isLocalhost && !request.nextUrl.protocol.startsWith('https')) {
-    return NextResponse.redirect(
-      new URL(`https://${host}${request.nextUrl.pathname}`, request.url),
-      301
-    );
+  if (process.env.NODE_ENV === 'production' && arrivedOverHttp(request)) {
+    const canonicalUrl = process.env.SITE_URL;
+    if (canonicalUrl) {
+      // Never build the redirect target from the Host header: that turns this
+      // into an open redirect and a cache-poisoning vector.
+      const target = new URL(request.nextUrl.pathname + request.nextUrl.search, canonicalUrl);
+      return NextResponse.redirect(target, 301);
+    }
   }
 
   return response;
