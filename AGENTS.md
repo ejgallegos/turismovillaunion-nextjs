@@ -139,7 +139,7 @@ try {
 
 ### Data Layer
 
-- Data stored in JSON files under `src/data/` and synced to Firebase
+- Data stored in JSON files under `data/` at the repository root (not `src/data/`)
 - Services in `src/lib/*.service.ts` handle data operations
 - Always validate data with Zod before saving
 
@@ -197,7 +197,7 @@ Currently there are **no tests** configured in this project. If adding tests:
 ## Common Tasks
 
 ### Adding a new data type
-1. Create JSON file in `src/data/`
+1. Create JSON file in `data/`
 2. Create service in `src/lib/<name>.service.ts`
 3. Create types in service file
 4. Add server actions in `src/app/admin/<name>/actions.ts`

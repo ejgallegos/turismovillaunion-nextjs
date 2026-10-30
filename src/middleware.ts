@@ -24,7 +24,18 @@ export function middleware(request: NextRequest) {
 
   const host = request.headers.get('host') || '';
   const isLocalhost = host.includes('localhost') || host.includes('127.0.0.1');
-  
+
+  // The admin panel is a local-only authoring tool. It writes to data/*.json on
+  // disk, which is baked into the image at build time, so it must never be
+  // reachable on a deployed host.
+  const isAdminPath =
+    request.nextUrl.pathname.startsWith('/admin') ||
+    request.nextUrl.pathname.startsWith('/login');
+
+  if (process.env.NODE_ENV === 'production' && !isLocalhost && isAdminPath) {
+    return new NextResponse('Not Found', { status: 404 });
+  }
+
   if (process.env.NODE_ENV === 'production' && !isLocalhost && !request.nextUrl.protocol.startsWith('https')) {
     return NextResponse.redirect(
       new URL(`https://${host}${request.nextUrl.pathname}`, request.url),

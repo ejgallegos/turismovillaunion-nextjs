@@ -7,7 +7,6 @@ import { getMapas, saveMapas, Mapa } from '@/lib/mapas.service';
 import { randomUUID } from 'crypto';
 import path from 'path';
 import fs from 'fs/promises';
-import { redirect } from 'next/navigation';
 
 // Helper to slugify text
 const slugify = (text: string) => text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
@@ -109,8 +108,9 @@ export async function upsertMapa(formData: FormData) {
   }
 
   revalidatePath('/admin/mapas');
+  revalidatePath('/admin/mapa-interactivo');
   revalidatePath('/mapas');
-  redirect('/admin/mapas');
+  return { success: true };
 }
 
 export async function deleteMapa(id: string) {

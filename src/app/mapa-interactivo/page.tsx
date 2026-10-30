@@ -3,6 +3,7 @@ import { InteractiveMap } from '@/components/landing/interactive-map';
 import { Footer } from '@/components/landing/footer';
 import { Header } from '@/components/landing/header';
 import { getLugaresMapa, getTipsMapa, getColectivosMapa } from '@/lib/admin-mapa.service';
+import { getMapas } from '@/lib/mapas.service';
 
 export const metadata: Metadata = {
   title: 'Mapa Interactivo - Villa Unión',
@@ -12,10 +13,11 @@ export const metadata: Metadata = {
 export const dynamic = 'force-dynamic';
 
 export default async function MapaInteractivoPage() {
-  const [lugares, tips, colectivos] = await Promise.all([
+  const [lugares, tips, colectivos, mapas] = await Promise.all([
     getLugaresMapa(),
     getTipsMapa(),
     getColectivosMapa(),
+    getMapas(),
   ]);
 
   return (
@@ -26,6 +28,7 @@ export default async function MapaInteractivoPage() {
           initialLugares={lugares}
           initialTips={tips}
           initialColectivos={colectivos}
+          initialMapas={mapas}
         />
       </main>
       <Footer />

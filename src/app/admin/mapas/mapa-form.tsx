@@ -105,6 +105,7 @@ export function MapaForm({ mapa }: MapaFormProps) {
             title: `Mapa ${mapa ? 'actualizado' : 'creado'}`,
             description: 'El mapa ha sido guardado correctamente.',
         });
+        router.push('/admin/mapas');
     }
   };
 

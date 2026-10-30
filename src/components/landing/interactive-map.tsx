@@ -5,27 +5,22 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { 
   Sun, Bus, Compass, Download
 } from 'lucide-react';
-import { getLugaresMapa, getTipsMapa, getColectivosMapa, type LugarMapa, type TipMapa, type ColectivoMapa } from '@/lib/admin-mapa.service';
+import { getLugaresMapa, getTipsMapa, getColectivosMapa, type LugarMapa, type TipMapa, type ColectivoMapa, type Mapa } from '@/lib/admin-mapa.service';
 
 interface Props {
   initialLugares?: LugarMapa[];
   initialTips?: TipMapa[];
   initialColectivos?: ColectivoMapa[];
+  initialMapas?: Mapa[];
 }
 
-const mapasData = [
-  { id: 'provincia-de-la-rioja', title: 'Provincia de La Rioja', downloadUrl: '/uploads/mapas/provincia-de-la-rioja/mapa-1751838091484.pdf' },
-  { id: 'villa-union', title: 'Villa Unión', downloadUrl: '/uploads/mapas/villa-uni-n/mapa-1751838209011.jpeg' },
-  { id: 'guandacol', title: 'Guandacol', downloadUrl: '/uploads/mapas/guandacol/mapa-1751838274235.jpeg' },
-  { id: 'pagancillo', title: 'Pagancillo', downloadUrl: '/uploads/mapas/pagancillo/mapa-1751838320208.jpeg' },
-];
-
-export function InteractiveMap({ initialLugares = [], initialTips = [], initialColectivos = [] }: Props) {
+export function InteractiveMap({ initialLugares = [], initialTips = [], initialColectivos = [], initialMapas = [] }: Props) {
   const [weather, setWeather] = useState<{temperature: number; weatherCode: number; windSpeed: number; humidity: number; uvIndex: number} | null>(null);
   const [currentTime, setCurrentTime] = useState(new Date());
   const [lugares, setLugares] = useState<LugarMapa[]>(initialLugares);
   const [tips, setTips] = useState<TipMapa[]>(initialTips);
   const [colectivos, setColectivos] = useState<ColectivoMapa[]>(initialColectivos);
+  const [mapas] = useState<Mapa[]>(initialMapas);
 
   useEffect(() => {
     async function fetchData() {
@@ -263,7 +258,7 @@ export function InteractiveMap({ initialLugares = [], initialTips = [], initialC
 							Mapas para Descargar
 						</h3>
 						<div className="space-y-2 max-h-[140px] overflow-y-auto pr-1">
-							{mapasData.map((mapa) => (
+							{mapas.filter((mapa) => mapa.downloadUrl).map((mapa) => (
 								<a
 									key={mapa.id}
 									href={mapa.downloadUrl}

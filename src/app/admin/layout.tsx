@@ -1,54 +1,14 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { onAuthStateChanged, User } from 'firebase/auth';
-import { auth } from '@/lib/firebase';
-import { LayoutDashboard, Loader2, Menu, X } from 'lucide-react';
+import { useState } from 'react';
+import { LayoutDashboard, Menu, X } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<User | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const router = useRouter();
-
-  useEffect(() => {
-    if (!auth) {
-        // This can happen if Firebase keys are not in .env
-        // Redirect to login, where the form will show an error message.
-        router.push('/login');
-        return;
-    }
-
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      if (!currentUser) {
-        router.push('/login');
-      } else {
-        setUser(currentUser);
-        setIsLoading(false);
-      }
-    });
-
-    return () => unsubscribe();
-  }, [router]);
-
-  const handleSignOut = async () => {
-    if (!auth) return;
-    await auth.signOut();
-    router.push('/login');
-  };
 
   const closeMobileMenu = () => setMobileMenuOpen(false);
-
-  if (isLoading) {
-    return (
-      <div className="flex h-screen items-center justify-center">
-        <Loader2 className="h-16 w-16 animate-spin text-primary" />
-      </div>
-    );
-  }
 
   return (
 		<div className="flex min-h-screen w-full flex-col">
@@ -120,13 +80,13 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 					</div>
 				</nav>
 
-				{/* Right side - user info and logout */}
+				{/* Right side - local mode indicator */}
 				<div className="flex w-full items-center justify-end gap-2 md:ml-auto md:gap-2 lg:gap-4">
-					<div className="text-sm text-muted-foreground truncate max-w-[150px] md:max-w-none">
-						{user?.email}
-					</div>
-					<Button onClick={handleSignOut} variant="outline" size="sm">
-						Cerrar Sesión
+					<span className="rounded-full border px-3 py-1 text-xs font-medium text-muted-foreground">
+						Modo local
+					</span>
+					<Button variant="outline" size="sm" asChild>
+						<Link href="/">Ver sitio</Link>
 					</Button>
 				</div>
 			</header>

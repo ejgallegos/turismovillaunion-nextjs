@@ -3,7 +3,9 @@ import type {NextConfig} from 'next';
 const nextConfig: NextConfig = {
 	experimental: {
 		serverActions: {
-			bodySizeLimit: "10mb",
+			// Files are validated against a 10MB limit inside the actions, so the
+			// transport limit must leave room for the multipart envelope.
+			bodySizeLimit: "20mb",
 		},
 	},
 	typescript: {

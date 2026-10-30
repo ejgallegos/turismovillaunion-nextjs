@@ -41,6 +41,9 @@ export function AdminMapaContent({ initialData }: Props) {
   const [mapaForm, setMapaForm] = useState<Mapa>({ id: '', title: '', description: '', downloadUrl: '' });
   const [mapaFile, setMapaFile] = useState<File | null>(null);
   const [mapaFilePreview, setMapaFilePreview] = useState<string | null>(null);
+  const [mapaErrors, setMapaErrors] = useState<Record<string, string[]>>({});
+
+  const firstError = (field: string) => mapaErrors[field]?.[0];
 
   const [tipForm, setTipForm] = useState<TipMapa>({ id: '', texto: '', activo: true });
 
@@ -53,6 +56,10 @@ export function AdminMapaContent({ initialData }: Props) {
     setMapaForm({ id: '', title: '', description: '', downloadUrl: '' });
     setMapaFile(null);
     setMapaFilePreview(null);
+    setMapaErrors({});
+    // The file input is uncontrolled, so its selected file must be cleared too.
+    const fileInput = document.getElementById('mapa-file-upload') as HTMLInputElement | null;
+    if (fileInput) fileInput.value = '';
   };
 
   const resetTipForm = () => setTipForm({ id: '', texto: '', activo: true });
@@ -63,25 +70,43 @@ export function AdminMapaContent({ initialData }: Props) {
   // MAPAS handlers
   const handleSaveMapa = async () => {
     setIsSaving(true);
+    setMapaErrors({});
     try {
       const formData = new FormData();
       formData.append('id', mapaForm.id || '');
       formData.append('title', mapaForm.title);
       formData.append('description', mapaForm.description);
       if (mapaFile) formData.append('downloadFile', mapaFile);
-      
-      const result = await upsertMapa(formData) as { success: boolean; error?: string };
-      
-      if (result.success) {
-        // Refresh mapas from server
-        window.location.reload();
-      } else {
-        alert(result.error || 'Error al guardar');
+
+      const result = (await upsertMapa(formData)) as
+        | { success: true }
+        | { success: false; error?: string; errors?: Record<string, string[]> }
+        | undefined;
+
+      // No payload means the request never reached the action, usually because
+      // the server action body limit rejected the file.
+      if (!result) {
+        alert('No se pudo guardar el mapa. Si el archivo pesa 10MB o más, probá con uno más liviano.');
+        return;
       }
+
+      if (!result.success) {
+        if (result.errors) setMapaErrors(result.errors);
+        const message =
+          result.error ??
+          Object.values(result.errors ?? {}).flat()[0] ??
+          'No se pudo guardar el mapa.';
+        alert(message);
+        return;
+      }
+
+      window.location.reload();
     } catch (error) {
       console.error('Error saving mapa:', error);
+      alert('No se pudo guardar el mapa. Revisá la consola del navegador para más detalles.');
+    } finally {
+      setIsSaving(false);
     }
-    setIsSaving(false);
   };
 
   const handleDeleteMapa = async (id: string) => {
@@ -97,9 +122,10 @@ export function AdminMapaContent({ initialData }: Props) {
   };
 
   const handleEditMapa = (mapa: Mapa) => {
-    setMapaForm(mapa);
+    setMapaForm({ ...mapa, downloadUrl: mapa.downloadUrl ?? '' });
     setMapaFile(null);
     setMapaFilePreview(mapa.downloadUrl || null);
+    setMapaErrors({});
     setEditingId(mapa.id);
   };
 
@@ -224,14 +250,20 @@ export function AdminMapaContent({ initialData }: Props) {
                       onChange={e => setMapaForm({...mapaForm, title: e.target.value})} 
                       placeholder="Ej: Mapa de Villa Unión" 
                     />
+                    {firstError('title') && (
+                      <p className="mt-1 text-sm text-destructive">{firstError('title')}</p>
+                    )}
                   </div>
                   <div className="md:col-span-2">
-                    <Label>Descripción</Label>
+                    <Label>Descripción <span className="text-destructive">*</span></Label>
                     <Input 
                       value={mapaForm.description} 
                       onChange={e => setMapaForm({...mapaForm, description: e.target.value})} 
                       placeholder="Descripción del mapa" 
                     />
+                    {firstError('description') && (
+                      <p className="mt-1 text-sm text-destructive">{firstError('description')}</p>
+                    )}
                   </div>
                   <div>
                     <Label>Archivo (PDF, JPG, PNG)</Label>
@@ -269,6 +301,9 @@ export function AdminMapaContent({ initialData }: Props) {
                         <Download className="w-4 h-4 text-green-500" />
                         <span className="text-sm text-green-500">Archivo cargado</span>
                       </div>
+                    )}
+                    {firstError('downloadFile') && (
+                      <p className="mt-1 text-sm text-destructive">{firstError('downloadFile')}</p>
                     )}
                   </div>
                 </div>

@@ -15,8 +15,8 @@ export function WhatsAppButton() {
     const phoneNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER;
     const message = process.env.NEXT_PUBLIC_WHATSAPP_MESSAGE || '';
     
-    // Don't render the button if there's no number, or if we are on an admin page or login page.
-    if (!phoneNumber || pathname.startsWith('/admin') || pathname.startsWith('/login')) {
+    // Don't render the button if there's no number, or if we are on an admin page.
+    if (!phoneNumber || pathname.startsWith('/admin')) {
         return null;
     }
     
