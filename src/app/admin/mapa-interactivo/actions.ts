@@ -5,6 +5,7 @@ import { z } from 'zod';
 import { randomUUID } from 'crypto';
 import path from 'path';
 import fs from 'fs/promises';
+import { uploadFileName } from '@/lib/upload';
 
 const slugify = (text: string) => text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
 
@@ -19,7 +20,14 @@ const lugarSchema = z.object({
   direccion: z.string().optional(),
   telefono: z.string().optional(),
   imagen: z.string().optional(),
-  imagenFile: z.any().optional(),
+  imagenFile: z
+    .any()
+    .refine((file) => !file || file.size <= MAX_FILE_SIZE, `El tamaño máximo es 10MB.`)
+    .refine(
+      (file) => !file || ACCEPTED_IMAGE_TYPES.includes(file.type),
+      'Solo se aceptan .jpg, .png y .webp.'
+    )
+    .optional(),
   latitud: z.coerce.number(),
   longitud: z.coerce.number(),
   activo: z.coerce.boolean(),
@@ -90,8 +98,10 @@ export async function upsertLugar(formData: FormData) {
     const uploadDir = path.join(process.cwd(), 'public/uploads/mapa-interactivo', slug);
     await fs.mkdir(uploadDir, { recursive: true });
 
-    const fileExtension = path.extname(imagenFile.name);
-    const filename = `${Date.now()}${fileExtension}`;
+    const filename = uploadFileName('', imagenFile.type);
+    if (!filename) {
+      return { success: false, error: 'Tipo de archivo no permitido.' };
+    }
     const filePath = path.join(uploadDir, filename);
 
     const buffer = Buffer.from(await imagenFile.arrayBuffer());

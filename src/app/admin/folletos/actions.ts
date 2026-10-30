@@ -8,6 +8,7 @@ import { randomUUID } from 'crypto';
 import path from 'path';
 import fs from 'fs/promises';
 import { redirect } from 'next/navigation';
+import { resolveWithinUploads, uploadFileName } from '@/lib/upload';
 
 // Helper to slugify text
 const slugify = (text: string) => text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
@@ -65,8 +66,10 @@ export async function upsertFolleto(formData: FormData) {
     
     // Handle downloadable file upload
     if (downloadFile) {
-      const fileExtension = path.extname(downloadFile.name);
-      const filename = `download-${Date.now()}${fileExtension}`;
+      const filename = uploadFileName('download-', downloadFile.type);
+      if (!filename) {
+        return { success: false, error: 'Tipo de archivo no permitido.' };
+      }
       const filePath = path.join(uploadDir, filename);
       const buffer = Buffer.from(await downloadFile.arrayBuffer());
       await fs.writeFile(filePath, buffer);
@@ -130,7 +133,13 @@ export async function deleteFolleto(id: string) {
       // Delete the folder associated with the folleto
       if (folletoToDelete.downloadUrl) {
         try {
-          const fileDir = path.join(process.cwd(), 'public', path.dirname(folletoToDelete.downloadUrl));
+          const fileDir = resolveWithinUploads(
+            path.join(process.cwd(), 'public'),
+            path.dirname(folletoToDelete.downloadUrl)
+          );
+          if (!fileDir) {
+            throw new Error('Ruta fuera de public/uploads; se omite el borrado.');
+          }
           await fs.rm(fileDir, { recursive: true, force: true });
         } catch (error) {
             console.error(`Failed to delete directory for folleto ${id}:`, error);

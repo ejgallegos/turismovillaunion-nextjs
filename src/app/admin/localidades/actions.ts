@@ -8,6 +8,7 @@ import { randomUUID } from 'crypto';
 import path from 'path';
 import fs from 'fs/promises';
 import { redirect } from 'next/navigation';
+import { resolveWithinUploads, uploadFileName } from '@/lib/upload';
 
 // Helper to slugify text
 const slugify = (text: string) => text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
@@ -59,8 +60,10 @@ export async function upsertLocalidad(formData: FormData) {
       const uploadDir = path.join(process.cwd(), 'public/uploads/localidades', slug);
       await fs.mkdir(uploadDir, { recursive: true });
 
-      const fileExtension = path.extname(image.name);
-      const filename = `${Date.now()}${fileExtension}`;
+      const filename = uploadFileName('', image.type);
+      if (!filename) {
+        return { success: false, error: 'Tipo de archivo no permitido.' };
+      }
       const filePath = path.join(uploadDir, filename);
 
       const buffer = Buffer.from(await image.arrayBuffer());
@@ -127,7 +130,13 @@ export async function deleteLocalidad(id: string) {
       
       if (localidadToDelete.imageUrl) {
         try {
-          const imageDir = path.join(process.cwd(), 'public', path.dirname(localidadToDelete.imageUrl));
+          const imageDir = resolveWithinUploads(
+            path.join(process.cwd(), 'public'),
+            path.dirname(localidadToDelete.imageUrl)
+          );
+          if (!imageDir) {
+            throw new Error('Ruta de imagen fuera de public/uploads; se omite el borrado.');
+          }
           await fs.rm(imageDir, { recursive: true, force: true });
         } catch (error) {
             console.error(`Failed to delete image directory for localidad ${id}:`, error);
