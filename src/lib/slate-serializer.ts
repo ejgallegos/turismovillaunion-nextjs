@@ -2,6 +2,7 @@
 
 import { escape } from 'html-escaper';
 import { Text } from 'slate';
+import { safeHref } from '@/lib/safe-url';
 
 interface CustomText {
   text: string;
@@ -48,8 +49,12 @@ function serializeNode(node: CustomNode): string {
         return `<ul>${children}</ul>`;
     case 'list-item':
         return `<li>${children}</li>`;
-    case 'link':
-        return `<a href="${escape(element.url || '')}" target="_blank" rel="noopener noreferrer">${children}</a>`;
+    case 'link': {
+      const href = safeHref(element.url);
+      // An unsafe scheme renders the text without a link instead of an executable href.
+      if (!href) return children;
+      return `<a href="${escape(href)}" target="_blank" rel="noopener noreferrer">${children}</a>`;
+    }
     default:
       return children;
   }
