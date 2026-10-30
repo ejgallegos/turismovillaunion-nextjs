@@ -2,12 +2,28 @@
 
 import { z } from 'zod';
 import nodemailer from 'nodemailer';
+import { headers } from 'next/headers';
+import { escape } from 'html-escaper';
+import { clientIpFromHeaders, createRateLimiter } from '@/lib/rate-limit';
+
+// Per-instance speed bump: five messages every ten minutes per client address.
+// See src/lib/rate-limit.ts for what this does and does not guarantee.
+const contactLimiter = createRateLimiter({ limit: 5, windowMs: 10 * 60 * 1000 });
 
 const contactSchema = z.object({
-  name: z.string().min(2, { message: 'El nombre es requerido.' }),
-  email: z.string().email({ message: 'El correo electrónico no es válido.' }),
-  message: z.string().min(10, { message: 'El mensaje debe tener al menos 10 caracteres.' }),
-  gRecaptchaToken: z.string().min(1, { message: 'El token de reCAPTCHA es requerido.'}),
+  name: z
+    .string()
+    .min(2, { message: 'El nombre es requerido.' })
+    .max(120, { message: 'El nombre es demasiado largo.' }),
+  email: z
+    .string()
+    .email({ message: 'El correo electrónico no es válido.' })
+    .max(200, { message: 'El correo electrónico es demasiado largo.' }),
+  message: z
+    .string()
+    .min(10, { message: 'El mensaje debe tener al menos 10 caracteres.' })
+    .max(5000, { message: 'El mensaje es demasiado largo.' }),
+  gRecaptchaToken: z.string().min(1, { message: 'El token de reCAPTCHA es requerido.' }),
 });
 
 export async function sendContactEmail(data: unknown) {
@@ -22,6 +38,18 @@ export async function sendContactEmail(data: unknown) {
 
   const { name, email, message, gRecaptchaToken } = validatedFields.data;
 
+  const requestHeaders = await headers();
+  const clientKey = clientIpFromHeaders(requestHeaders) ?? 'unknown';
+
+  const limit = contactLimiter.check(clientKey);
+  if (!limit.allowed) {
+    const minutes = Math.max(1, Math.ceil(limit.retryAfterSeconds / 60));
+    return {
+      success: false,
+      error: `Demasiados intentos. Volvé a intentar en ${minutes} minuto(s).`,
+    };
+  }
+
   // reCAPTCHA validation
   const secretKey = process.env.RECAPTCHA_SECRET_KEY;
   if (!secretKey) {
@@ -35,10 +63,10 @@ export async function sendContactEmail(data: unknown) {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
-      body: `secret=${secretKey}&response=${gRecaptchaToken}`,
+      body: `secret=${encodeURIComponent(secretKey)}&response=${encodeURIComponent(gRecaptchaToken)}`,
     });
     const recaptchaData = await response.json();
-    
+
     // The score is a value between 0.0 and 1.0. 0.5 is a common threshold.
     if (!recaptchaData.success || recaptchaData.score < 0.5) {
       console.warn('reCAPTCHA verification failed:', recaptchaData['error-codes']);
@@ -48,7 +76,7 @@ export async function sendContactEmail(data: unknown) {
     console.error('Error verifying reCAPTCHA:', error);
     return { success: false, error: 'Hubo un error al verificar el reCAPTCHA. Inténtalo de nuevo.' };
   }
-  
+
   // Email server configuration validation
   if (
     !process.env.EMAIL_SERVER_HOST ||
@@ -72,25 +100,27 @@ export async function sendContactEmail(data: unknown) {
     },
   });
 
-  try {
-    await transporter.verify();
-  } catch(error) {
-    console.error('Error verifying email transporter:', error);
-    return { success: false, error: 'La configuración del correo es inválida. Contacte al administrador.' };
-  }
+  // Header-safe display name: no quotes, no CRLF, no angle brackets.
+  const displayName =
+    name.replace(/[\r\n"\\<>]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 120) || 'Sitio web';
 
+  const safeName = escape(name);
+  const safeEmail = escape(email);
+  const safeMessage = escape(message).replace(/\n/g, '<br>');
 
   try {
+    // A single SMTP operation per request. Calling verify() first doubled the
+    // connections and let one submission cost two handshakes.
     await transporter.sendMail({
-      from: `"${name}" <${process.env.EMAIL_FROM}>`,
+      from: `"${displayName}" <${process.env.EMAIL_FROM}>`,
       to: process.env.EMAIL_TO,
-      subject: `Nuevo mensaje de contacto de ${name}`,
+      subject: `Nuevo mensaje de contacto de ${displayName}`,
       replyTo: email,
       html: `<p>Has recibido un nuevo mensaje de tu sitio web:</p>
-             <p><strong>Nombre:</strong> ${name}</p>
-             <p><strong>Email:</strong> ${email}</p>
+             <p><strong>Nombre:</strong> ${safeName}</p>
+             <p><strong>Email:</strong> ${safeEmail}</p>
              <p><strong>Mensaje:</strong></p>
-             <p>${message.replace(/\n/g, '<br>')}</p>`,
+             <p>${safeMessage}</p>`,
     });
 
     return { success: true };
