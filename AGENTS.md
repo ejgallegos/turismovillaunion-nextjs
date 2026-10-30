@@ -1,213 +1,99 @@
-# AGENTS.md - Development Guide for Tourism Villa Union
+# AGENTS.md — Villa Unión del Talampaya
 
-This file provides guidelines and reference information for agents working on this codebase.
+Next.js 15 (App Router) + TypeScript + Tailwind + shadcn/ui (Radix) tourism site.
+Content lives in JSON files, not a database. No Firebase, no tests.
 
-## Project Overview
-
-This is a Next.js 15 application (App Router) for a tourism website for Villa Union. It uses:
-- **Framework**: Next.js 15.3.4 with TypeScript
-- **Styling**: Tailwind CSS with Radix UI components
-- **Forms/Validation**: React Hook Form + Zod
-- **AI**: Google Genkit for AI features
-- **Database**: Firebase + local JSON files for data storage
-
----
-
-## Build Commands
+## Commands
 
 ```bash
-# Development
-npm run dev              # Start Next.js dev server on port 9002
-
-# Production
-npm run build            # Build Next.js application
-npm run start            # Start production server
-
-# Linting & Type Checking
-npm run lint             # Run Next.js lint
-npm run typecheck        # Run TypeScript type checking (tsc --noEmit)
-
-# AI Development
-npm run genkit:dev       # Start Genkit AI dev server
-npm run genkit:watch     # Start Genkit AI with watch mode
+npm run dev          # dev server on port 9002
+npm run build        # next build
+npm run start        # port 3000, forces NODE_ENV=production
+npm run typecheck    # tsc --noEmit — the only real gate
+npm run genkit:dev   # Genkit AI server (src/ai/dev.ts)
 ```
 
----
+- **Do not run `npm run lint`.** There is no ESLint config in the repo, so `next lint`
+  stops on an interactive "How would you like to configure ESLint?" prompt and hangs
+  non-interactive sessions.
+- **`npm run build` does not type-check.** `next.config.ts` sets
+  `typescript.ignoreBuildErrors: true`, so a green build says nothing about types.
+  Always run `npm run typecheck`.
+- **No test framework, no test script, zero test files.** Verification is
+  `npm run typecheck` plus HTTP smoke checks against the dev server. For dynamic
+  routes use `curl -g`, otherwise curl treats `[id]` as a URL glob and exits 3.
 
-## Code Style Guidelines
+## Data layer (read this before debugging stale content)
 
-### TypeScript
+- Source of truth is `data/*.json` at the **repo root** (9 files). There is no
+  `src/data/` — it was a duplicate and was deleted.
+- Services in `src/lib/*.service.ts` **import** their JSON through the bundler
+  (`import x from '../../data/x.json'`), while `save*()` writes with `fs` to
+  `process.cwd()/data/`. Consequence: runtime writes are **not** reflected by an
+  already-built server, because the JSON was inlined at build time.
+- Publishing a content change therefore means: edit locally → commit the JSON →
+  rebuild/redeploy. In dev the file watcher reloads it, so dev "just works".
+- `data/` is absent from the Docker runner stage and does not need to be there;
+  the data is baked into `.next`.
+- Only some pages opt out of static rendering (`/mapas`, `/servicios`,
+  `/folletos`, `/mapa-interactivo`, and every admin page). `/`, `/atractivos*`,
+  `/localidades*`, `/novedades*` have **no** `export const dynamic`, so they are
+  pre-rendered from the JSON at build time. If an edit is not showing there, it is
+  usually a build/static cache, not a broken read.
+- Admin server actions validate input with Zod (`src/app/admin/*/actions.ts`)
+  before touching the filesystem.
 
-- **Strict mode enabled** in `tsconfig.json` - do not disable strict checks
-- Use explicit types for function parameters and return types when not obvious
-- Use `interface` for public APIs and data shapes, `type` for unions/utilities
+## Admin panel is local-only authoring
 
-### Imports
+- `src/middleware.ts` returns 404 for `/admin*` and `/login*` when
+  `NODE_ENV=production` and the host is not localhost/127.0.0.1. This is by design,
+  not a bug to "fix".
+- The admin CRUD writes `data/*.json` and uploads to `public/uploads/<section>/<slug>/`,
+  storing `/uploads/...` paths in JSON.
+- Server actions return `{ success, errors }` and must **not** call `redirect()`;
+  the form component renders the returned state.
 
-- Use path aliases: `@/*` maps to `./src/*`
-- Example: `import { Button } from '@/components/ui/button'`
-- Order imports: React → external libs → internal components/lib → types
+## Gotchas that have already caused bugs
 
-```typescript
-import * as React from "react"
-import { Slot } from "@radix-ui/react-slot"
-import { cva, type VariantProps } from "class-variance-authority"
-import { cn } from "@/lib/utils"
-import type { SomeType } from "@/types"
-```
+- **Public pages must read from a service.** A component with a literal array
+  (`const mapasData = [...]`) silently shadowed `data/mapas.json`, so deleting a map
+  in admin never removed it from the public page. The same page also passed no data
+  into the component, so the fallback was always used. If a deleted entity still
+  shows up, grep the component for a hardcoded list before blaming cache.
+- **Rich text fields are stringified Slate JSON**, not plain strings. Use
+  `plainTextFromSlate()` from `@/lib/slate-helpers` for display and
+  `serializeSlate()` from `@/lib/slate-serializer` before saving. Do not
+  `.slice()` the raw value.
+- **The hero is a client component** that renders a skeleton server-side and fetches
+  slides through the server action `getHeroSlidesData`
+  (`src/components/landing/actions.ts`). Its title, subtitle, button text and href
+  never appear in the initial HTML, so grepping the page source proves nothing.
+  Its CTA is data-driven from `data/slider.json`.
+- **Adding an external script, font, image host or frame requires editing the CSP**
+  in `src/middleware.ts`, or it gets blocked at runtime with no build error.
 
-### Components
+## Conventions
 
-- Use `React.forwardRef` for components that accept refs
-- Define `displayName` for forwarded ref components
-- Use CVA (class-variance-authority) for component variants
+- Path alias `@/*` → `./src/*`. `tsconfig.json` has `strict: true`.
+- Files and route folders are kebab-case; components and types PascalCase; server
+  actions camelCase verb-first (`upsertNovedad`). UI text is Spanish (Rioplatense).
+- Use existing `@/components/ui/*` (shadcn, configured in `components.json`, aliases
+  `@/components`, `@/lib`, `@/hooks`, icons from `lucide`). Add new primitives with
+  the shadcn CLI rather than hand-rolling Radix wrappers.
+- Style with semantic Tailwind tokens (`primary`, `secondary`, `accent`,
+  `destructive`, `muted`) and the `font-body` / `font-headline` / `font-display`
+  families (PT Sans). Brand values from `docs/blueprint.md`.
+- Public pages live in `src/app/<section>/`, admin CRUD in `src/app/admin/<section>/`
+  with a sibling `actions.ts`. Public page data flows: page (server) → service →
+  props on a `landing/*` component.
 
-```typescript
-const buttonVariants = cva("...", {
-  variants: {
-    variant: { default: "...", destructive: "..." },
-    size: { default: "...", sm: "...", lg: "..." },
-  },
-  defaultVariants: { variant: "default", size: "default" },
-})
+## Sources of truth and non-sources
 
-export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement>, VariantProps<typeof buttonVariants> {
-  asChild?: boolean
-}
-
-const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, ...props }, ref) => {
-    const Comp = asChild ? Slot : "button"
-    return <Comp className={cn(buttonVariants({ variant, size, className }))} ref={ref} {...props} />
-  }
-)
-Button.displayName = "Button"
-
-export { Button, buttonVariants }
-```
-
-### Naming Conventions
-
-- **Files**: kebab-case for pages/routes (`novedades/page.tsx`), kebab-case for components
-- **Components**: PascalCase (`Button`, `NovedadForm`)
-- **Functions**: camelCase (`getNovedades`, `saveNovedades`)
-- **Interfaces/Types**: PascalCase with descriptive names (`Attraction`, `Novedad`)
-- **Server Actions**: camelCase, verb-first (`upsertNovedad`, `deleteNovedad`)
-
-### Server Actions
-
-- Add `'use server'` at the top of files containing server actions
-- Use Zod for form validation
-- Return structured responses: `{ success: boolean; errors?: ...; error?: string }`
-- Use `revalidatePath()` to refresh cached data after mutations
-
-```typescript
-'use server'
-import { z } from 'zod'
-import { revalidatePath } from 'next/cache'
-
-const schema = z.object({ title: z.string().min(3) })
-
-export async function actionName(formData: FormData) {
-  const rawData = { title: formData.get('title')?.toString() }
-  const validated = schema.safeParse(rawData)
-  
-  if (!validated.success) {
-    return { success: false, errors: validated.error.flatten().fieldErrors }
-  }
-  
-  // ... perform action
-  revalidatePath('/path')
-  return { success: true }
-}
-```
-
-### Error Handling
-
-- Use try/catch in async operations, especially file system and external API calls
-- Return user-friendly error messages in Spanish (project language)
-- Log errors with `console.error()` for debugging
-
-```typescript
-try {
-  await fs.writeFile(filePath, data)
-} catch (error) {
-  console.error('Error saving data:', error)
-  throw new Error('No se pudieron guardar los datos.')
-}
-```
-
-### Data Layer
-
-- Data stored in JSON files under `data/` at the repository root (not `src/data/`)
-- Services in `src/lib/*.service.ts` handle data operations
-- Always validate data with Zod before saving
-
-### UI Components
-
-- Use existing UI components from `@/components/ui/` (built on Radix UI)
-- Use Tailwind CSS for styling - follow existing color/spacing patterns
-- Colors defined in `tailwind.config.ts` - use semantic tokens (primary, secondary, destructive)
-- Fonts: PT Sans for body/headlines (configured in tailwind.config.ts)
-
-### Routes & Pages
-
-- Public pages in `src/app/` (e.g., `src/app/novedades/page.tsx`)
-- Admin pages in `src/app/admin/`
-- Dynamic routes use folder naming: `src/app/atractivos/[id]/page.tsx`
-
----
-
-## Project Structure
-
-```
-src/
-├── ai/                    # Genkit AI flows
-├── app/                   # Next.js App Router pages
-│   ├── admin/             # Admin dashboard pages
-│   ├── api/               # API routes
-│   └── (public pages)     # Website pages
-├── components/
-│   └── ui/                # Reusable UI components
-├── data/                  # JSON data files
-├── hooks/                 # Custom React hooks
-├── lib/                   # Utilities and services
-└── types/                 # TypeScript type definitions
-```
-
----
-
-## Important Configuration
-
-- `next.config.ts`: Server actions body limit 10MB, ignores TypeScript errors in build
-- `tsconfig.json`: Strict mode enabled, path alias `@/*` → `./src/*`
-- `tailwind.config.ts`: Custom colors, dark mode support, typography plugin
-
----
-
-## Testing
-
-Currently there are **no tests** configured in this project. If adding tests:
-- Use Vitest or Jest with React Testing Library
-- Place tests alongside components with `.test.tsx` extension
-- Run tests with `npm run test` (add to package.json)
-
----
-
-## Common Tasks
-
-### Adding a new data type
-1. Create JSON file in `data/`
-2. Create service in `src/lib/<name>.service.ts`
-3. Create types in service file
-4. Add server actions in `src/app/admin/<name>/actions.ts`
-
-### Adding a new admin page
-1. Create folder in `src/app/admin/<name>/`
-2. Create `page.tsx` for listing and forms
-3. Create `actions.ts` with server actions for CRUD
-
-### Adding a new public page
-1. Create folder in `src/app/<name>/`
-2. Use existing data services to fetch content
-3. Follow Tailwind styling conventions
+- Trust: `package.json`, `next.config.ts`, `tsconfig.json`, `src/middleware.ts`,
+  `components.json`, `src/lib/*.service.ts`, `data/*.json`, `.env` (local, untracked;
+  tracked template is `env-example`).
+- Do **not** trust: `README.md` (stale Firebase Studio boilerplate). `docs/blueprint.md`
+  is product/style intent only, not architecture. `patches/` contains `react-quill`
+  patches for a dependency that is not installed — ignore it.
+- Deployment: both a `Dockerfile` (multi-stage, `next start`) and `apphosting.yaml`
+  (Firebase App Hosting, `maxInstances: 1`) exist.
