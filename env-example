@@ -9,3 +9,14 @@ EMAIL_TO="contact@example.com"
 # WhatsApp Button
 NEXT_PUBLIC_WHATSAPP_NUMBER="5493825000000"
 NEXT_PUBLIC_WHATSAPP_MESSAGE="¡Hola! Quisiera más información sobre Villa Unión."
+
+# --- Panel de administración ---
+# En producción el panel responde 404 salvo que ENABLE_ADMIN sea exactamente "true"
+# Y el host de la petición esté en ADMIN_ALLOWED_HOSTS. Nunca habilitar en un host público.
+ENABLE_ADMIN="false"
+ADMIN_ALLOWED_HOSTS="localhost:9002,127.0.0.1:9002"
+
+# --- Redirección HTTPS ---
+# Origen canónico usado para el redirect http -> https. El destino nunca se arma
+# con el header Host. Si se omite, no se redirige (lo hace la plataforma).
+SITE_URL="https://turismovillaunion.gob.ar"

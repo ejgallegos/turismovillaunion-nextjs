@@ -50,8 +50,8 @@ npm run genkit:dev   # Genkit AI server (src/ai/dev.ts)
   not a bug to "fix".
 - The admin CRUD writes `data/*.json` and uploads to `public/uploads/<section>/<slug>/`,
   storing `/uploads/...` paths in JSON.
-- Server actions return `{ success, errors }` and must **not** call `redirect()`;
-  the form component renders the returned state.
+- Server actions return `{ success, errors }` for validation failures and call
+  `redirect()` on success (the framework turns that into client navigation).
 
 ## Gotchas that have already caused bugs
 

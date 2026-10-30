@@ -31,14 +31,31 @@ export function middleware(request: NextRequest) {
   response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
   response.headers.set('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
 
+  if (process.env.NODE_ENV === 'production') {
+    response.headers.set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
+  }
+
+  // 'unsafe-eval' is only required by the development toolchain (HMR and source
+  // maps); production has no eval in this codebase. 'unsafe-inline' stays because
+  // Next.js emits inline bootstrap scripts.
+  const scriptSrc =
+    process.env.NODE_ENV === 'production'
+      ? "script-src 'self' 'unsafe-inline' https://www.google.com https://www.gstatic.com https://www.googletagmanager.com"
+      : "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.google.com https://www.gstatic.com https://www.googletagmanager.com";
+
   const csp = [
     "default-src 'self'",
-    "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.google.com https://www.gstatic.com https://unpkg.com",
+    scriptSrc,
     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
     "font-src 'self' data: https://fonts.gstatic.com",
-    "img-src 'self' data: blob: https://*.googleusercontent.com https://*.openstreetmap.org https://server.arcgisonline.com",
-    "connect-src 'self' https://api.open-meteo.com https://*.googleapis.com",
+    "img-src 'self' data: blob: https://*.googleusercontent.com https://*.openstreetmap.org https://server.arcgisonline.com https://*.google-analytics.com",
+    // reCAPTCHA and Google Analytics both post back to their own origins.
+    "connect-src 'self' https://api.open-meteo.com https://*.googleapis.com https://www.google.com https://www.google-analytics.com https://*.analytics.google.com",
     "frame-src 'self' https://www.google.com",
+    "object-src 'none'",
+    "base-uri 'self'",
+    "form-action 'self'",
+    "frame-ancestors 'self'",
   ].join('; ');
 
   response.headers.set('Content-Security-Policy', csp);

@@ -1,6 +1,7 @@
 import type {NextConfig} from 'next';
 
 const nextConfig: NextConfig = {
+	poweredByHeader: false,
 	experimental: {
 		serverActions: {
 			// Files are validated against a 10MB limit inside the actions, so the
